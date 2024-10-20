@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   test.h                                             :+:      :+:    :+:   */
@@ -6,15 +6,16 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 13:55:48 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/10/16 14:03:06 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/10/20 12:53:14 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef TEST_H
 # define TEST_H
 
 # include "../libft/libft.h"
 # include "../utils/utils.h"
+# include "../minishell.h"
 # include <ctype.h>
 # include <fcntl.h>
 # include <readline/history.h>
@@ -30,12 +31,6 @@
 
 #include <ctype.h>
 
-
-typedef struct s_params
-{
-	char			**str;
-	struct s_params	*next;
-}					t_params;
 
 int					is_operator(char *str);
 t_params			*create_params(char **argv);
