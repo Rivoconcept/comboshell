@@ -1,4 +1,4 @@
-# **************************************************************************** #
+#******************************************************************************#
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
@@ -6,12 +6,12 @@
 #    By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/22 08:39:35 by rhanitra          #+#    #+#              #
-#    Updated: 2024/10/01 20:28:03 by rhanitra         ###   ########.fr        #
+#    Updated: 2024/10/22 16:42:49 by rhanitra         ###   ########.fr        #
 #                                                                              #
-# **************************************************************************** #
+#******************************************************************************#
 
 MINISHELL = main.c format_input.c check_behavior.c utils.c format_cmd.c \
-			parser.c format_params.c init_list_params.c
+			format_argv.c parser.c format_params.c init_list_params.c
 
 DIR_MINISHELL = ./
 SRC_MINISHELL = $(addprefix $(DIR_MINISHELL),$(MINISHELL))
