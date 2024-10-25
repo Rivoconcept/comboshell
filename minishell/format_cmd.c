@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   format_cmd.c                                       :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 15:13:30 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/10/19 13:38:13 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/10/25 11:47:43 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -90,7 +90,6 @@ char	**format_argv(char *input)
 
 	i = 0;
     new_input = format_input(input, "&|<>;");
-	//printf("%s\n", new_input);
 	argv = parse_command(new_input);
     while (argv[i] != NULL)
     {
@@ -107,12 +106,14 @@ char	**format_argv(char *input)
 	return (argv);
 }
 
-char	**put_argv(char **argv, char *input)
+char	**put_argv(char **argv, char *input, t_params *params)
 {
 	char	*cmd;
 
 	cmd = NULL;
 	argv = format_argv(input);
+    format_variable(argv, params);
+    del_quotes(argv);
 	if (!isbuiltins(argv[0]))
 		cmd = check_cmd_standard(argv[0]);
 	else
@@ -121,14 +122,13 @@ char	**put_argv(char **argv, char *input)
 	{
 		free(argv[0]);
 		argv[0] = ft_strdup(cmd);
-		free(cmd);
+        free(cmd);
 		return (argv);
 	}
 	else
 	{
 		printf("%s : command not found\n", argv[0]);
-		free(cmd);
 		free_array(argv);
 	}
-	return (NULL);
+	return (free(cmd), NULL);
 }

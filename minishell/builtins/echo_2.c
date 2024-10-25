@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 12:55:21 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/10/19 21:33:18 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/10/20 11:23:33 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int put_val_env(char *str, int *index, int fd)
     int i;
     char var_env[256];
     char *env_value;
-    t_wstatus *status;
+    t_wstatus *status = {0};
     
     i = 0;
     status->value = 0;
