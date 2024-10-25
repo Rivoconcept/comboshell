@@ -361,83 +361,6 @@ char **parse_command(char const *input)
     return (split);
 } 
 
-
-/**************************************************************** */
-
-char *check_val_env(char *str, int *index, t_params *params)
-{
-    int i;
-    char var_env[256];
-    char *env_value;
-
-    i = 0;
-    (*index)++;
-    env_value = NULL;
-    if (str[*index] == '0')
-        return (ft_strdup("minishell"));
-    else if (str[*index] == '?')
-        return (ft_itoa(params->wstatus));
-    else if (ft_isdigit(str[*index]) && str[(*index) - 1] == '$')
-        return (ft_strdup(""));
-    while (str[*index] != '\0' && str[*index] != '"' && str[*index] != '\''
-        && str[*index] != ' ' && str[*index] != '$')
-        var_env[i++] = str[(*index)++];
-    (*index)--;
-    var_env[i] = '\0';
-    env_value = getenv(var_env);
-    if (env_value)
-        return (ft_strdup(env_value));
-    else
-        return (NULL);
-}
-
-void put_var_env(char *input, int *i, char **temp, t_params *params)
-{
-    if (in_double_quote(input))
-        *temp = check_val_env(input, i, params);
-    else if (in_single_quote(input))
-    {
-        if (input[*i - 1] == '\'' && *i > 1)
-            *temp = check_val_env(input, i, params);
-        else
-            *temp = ft_strdup("$");
-    }
-    else if (pure_quote(input))
-        *temp = check_val_env(input, i, params);
-    else if (!pure_quote(input) && !pure_apostrophe(input)
-        && !in_double_quote(input) && !in_single_quote(input))
-        *temp = check_val_env(input, i, params);
-}
-
-
-char *format_var_env(char *arg, t_params *params)
-{
-    int i[3] = {-1, 0, 0};
-    char *temp;
-    static char new_str[1024];
-
-    while (arg[++i[0]] != '\0')
-    {
-        if (arg[i[0]] == '$')
-        {
-            i[2] = 0;
-            temp = NULL;
-            put_var_env(arg, &i[0], &temp, params);
-            if (temp)
-            {
-                while(temp[i[2]] != '\0')
-                    new_str[(i[1])++] = temp[(i[2])++];
-                free(temp);
-            }
-        }
-        else
-            new_str[(i[1])++] = arg[i[0]];
-        new_str[i[1]] = '\0';
-    }
-    return (new_str);
-}
-
-
 /******************************************************************* */
 
 int	isbuiltins(char *command)
@@ -465,7 +388,7 @@ char	*check_cmd_builtins(char *command)
 			"exit", NULL};
 
 	i = 0;
-    path = "./builtins/exec/";
+    path = "./builtins/bin/";
 	full_path = NULL;
 	while (builtins[i] != NULL)
 	{
@@ -518,10 +441,9 @@ char *put_path(char **dirs, char *command)
 			return (NULL);
         full_path = check_access(full_path, command, path);
     	if (!full_path)
-			return (free(path), NULL);
+			return (NULL);
         if (access(full_path, X_OK | F_OK) == 0)
-            return (free(path), full_path);
-        free(path);
+            return (full_path);
 		free(full_path);
         i++;
 	}
@@ -550,6 +472,22 @@ char *check_cmd_standard(char *command)
     }
 	return (full_path);
 }
+
+/*char *token_type(char *arg)
+{
+    char    *type;
+    char    *temp;
+
+    type = NULL;
+    temp = format_quotes(arg);
+    if (ft_strcmp(temp, "|") == 0 || ft_strcmp(temp, ">") == 0 
+        || ft_strcmp(temp, "<") == 0 || ft_strcmp(temp, ">>") == 0 
+        || ft_strcmp(temp, "&&") == 0 || ft_strcmp(temp, "||") == 0)
+        type = ft_strdup("OPERATOR");
+    if (temp[0] == '-')
+        type = ft_strdup("OPTION");
+    return (free(temp), type);
+}*/
 
 int token_type(char *arg)
 {
@@ -601,90 +539,12 @@ char	**format_argv(char *input)
 	return (argv);
 }
 
-void format_variable(char **argv, t_params *params)
-{
-    int i;
-    char *tmp;
-
-    i = 0;
-    while(argv[i] != NULL)
-    {
-        tmp = ft_strdup(format_var_env(argv[i], params));
-        free(argv[i]);
-        argv[i] = tmp;
-        i++;
-    }
-}
-
-void print_char(char *input, int *i, int fd)
-{
-    if (in_single_quote(input) && input[*i] != '\'')
-        ft_putcharfd(input[*i], fd);
-    else if (in_double_quote(input) && input[*i] != '"')
-        ft_putcharfd(input[*i], fd);
-    else if (pure_apostrophe(input) && input[*i] != '\'')
-        ft_putcharfd(input[*i], fd);
-    else if (pure_quote(input) && input[*i] != '"')
-        ft_putcharfd(input[*i], fd);
-    else if (!pure_apostrophe(input) && !pure_quote(input) 
-        && !in_double_quote(input) && !in_single_quote(input))
-        ft_putcharfd(input[*i], fd);
-}
-
-char *format_str_quotes(char *arg)
-{
-    int i;
-    int j;
-    char *temp;
-
-    i = 0;
-    j = 0;
-    temp = (char *)malloc(sizeof(char) * (ft_strlen(arg) + 1));
-    if (!temp)
-        return (NULL);
-    while (arg[i] != '\0')
-    {
-        if (in_single_quote(arg) && arg[i] != '\'')
-            temp[j] = arg[i];
-        else if (in_double_quote(arg) && arg[i] != '"')
-            temp[j] = arg[i];
-        else if (pure_apostrophe(arg) && arg[i] != '\'')
-            temp[j] = arg[i];
-        else if (pure_quote(arg) && arg[i] != '"')
-            temp[j] = arg[i];
-        else if (!pure_apostrophe(arg) && !pure_quote(arg) 
-            && !in_double_quote(arg) && !in_single_quote(arg))
-            temp[j] = arg[i];
-        i++;
-        j++;
-    }
-    temp[j] = '\0';
-    return (temp);
-}
-
-void format_arg_quotes(char **argv)
-{
-    int i;
-    char *tmp;
-
-    i = 0;
-    while(argv[i] != NULL)
-    {
-        tmp = format_str_quotes(argv[i]);
-        free(argv[i]);
-        argv[i] = tmp;
-        i++;
-    }
-}
-
-char	**put_argv(char **argv, char *input, t_params *params)
+char	**put_argv(char **argv, char *input)
 {
 	char	*cmd;
 
 	cmd = NULL;
 	argv = format_argv(input);
-    format_variable(argv, params);
-    // format_arg_quotes(argv);   
 	if (!isbuiltins(argv[0]))
 		cmd = check_cmd_standard(argv[0]);
 	else
@@ -704,18 +564,12 @@ char	**put_argv(char **argv, char *input, t_params *params)
 	return (free(cmd), NULL);
 }
 
-
 int main(void)
 {
-    t_params *params;
 
-    params = malloc(sizeof(t_params));
-    if (!params)
-        return (1);
-    params->wstatus = 0;
     char *path = "\"\"''\"e\"c'h'o \
                 ""''-n'n's '-l's''\
-                \"comment 'faire' des '$HOME'\"\
+                \"$HOME\"\
                 '\"$HOME\" est un $HOME qui va \"$HOME\"'\
                 ''\"\"'pe''\"y\"' \
                 \"'$HOME' est un \"$HOME\" qui va '$HOME'\"||""''w'c' -l \
@@ -723,26 +577,18 @@ int main(void)
     char **argv = NULL;
     char **new_argv = NULL;
 
-    new_argv = put_argv(argv, path, params);
+    new_argv = put_argv(argv, path);
 
-    int i = 0;
-    while(new_argv[i] != NULL)
-    {
-        printf("%s\n", new_argv[i]);
-        i++;
-    }
-    char *tmp;
-    printf("%s\n", tmp = format_str_quotes(new_argv[3]));
-    free(tmp);
-    /*i = 0;
-    while(new_argv[i] != NULL)
-    {
-        printf("%s\n", new_argv[i]);
-        i++;
-    }*/
+    printf("%s\n", new_argv[0]);
+    printf("%s\n", new_argv[1]);
+    printf("%s\n", new_argv[2]);
+    printf("%s\n", new_argv[3]);
+    printf("%s\n", new_argv[4]);
+    printf("%s\n", new_argv[5]);
+    printf("%s\n", new_argv[6]);
+    printf("%s\n", new_argv[7]);
 
     free_array(new_argv);
-    free(params);
     return 0;
 }
 

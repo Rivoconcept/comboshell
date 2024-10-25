@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   test.h                                             :+:      :+:    :+:   */
@@ -6,16 +6,15 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 13:55:48 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/10/20 12:53:14 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/10/23 15:59:56 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef TEST_H
 # define TEST_H
 
 # include "../libft/libft.h"
 # include "../utils/utils.h"
-# include "../minishell.h"
 # include <ctype.h>
 # include <fcntl.h>
 # include <readline/history.h>
@@ -32,6 +31,18 @@
 #include <ctype.h>
 
 
+typedef struct s_wstatus
+{
+	int			value;
+}				t_wstatus;	
+
+typedef struct s_params
+{
+	char			**str;
+	int				wstatus;
+	struct s_params	*next;
+}					t_params;
+
 int					is_operator(char *str);
 t_params			*create_params(char **argv);
 void				append_params(t_params **params_list, char **argv);
@@ -46,7 +57,7 @@ int					check_behavior(char *s);
 
 char				*format_input(char *input, char *operators);
 
-char				**put_argv(char **argv, char *input);
+char				**put_argv(char **argv, char *input, t_params *params);
 void				free_array(char **arr);
 void				free_list_params(t_params *params);
 int					execution(char **argv, char **envp);

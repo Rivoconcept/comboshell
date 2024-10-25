@@ -7,46 +7,31 @@
 #include <string.h>
 #include <unistd.h>  // Pour write() et sleep()
 
-int put_val_env(char *str, int *index, int fd)
+void handler(int num)
 {
-    int i;
-    char var_env[256];
-    char *env_value;
-    t_params    *params;
-    
-    i = 0;
-    (*index)++;
-
-    while (str[*index] != '\0' && str[*index] != '"' && str[*index] != '\''
-        && str[*index] != ' ' && str[*index] != '$')
-    {
-        var_env[i] = str[*index];
-        (*index)++;
-        i++;
-    }
-    (*index)--;
-    var_env[i] = '\0';
-    env_value = getenv(var_env);
-    if (env_value)
-        return (ft_putstrfd(env_value, fd));
-    else
-         return (0);
+    (void)num;
+    write(STDOUT_FILENO, "yes\n", strlen("yes\n"));
 }
 
-void print_var_env(char *input, int *i, int fd)
+int main(void)
 {
-    if (in_double_quote(input))
-        put_val_env(input, i, fd);
-    else if (in_single_quote(input))
+    struct sigaction sa;
+
+    // Efface le masque de signaux
+    sigemptyset(&sa.sa_mask);
+
+    sa.sa_handler = handler;
+    sa.sa_flags = 0;  // Pas de flags spécifiques
+
+    // Attache le handler aux signaux SIGINT et SIGTERM
+    sigaction(SIGINT, &sa, NULL);
+    sigaction(SIGTERM, &sa, NULL);  // Correction du signal ici
+
+    while (1)
     {
-        if (input[*i - 1] == '\'' && *i > 1)
-            put_val_env(input, i, fd);
-        else
-            ft_putcharfd(input[*i], fd);
+        sleep(1);
+        printf("kill me\n");
     }
-    else if (pure_quote(input))
-        put_val_env(input, i, fd);
-    else if (!pure_quote(input) && !pure_apostrophe(input)
-        && !in_double_quote(input) && !in_single_quote(input))
-        put_val_env(input, i, fd);
+
+    return (0);
 }
