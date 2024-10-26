@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   format_argv.c                                      :+:      :+:    :+:   */
@@ -6,22 +6,20 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 18:26:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/10/25 11:47:55 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/10/26 15:14:53 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "minishell.h"
 
 
-char *check_val_env(char *str, int *index, t_params *params)
+char *check_val_env(char *str, int *index, char *env_value, t_params *params)
 {
     int i;
     char var_env[256];
-    char *env_value;
 
     i = 0;
     (*index)++;
-    env_value = NULL;
     if (str[*index] == '0')
         return (ft_strdup("minishell"));
     else if (str[*index] == '?')
@@ -36,34 +34,50 @@ char *check_val_env(char *str, int *index, t_params *params)
     env_value = getenv(var_env);
     if (env_value)
         return (ft_strdup(env_value));
-    else
+    else if (in_double_quote(str))
         return (NULL);
+    else
+        return (*index -= ft_strlen(var_env), NULL);
 }
 
 void put_var_env(char *input, int *i, char **temp, t_params *params)
 {
+    char *env_value;
+
+    env_value = NULL;
     if (in_double_quote(input))
-        *temp = check_val_env(input, i, params);
+        *temp = check_val_env(input, i, env_value, params);
     else if (in_single_quote(input))
     {
         if (input[*i - 1] == '\'' && *i > 1)
-            *temp = check_val_env(input, i, params);
+            *temp = check_val_env(input, i, env_value, params);
         else
             *temp = ft_strdup("$");
     }
     else if (pure_quote(input))
-        *temp = check_val_env(input, i, params);
-    else if (pure_apostrophe(input))
-        *temp = ft_strdup("$");
+        *temp = check_val_env(input, i, env_value, params);
     else if (!pure_quote(input) && !pure_apostrophe(input)
         && !in_double_quote(input) && !in_single_quote(input))
-        *temp = check_val_env(input, i, params);
+        *temp = check_val_env(input, i, env_value, params);
 }
 
+void copy_var_env(char *env, char *new_str, int *index)
+{
+    int i;
+
+    i = 0;
+    while (env[i] != '\0')
+    {
+        new_str[*index] = env[i];
+        (*index)++;
+        i++;
+    }
+    free(env);
+}
 
 char *format_var_env(char *arg, t_params *params)
 {
-    int i[3] = {-1, 0, 0};
+    int i[3] = {-1, 0};
     char *temp;
     static char new_str[1024];
 
@@ -71,15 +85,12 @@ char *format_var_env(char *arg, t_params *params)
     {
         if (arg[i[0]] == '$')
         {
-            i[2] = 0;
             temp = NULL;
             put_var_env(arg, &i[0], &temp, params);
             if (temp)
-            {
-                while(temp[i[2]] != '\0')
-                    new_str[(i[1])++] = temp[(i[2])++];
-                free(temp);
-            }
+                copy_var_env(temp, new_str, &i[1]);
+            else if (!in_double_quote(arg))
+                new_str[(i[1])++] = '$';
         }
         else
             new_str[(i[1])++] = arg[i[0]];
