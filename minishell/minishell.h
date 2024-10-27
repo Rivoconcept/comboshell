@@ -1,63 +1,175 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/13 13:55:48 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/10/25 11:48:08 by rhanitra         ###   ########.fr       */
+/*   Created: 2024/08/24 20:51:59 by rrakoton          #+#    #+#             */
+/*   Updated: 2024/10/27 16:28:44 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "./libft/libft.h"
-# include "./utils/utils.h"
-# include <ctype.h>
-# include <fcntl.h>
-# include <readline/history.h>
-# include <readline/readline.h>
-# include <signal.h>
+#include <stddef.h>
+# include <limits.h>
+# include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-# include <sys/types.h>
-# include <sys/wait.h>
 # include <unistd.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+#include <signal.h>
+#include <sys/wait.h>
+#include <errno.h>
 
 
-typedef struct s_params
-{
-	char			**str;
-	int				status;
-	struct s_params	*next;
-}					t_params;
+#include "./ljosia/ljosia.h"
+// #include "./libft/libft.h"
+#include "./RIVO/rivo.h"
 
-int					is_operator(char *str);
-t_params			*create_params(char **argv);
-void				append_params(t_params **params_list, char **argv);
-void				free_list_params(t_params *params);
-int					ft_argvlen(char **argv, int *index);
-t_params			*parse_command_into_params(char **argv, char const *input);
+#define MAX_CHILDREN 1024
 
-int					check_input(char *s, char *base);
-int					check_str(const char *big, const char *little, char *check);
-int					check_behavior(char *s);
+typedef struct s_children {
+    pid_t pids[MAX_CHILDREN];
+    int count;
+} t_children;
 
-char				*format_input(char *input, char *operators);
-int					isbuiltins(char *command);
-char				*check_cmd_builtins(char *command);
-char				**put_argv(char **argv, char *input, t_params *params);
-void				free_array(char **arr);
-void				free_list_params(t_params *params);
-int 				execution(char **argv, char **envp, t_params *params);
-char				**parse_command(const char *str);
-char				*format_str_without_quote(char *input);
-int					while_check_char(char c, char *input);
-char				*format_quotes(char *command);
-void 				format_variable(char **argv, t_params *params);
-void				del_quotes(char **argv);
+typedef struct s_context {
+    int fd[2];
+    int fd_close;
+} s_context;
+
+typedef enum e_tokentype {
+    END_TOKEN = 0,
+    CMD_TOKEN = 1,
+	PIPE_TOKEN = 2,
+    STR_TOKEN = 3,
+    COL_TOKEN = 4,
+    HERE_TOKEN = 5, // <<
+    LESS_TOKEN = 6, // <
+    GREAT_TOKEN = 7, // >
+    DGREAT_TOKEN =8 // >>
+} e_tokentype;
+
+typedef struct s_element {
+    e_tokentype type;
+    char *value;
+    struct s_element *next;
+} s_element;
+
+typedef struct s_slice {
+    char *start;
+    size_t length;
+} s_slice;
+
+typedef struct s_token {
+    e_tokentype type;
+    s_slice location;
+} s_token;
+
+typedef struct Node s_node;
+
+typedef enum e_nodetype {
+    ERROR_NODE = -1,
+    CHAR_NODE = 0,
+    PAIR_NODE = 1,
+    STR_NODE = 2
+} e_nodetype;
+
+typedef struct s_pairvalue {
+    s_node *left;
+    s_node *right;
+} s_pairvalue;
+
+typedef union {
+    s_pairvalue pair;
+    char value;
+    char *error;
+    char *str;
+} u_nodevalue;
+
+struct Node {
+    e_nodetype type;
+    u_nodevalue data;
+};
+
+// clean_arg.c
+char *join_argv(char **argv);
+
+// exec.c
+void exec(const s_node *node);
+int exec_node(const s_node *node, s_context *ctx, t_children *children);
+int exec_pipe(const s_node *node, s_context *ctx, t_children *children) ;
+int exec_command(char **argv, s_context *ctx, t_children *children);
+
+// ft_cmd.c
+char	*check_shell(char *path);
+char *is_valid_cmd(char *path, char *cmd);
+
+// ft_multiline.c
+char *multiline(char **input);
+
+// ft_path.c
+char	*get_path(char *envp[], char *rgx);
+
+// guard.c
+void* guard(void *ptr, char *file, int number);
+
+// here_doc_utils.c
+char **here_key(char *input);
+
+// here_doc.c
+void process_here(char **keys);
+
+// list.c
+s_element *add_element(s_element *list, char *value, e_tokentype type);
+void print_elements(s_element *list);
+void free_elements(s_element *list);
+char **list_to_array(s_element *list);
+
+// node.c 
+s_node *strnode_new(char *c);
+s_node *charnode_new(char c);
+s_node *pairnode_new(s_node *left, s_node *right);
+s_node *errornode_new(char *msg);
+void *node_drop(s_node *node);
+
+// parser.c
+s_node *parse(char *itr, int *i);
+
+// quote.c
+int check_quote(char *str);
+int dquote_length(char *str, int pos, char quote);
+
+// real_path.c
+int is_absolute_path(const char *path);
+int is_executable_name(const char *path);
+char* simplify_path(const char *path);
+
+// scanner.c
+int len_word(char *str, int *start);
+s_token scanner_peek(char *itr, int *i);
+int scanner_has_next(char *itr, int *i);
+s_token scanner_next(char *itr, int *i);
+
+// signal.c
+void register_child(t_children *children, pid_t pid);
+void terminate_children(t_children *children);
+void sig_handler(int signal);
+void signal_handlers(int sign);
+
+// tokens.c
+int has_next(const char *itr, int *i);
+char peek(const char *itr, int *i);
+char next(char *itr, int *i, int length);
+
+// vector.c
+char* extract_word(char *input, int *i);
+char* extract_redirection(char *input, int *i);
+s_element *parse_cmd(char *input);
 
 #endif

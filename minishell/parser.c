@@ -5,146 +5,71 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/24 19:39:54 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/10/12 19:34:41 by rhanitra         ###   ########.fr       */
+/*   Created: 2024/09/23 11:59:50 by rrakoton          #+#    #+#             */
+/*   Updated: 2024/10/27 16:18:37 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int put_word_len(char *str)
-{
-    int i;
-    int in_single_quote;
-    int in_double_quote;
-
-    i = 0;
-    in_single_quote = 0;
-    in_double_quote = 0;
-    while (str[i] != '\0' && (str[i] != ' '
-        || in_single_quote || in_double_quote))
+/*
+// consume SPACES
+static void parse_space(char *itr, int *i){
+    if(peek(itr, i) ==  32 || peek(itr, i) ==  9)
     {
-        handle_quotes(str[i], &in_single_quote, &in_double_quote);
-        i++;
+        scanner_next(itr, i);
+        parse_space(itr, i);
     }
-    return (i);
-}
-
-int check_quote(char c, char *str, int *i)
-{
-    if (str[*i] == c)
-    {
-        (*i)++;
-        while (str[*i] != c && str[*i] != '\0')
-            (*i)++;
-        if (str[*i] == c && str[*i - 1] !=  c)
-        {
-            (*i)++;
-            return (1);
-        }
-    }
-    return (0);
-}
-
-int word_count(char *str)
-{
-    int i;
-    int j;
-
-    i = 0;
-    j = 0;
-    while (str[i] != '\0')
-    {
-        if (check_quote('\'', str, &i) || check_quote('"', str, &i))
-            j++;
-        else if (str[i] != ' ' && (i == 0 || str[i - 1] == ' '))
-        {
-            j++; 
-            while (str[i] != ' ' && str[i] != '\0')
-                i++;
-        }
-        else
-            i++;
-    }
-    return (j);
-}
-
-
-char *split_word(char *str, int index)
-{
-    int i = 0;
-    char *temp;
-    int in_single_quote;
-    int in_double_quote;
-
-    i = 0;
-    in_single_quote = 0;
-    in_double_quote = 0;
-    temp = (char *)malloc(sizeof(char) * (put_word_len(&str[index]) + 1));
-    if (!temp)
-        return (NULL);
-    while (str[index] != '\0' && (str[index] != ' '
-        || in_single_quote || in_double_quote))
-    {
-        handle_quotes(str[index], &in_single_quote, &in_double_quote);
-        temp[i++] = str[index++];
-    }
-    temp[i] = '\0';
-    return (temp);
-}
-
-
-char **parse_command(char const *input)
-{
-    int i;
-    int j;
-    char **split;
-
-    if (!input)
-        return (NULL);
-    i = 0;
-    j = 0;
-    split = (char **)malloc(sizeof(char *) * (word_count((char *)input) + 2));
-    if (!split)
-        return (NULL);
-    while (input[i] != '\0')
-    {
-        if (input[i] != ' ')
-        {
-            split[j++] = split_word((char *)input, i);
-            i += put_word_len((char *)input + i);
-        }
-        else
-            i++;
-    }
-    split[j] = NULL;
-    return (split);
-}
-
-/*void free_array(char **arr)
-{
-    int i = 0;
-    while (arr[i] != NULL)
-    {
-        free(arr[i]);
-        i++;
-    }
-    free(arr);
-}
-
-
-int main(void)
-{
-    char **argv;
-    char *str2 = "\"\"''\"\"''echo '$HOME' \"'$HOME' 'maitre ave \"quoi\" de' neuf '\"$HOME\" grand'\"";
-
-    argv = parse_command(str2);
-    int i = 0;
-    while (argv[i] != NULL)
-    {
-        printf("%s\n", argv[i]);
-        i++;
-    }
-    free_array(argv);
-    return 0;
 }*/
+
+// STR_NODE    ::= CMD_TOKEN
+static s_node* parse_str(char *itr, int *i)
+{
+    char *str;
+    size_t j;
+    int start;
+
+    start = *i;
+    s_token next = scanner_next(itr, i);
+    j = 0;
+    str = (char *)malloc(sizeof(char) * (next.location.length) + 1);
+    if(!str)
+        return (NULL);
+    ft_bzero(str, next.location.length + 1);
+    while(j <  next.location.length){
+        str[j] = next.location.start[j];
+        j++;
+    }
+    return strnode_new(str);
+}
+/*
+
+// CHAR_NODE    ::= COL_TOKEN
+static s_node* parse_char(char *itr, int *i)
+{
+    s_token next = scanner_next(itr, i);
+    return charnode_new(next.location.start[0]);
+}*/
+
+s_node *parse(char *itr, int *i) {
+    s_node *left = NULL;
+    s_node *right = NULL;
+    s_token next;
+
+    left = parse_str(itr, i);
+
+    while (scanner_has_next(itr, i)) {
+        next = scanner_peek(itr, i);
+        if (next.type == PIPE_TOKEN) {
+            scanner_next(itr, i);
+            right = parse_str(itr, i);
+            if (!right) {
+                return errornode_new("Expected a command after |");
+            }
+            left = pairnode_new(left, right);
+        } else {
+            break;
+        }
+    }
+
+    return left;
+}

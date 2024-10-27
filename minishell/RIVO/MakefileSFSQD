@@ -6,46 +6,34 @@
 #    By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/22 08:39:35 by rhanitra          #+#    #+#              #
-#    Updated: 2024/10/27 16:51:23 by rhanitra         ###   ########.fr        #
+#    Updated: 2024/10/27 15:00:39 by rhanitra         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FT_JOSIA = exec.c ft_cmd.c ft_multiline.c ft_path.c here_doc_utils.c here_doc.c \
-	list.c guards.c main.c node.c parser.c quote.c real_path.c scanner.c \
-	signal.c tokens.c vector.c
-
-DIR_FT_JOSIA = ./
-SRC_FT_JOSIA = $(addprefix $(DIR_FT_JOSIA),$(FT_JOSIA))
-
-FT_RIVO = main.c format_input.c check_behavior.c utils.c format_cmd.c \
+MINISHELL = main.c format_input.c check_behavior.c utils.c format_cmd.c \
 			format_argv.c parser.c format_params.c init_list_params.c
 
-DIR_FT_RIVO = ./RIVO/
-SRC_FT_RIVO = $(addprefix $(DIR_FT_RIVO),$(FT_RIVO))
+DIR_MINISHELL = ./
+SRC_MINISHELL = $(addprefix $(DIR_MINISHELL),$(MINISHELL))
 
-DIR_LIBFT = ./libft
+DIR_LIBFT = ../libft
 LIBFT = $(DIR_LIBFT)/libft.a
 
-DIR_LJOSIA = ./ljosia
-LJOSIA = $(DIR_LJOSIA)/ljosia.a
-
-DIR_UTILS = ./RIVO/utils
+DIR_UTILS = ./utils
 UTILS = $(DIR_UTILS)/libutils.a
 
-DIR_BUILTINS = ./RIVO/builtins
+DIR_BUILTINS = ./builtins
 
-OBJ_FT_RIVO = $(SRC_FT_RIVO:.c=.o)
-OBJ_FT_JOSIA = $(SRC_FT_JOSIA:.c=.o)
+OBJ_MINISHELL = $(SRC_MINISHELL:.c=.o)
 
-EXEC = ft_rivo
-NAME = minishell
+EXEC = minishell
 
 CFLAGS = -Wall -Wextra -Werror -g -I $(DIR_LIBFT) -I $(DIR_UTILS) -I $(DIR_BUILTINS)
 CC = cc
 RM = rm -rf
 AR = ar rcs
 
-all : $(EXEC) $(NAME)
+all : $(EXEC)
 
 %.o : %.c
 	$(CC) $(CFLAGS) -o $@ -c $<
@@ -53,33 +41,23 @@ all : $(EXEC) $(NAME)
 $(LIBFT):
 	$(MAKE) -C $(DIR_LIBFT)
 
-$(LJOSIA):
-	$(MAKE) -C $(DIR_LJOSIA)
-
 $(UTILS):
 	$(MAKE) -C $(DIR_UTILS)
 	$(MAKE) -C $(DIR_BUILTINS)
 
 
-$(EXEC) : $(OBJ_FT_RIVO) $(LIBFT) $(UTILS)
-	$(CC)  $(CFLAGS) -o $@ $^ -L$(DIR_LIBFT) -lft -L$(DIR_UTILS) -lutils -lreadline
-
-$(NAME) : $(OBJ_FT_JOSIA) $(LIBFT) $(LJOSIA)
+$(EXEC) : $(OBJ_MINISHELL) $(LIBFT) $(UTILS)
 	$(CC)  $(CFLAGS) -o $@ $^ -L$(DIR_LIBFT) -lft -L$(DIR_UTILS) -lutils -lreadline
 
 clean :
-	$(RM) $(OBJ_FT_RIVO)
-	$(RM) $(OBJ_FT_JOSIA)
+	$(RM) $(OBJ_MINISHELL)
 	$(MAKE) -C $(DIR_LIBFT) clean
-	$(MAKE) -C $(DIR_LJOSIA) clean
 	$(MAKE) -C $(DIR_UTILS) clean
 	$(MAKE) -C $(DIR_BUILTINS) clean
 
 fclean : clean
 	$(RM) $(EXEC)
-	$(RM) $(NAME)
 	$(MAKE) -C $(DIR_LIBFT) fclean
-	$(MAKE) -C $(DIR_LJOSIA) fclean
 	$(MAKE) -C $(DIR_UTILS) fclean
 	$(MAKE) -C $(DIR_BUILTINS) fclean
 
