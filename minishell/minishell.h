@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 20:51:59 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/10/27 16:28:44 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/10/27 18:51:07 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,23 @@
 
 #include <stddef.h>
 # include <limits.h>
-# include <stddef.h>
+# include <ctype.h>
+# include <fcntl.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <unistd.h>
-# include <readline/readline.h>
-# include <readline/history.h>
 #include <signal.h>
 #include <sys/wait.h>
 #include <errno.h>
 
-
-#include "./ljosia/ljosia.h"
-// #include "./libft/libft.h"
-#include "./RIVO/rivo.h"
+# include "./libft/libft.h"
+# include "./utils/utils.h"
 
 #define MAX_CHILDREN 1024
 
@@ -96,6 +98,15 @@ struct Node {
     e_nodetype type;
     u_nodevalue data;
 };
+
+/********************************************** */
+typedef struct s_params
+{
+	int				status;
+	// struct s_params	*next;
+}               t_params;
+
+/******************************************** */
 
 // clean_arg.c
 char *join_argv(char **argv);
@@ -171,5 +182,11 @@ char next(char *itr, int *i, int length);
 char* extract_word(char *input, int *i);
 char* extract_redirection(char *input, int *i);
 s_element *parse_cmd(char *input);
+
+//format_argv.c
+void format_variable(char **argv, t_params *params);
+
+//format_cmd.c
+char	**put_argv(char **argv, char *input, t_params *params);
 
 #endif

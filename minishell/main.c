@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 09:33:58 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/10/27 16:16:20 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/10/27 18:41:14 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int main(int argc, char *argv[])
 {
     char *input;
-    int i;
 
     rl_catch_signals = 0;
     signal_handlers(SIGCHLD);
@@ -30,12 +29,10 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     params->status = 0;
-    params->str = NULL;
     (void)argc;
     
     while (1)
     {
-        i = 0;
         input = readline("# ");
         if (!input)
         {

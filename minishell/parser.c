@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 11:59:50 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/10/27 16:18:37 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/10/27 18:41:44 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ static s_node* parse_str(char *itr, int *i)
 {
     char *str;
     size_t j;
-    int start;
+   // int start;
 
-    start = *i;
+   // start = *i;
     s_token next = scanner_next(itr, i);
     j = 0;
     str = (char *)malloc(sizeof(char) * (next.location.length) + 1);
