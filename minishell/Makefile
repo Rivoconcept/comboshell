@@ -10,9 +10,9 @@
 #                                                                              #
 # **************************************************************************** #
 
-MINISHELL = exec.c ft_cmd.c ft_multiline.c ft_path.c here_doc_utils.c here_doc.c \
-	list.c guards.c main.c node.c parser.c quote.c real_path.c scanner.c \
-	signal.c tokens.c vector.c format_argv.c format_cmd.c
+MINISHELL = child_process.c clean_arg.c exec_utils.c exec.c ft_check.c ft_cmd.c ft_multiline.c ft_path.c \
+	here_doc_utils.c here_doc.c list.c guards.c main.c node.c parser.c quote.c real_path.c \
+	redirection.c redirection_utils.c scanner.c signal.c tokens.c vector.c format_argv.c format_cmd.c
 
 DIR_MINISHELL = ./
 SRC_MINISHELL = $(addprefix $(DIR_MINISHELL),$(MINISHELL))

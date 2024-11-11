@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 09:04:33 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/10/27 16:19:11 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/10/25 09:04:33 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ char* extract_redirection(char *input, int *i)
     return NULL;
 }
 
-static e_tokentype token_types (char *rdir)
+static e_tokentype redirection_type (char *rdir)
 {
     if (!ft_strcmp(rdir, "<<"))
         return HERE_TOKEN;
@@ -106,14 +106,14 @@ s_element *parse_cmd(char *input)
     s_element *element_list = NULL;
     char *redir;
     char *value;
-    
+
     while (input[i]) {
         while (input[i] == ' ')
             i++;
         if (input[i] == '>' || input[i] == '<') {
             redir = extract_redirection(input, &i);
             value = extract_word(input, &i);
-            element_list = add_element(element_list, value, token_types(redir));
+            element_list = add_element(element_list, value, redirection_type(redir));
             free(redir);
             free(value);
         } else if (input[i]) {

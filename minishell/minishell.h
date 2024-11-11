@@ -33,17 +33,12 @@
 # include "./libft/libft.h"
 # include "./utils/utils.h"
 
-#define MAX_CHILDREN 1024
+#define PID_FILE "/tmp/child_pids.txt"
 
-typedef struct s_children {
-    pid_t pids[MAX_CHILDREN];
-    int count;
-} t_children;
-
-typedef struct s_context {
-    int fd[2];
-    int fd_close;
-} s_context;
+typedef struct {
+    pid_t *child_pids;
+    int child_count;
+} s_state;
 
 typedef enum e_tokentype {
     END_TOKEN = 0,
@@ -56,6 +51,18 @@ typedef enum e_tokentype {
     GREAT_TOKEN = 7, // >
     DGREAT_TOKEN =8 // >>
 } e_tokentype;
+
+typedef struct s_redirection {
+    e_tokentype type;
+    char *value;
+} s_redirection;
+
+typedef struct s_redirections {
+    s_redirection *less;
+    s_redirection *great;
+    s_redirection *dgreat;
+    s_redirection *here;
+} s_redirections;
 
 typedef struct s_element {
     e_tokentype type;
@@ -111,11 +118,19 @@ typedef struct s_params
 // clean_arg.c
 char *join_argv(char **argv);
 
+// exec_utils.c
+void node_list(const s_node *node, s_element **elements);
+void wait_for_children(int num_cmds);
+void close_pipes(int **pipes, int num_pipes);
+int **create_pipes(int num_pipes);
+
 // exec.c
-void exec(const s_node *node);
-int exec_node(const s_node *node, s_context *ctx, t_children *children);
-int exec_pipe(const s_node *node, s_context *ctx, t_children *children) ;
-int exec_command(char **argv, s_context *ctx, t_children *children);
+int exec(const s_node *node);
+
+// ft_check.c
+int	check_infile_err(char *infile, char *shell);
+int	check_infile(char *infile);
+int	check_outfile(char *outfile, char *shell);
 
 // ft_cmd.c
 char	*check_shell(char *path);
@@ -141,6 +156,7 @@ s_element *add_element(s_element *list, char *value, e_tokentype type);
 void print_elements(s_element *list);
 void free_elements(s_element *list);
 char **list_to_array(s_element *list);
+int count_elements(s_element *list);
 
 // node.c 
 s_node *strnode_new(char *c);
@@ -161,6 +177,16 @@ int is_absolute_path(const char *path);
 int is_executable_name(const char *path);
 char* simplify_path(const char *path);
 
+// redirection_utils.c
+void free_redirection(s_redirection *redir);
+void handle_redirection(s_redirection **redir, e_tokentype type, char *value);
+void remove_current_element(s_element **elements, s_element **prev, s_element **current);
+
+// redirection.c
+s_element *redirect_io(s_element **elements, s_redirections *redirs);
+s_redirection *add_red(e_tokentype type, char *value);
+void free_redirections(s_redirections *redirs);
+
 // scanner.c
 int len_word(char *str, int *start);
 s_token scanner_peek(char *itr, int *i);
@@ -168,10 +194,10 @@ int scanner_has_next(char *itr, int *i);
 s_token scanner_next(char *itr, int *i);
 
 // signal.c
-void register_child(t_children *children, pid_t pid);
-void terminate_children(t_children *children);
-void sig_handler(int signal);
-void signal_handlers(int sign);
+void catch_ctrl_c(int sig, siginfo_t *info, void *ucontext);
+void catch_sigquit(int sig, siginfo_t *info, void *ucontext);
+void write_pid(pid_t pid);
+
 
 // tokens.c
 int has_next(const char *itr, int *i);

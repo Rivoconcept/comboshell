@@ -3,108 +3,81 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 07:01:52 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/10/27 16:10:33 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/10/26 07:01:52 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static void execute_command(s_element *cmd, int **pipes, int i, int num_cmds)
+{
+    char **argv = NULL;
+    pid_t pid;
+    s_element *commande;
 
-void exec(const s_node *node) {
-    t_children children = { .count = 0 };
-    
-    s_context ctx = {
-        {STDIN_FILENO, STDOUT_FILENO},
-        -1
-    };
-    
-    int children_count = exec_node(node, &ctx, &children);
-    
-    int remaining = children_count;
-    
-    while (remaining > 0) {
-        for (int i = 0; i < children_count; i++) {
-            if (children.pids[i] == -1) 
-                continue;
-            
-            int status;
-            pid_t result = waitpid(children.pids[i], &status, 0);
-            
-            if (result > 0) {
-                remaining--;
-                children.pids[i] = -1;
-            } 
-            else if (result == -1) {
-                if (errno == ECHILD) {
-                    remaining--;
-                    children.pids[i] = -1;
-                } else {
-                    terminate_children(&children);
-                    return;
-                }
-            }
+    argv = put_argv(argv, cmd->value, NULL);
+    free(cmd->value);
+    cmd->value  = join_argv(argv);
+    free(argv);
+
+    commande = parse_cmd(cmd->value);
+    argv = list_to_array(commande);
+    free_elements(commande);
+
+    pid = fork();
+    if (pid == -1)
+    {
+        perror("fork failed");
+        ft_free(argv, count_array(argv));
+        exit(1);
+    }
+    if (pid == 0)
+    {
+        write_pid(getpid());
+        if (i > 0)
+            dup2(pipes[i - 1][0], STDIN_FILENO);
+        if (i < num_cmds - 1)
+            dup2(pipes[i][1], STDOUT_FILENO);
+        close_pipes(pipes, num_cmds - 1);
+        if (execvp(argv[0], argv) == -1) {
+            perror("execvp failed");
+            exit(1);
         }
     }
-    terminate_children(&children);
+   ft_free(argv, count_array(argv));
 }
 
-int exec_node(const s_node *node, s_context *ctx, t_children *children) {
-    char **argv;
+static void execute_dynamic_pipeline(s_element *cmd) {
+    int num_cmds;
+    int **pipes = NULL;
+    int i;
+    s_element *current_cmd;
 
-    if (node->type == PAIR_NODE) {
-        return exec_pipe(node, ctx, children);
-    } else if (node->type == STR_NODE) {
-        argv = list_to_array(parse_cmd(node->data.str));
-        return exec_command(argv, ctx, children);
+    num_cmds = count_elements(cmd);
+    if (num_cmds == 0) return;
+    if (num_cmds > 1)
+        pipes = create_pipes(num_cmds - 1);
+    current_cmd = cmd;
+    i = 0;
+    while (current_cmd) {
+        execute_command(current_cmd, pipes, i, num_cmds);
+        current_cmd = current_cmd->next;
+        i++;
     }
-    return 0;
+    if (num_cmds > 1)
+        close_pipes(pipes, num_cmds - 1);
+    wait_for_children(num_cmds);
 }
 
+int exec(const s_node *node) {
+    s_element *commands = NULL;
 
-int exec_pipe(const s_node *node, s_context *ctx, t_children *children) {
-    int p[2];
-    int children_count = 0;
-    s_context lhs_ctx;
-    s_context rhs_ctx;
-
-    if (pipe(p) == -1) {
-        perror("pipe");
-        return 0;
-    }
-
-    const s_node *lhs = node->data.pair.left;
-    lhs_ctx = *ctx;
-    lhs_ctx.fd[STDOUT_FILENO] = p[STDOUT_FILENO];
-    lhs_ctx.fd_close = p[STDIN_FILENO];
-    children_count += exec_node(lhs, &lhs_ctx, children);
-
-    const s_node *rhs = node->data.pair.right;
-    rhs_ctx = *ctx;
-    rhs_ctx.fd[STDIN_FILENO] = p[STDIN_FILENO];
-    rhs_ctx.fd_close = p[STDOUT_FILENO];
-    children_count += exec_node(rhs, &rhs_ctx, children);
-
-    close(p[STDIN_FILENO]);
-    close(p[STDOUT_FILENO]);
-    return children_count;
-}
-
-int exec_command(char **argv, s_context *ctx, t_children *children) {
-    pid_t child_pid = fork();
-    if (child_pid == 0) {
-        dup2(ctx->fd[STDIN_FILENO], STDIN_FILENO);
-        dup2(ctx->fd[STDOUT_FILENO], STDOUT_FILENO);
-        if (ctx->fd_close >= 0)
-            close(ctx->fd_close);
-        execvp(argv[0], argv);
-        perror("execvp");
-        exit(EXIT_FAILURE);
-    } else if (child_pid > 0) {
-        register_child(children, child_pid);
-    }
-    ft_free(argv, count_array(argv));
+    node_list(node, &commands);
+    execute_dynamic_pipeline(commands);
+    free_elements(commands);
+    unlink(PID_FILE);
     return 1;
 }

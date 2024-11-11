@@ -115,12 +115,6 @@ char	**put_argv(char **argv, char *input, t_params *params)
     format_variable(argv, params);
     ft_del_quotes(argv);
 
-    int i = 0;
-    while (argv[i] != NULL)
-    {
-        printf("%s\n", argv[i]);
-        i++;
-    }
 	if (!isbuiltins(argv[0]))
 		cmd = check_cmd_standard(argv[0]);
 	else

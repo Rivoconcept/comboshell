@@ -41,7 +41,7 @@ s_element *add_element(s_element *list, char *value, e_tokentype type)
     return list;
 }
 
-static int count_elements(s_element *list) {
+int count_elements(s_element *list) {
     int count = 0;
     while (list) {
         count++;
@@ -60,7 +60,7 @@ static void remove_newline(char *str) {
 char **list_to_array(s_element *list)
 {
     int count;
-    char **args;
+    char **args = NULL;
     int i;
 
     i = 0;

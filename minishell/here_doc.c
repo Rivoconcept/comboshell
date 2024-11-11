@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:41:20 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/10/27 16:13:10 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/10/17 21:41:20 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
