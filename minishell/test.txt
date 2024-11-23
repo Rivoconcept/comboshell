@@ -1,0 +1,14 @@
+static void pipes_fd(int i, int num_cmds, int **pipes, s_redirections *redirs) {
+    if (i < num_cmds - 1 && !redirs->great && !redirs->dgreat) {
+static void execute_command(s_element *cmd, int **pipes, int i, int num_cmds)
+        pipes_fd(i, num_cmds, pipes, &redirs);
+        close_pipes(pipes, num_cmds - 1);
+    int num_cmds;
+    num_cmds = count_elements(cmd);
+    if (num_cmds == 0) return;
+    if (num_cmds > 1)
+        pipes = create_pipes(num_cmds - 1);
+        execute_command(current_cmd, pipes, i, num_cmds);
+    if (num_cmds > 1)
+        close_pipes(pipes, num_cmds - 1);
+    wait_for_children(num_cmds);
