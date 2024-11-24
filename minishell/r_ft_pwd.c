@@ -1,32 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/27 09:56:43 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/02 10:59:40 by rhanitra         ###   ########.fr       */
+/*   Created: 2024/10/17 19:24:53 by rhanitra          #+#    #+#             */
+/*   Updated: 2024/11/15 19:27:29 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <sys/types.h>
+#include "minishell.h"
 
-size_t	ft_strlcpy(char	*dest, const char *src, size_t size)
+int ft_pwd(void)
 {
-	size_t	src_len;
-	size_t	i;
+    char *cwd;
 
-	i = 0;
-	src_len = ft_strlen(src);
-	if (!size)
-		return (src_len);
-	while (src[i] != '\0' && i < size - 1)
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (src_len);
+    cwd = getcwd(NULL, 0);
+    if (cwd == NULL)
+        return (perror("Error on getcwd"), 1);
+    printf("%s\n", cwd);
+    free(cwd);
+    return (0);
 }

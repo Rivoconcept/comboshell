@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 09:33:58 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/10/08 09:33:58 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/11/24 13:49:03 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@ int main(int argc, char *argv[])
     char *input;
     int i;
     int status = 0;
-    s_node *node;
+    t_node *node;
     t_params *params;
+    (void)argv;
 
     rl_catch_signals = 0;
 
@@ -28,7 +29,6 @@ int main(int argc, char *argv[])
     sa.sa_sigaction = catch_ctrl_c;
     sigaction(SIGINT, &sa, NULL);
 
-    // Configurer SIGQUIT
     memset(&sa, 0, sizeof(sa));
     sa.sa_flags = SA_SIGINFO;
     sa.sa_sigaction = catch_sigquit;
@@ -57,10 +57,10 @@ int main(int argc, char *argv[])
         {
             if (ft_strlen(input) > 0)
             {
-                argv = put_argv(argv, input, params);
-                free(input);
-                input = join_argv(argv);
-                free(argv);
+                //argv = put_argv(argv, input, params);
+                //free(input);
+                //input = join_argv(argv);
+                //free(argv);
                 while (has_next(input, &i))
                     node = parse(input, &i);
                 if (node)

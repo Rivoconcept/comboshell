@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 20:51:59 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/10/27 18:51:07 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/11/24 13:15:04 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 #include <errno.h>
 
 # include "./libft/libft.h"
-# include "./utils/utils.h"
+//# include "./utils/utils.h"
 
 #define PID_FILE "/tmp/child_pids.txt"
 
@@ -55,32 +55,32 @@ typedef enum e_tokentype {
 typedef struct s_redirection {
     e_tokentype type;
     char *value;
-} s_redirection;
+} t_redirection;
 
 typedef struct s_redirections {
-    s_redirection *less;
-    s_redirection *great;
-    s_redirection *dgreat;
-    s_redirection *here;
-} s_redirections;
+    t_redirection *less;
+    t_redirection *great;
+    t_redirection *dgreat;
+    t_redirection *here;
+} t_redirections;
 
 typedef struct s_element {
     e_tokentype type;
     char *value;
     struct s_element *next;
-} s_element;
+} t_element;
 
 typedef struct s_slice {
     char *start;
     size_t length;
-} s_slice;
+} t_slice;
 
 typedef struct s_token {
     e_tokentype type;
-    s_slice location;
-} s_token;
+    t_slice location;
+} t_token;
 
-typedef struct Node s_node;
+typedef struct Node t_node;
 
 typedef enum e_nodetype {
     ERROR_NODE = -1,
@@ -90,12 +90,12 @@ typedef enum e_nodetype {
 } e_nodetype;
 
 typedef struct s_pairvalue {
-    s_node *left;
-    s_node *right;
-} s_pairvalue;
+    t_node *left;
+    t_node *right;
+} t_pairvalue;
 
 typedef union {
-    s_pairvalue pair;
+    t_pairvalue pair;
     char value;
     char *error;
     char *str;
@@ -119,13 +119,16 @@ typedef struct s_params
 char *join_argv(char **argv);
 
 // exec_utils.c
-void node_list(const s_node *node, s_element **elements);
+void node_list(const t_node *node, t_element **elements);
 void wait_for_children(int num_cmds);
 void close_pipes(int **pipes, int num_pipes);
 int **create_pipes(int num_pipes);
 
 // exec.c
-int exec(const s_node *node);
+int exec(const t_node *node);
+// free.c
+int count_array (char **argv);
+void	*ft_free(char **ar, int index);
 
 // ft_check.c
 int	check_infile_err(char *infile, char *shell);
@@ -138,6 +141,25 @@ char *is_valid_cmd(char *path, char *cmd);
 
 // ft_multiline.c
 char *multiline(char **input);
+
+// ft_strcat.c
+char *ft_strcat(char *dest, char *src);
+
+// ft_strcmp.c
+int	ft_strcmp(const char *first, const char *second);
+
+// ft_strcpy.c 
+char    *ft_strcpy(char *s1, char *s2);
+
+// ft_strndup.c
+char	*ft_strndup(const char *s, size_t size);
+
+// ft_realloc.c
+void *ft_realloc(void *ptr, size_t new_size);
+
+// ft_subfirst.c
+char	*ft_subfirst(char *s, unsigned int start, size_t len);
+char	*ft_substrj(char *s, unsigned int start, size_t len);
 
 // ft_path.c
 char	*get_path(char *envp[], char *rgx);
@@ -152,21 +174,21 @@ char **here_key(char *input);
 void process_here(char **keys);
 
 // list.c
-s_element *add_element(s_element *list, char *value, e_tokentype type);
-void print_elements(s_element *list);
-void free_elements(s_element *list);
-char **list_to_array(s_element *list);
-int count_elements(s_element *list);
+t_element *add_element(t_element *list, char *value, e_tokentype type);
+void print_elements(t_element *list);
+void free_elements(t_element *list);
+char **list_to_array(t_element *list);
+int count_elements(t_element *list);
 
 // node.c 
-s_node *strnode_new(char *c);
-s_node *charnode_new(char c);
-s_node *pairnode_new(s_node *left, s_node *right);
-s_node *errornode_new(char *msg);
-void *node_drop(s_node *node);
+t_node *strnode_new(char *c);
+t_node *charnode_new(char c);
+t_node *pairnode_new(t_node *left, t_node *right);
+t_node *errornode_new(char *msg);
+void *node_drop(t_node *node);
 
 // parser.c
-s_node *parse(char *itr, int *i);
+t_node *parse(char *itr, int *i);
 
 // quote.c
 int check_quote(char *str);
@@ -178,20 +200,20 @@ int is_executable_name(const char *path);
 char* simplify_path(const char *path);
 
 // redirection_utils.c
-void free_redirection(s_redirection *redir);
-void handle_redirection(s_redirection **redir, e_tokentype type, char *value);
-void remove_current_element(s_element **elements, s_element **prev, s_element **current);
+void free_redirection(t_redirection *redir);
+void handle_redirection(t_redirection **redir, e_tokentype type, char *value);
+void remove_current_element(t_element **elements, t_element **prev, t_element **current);
 
 // redirection.c
-s_element *redirect_io(s_element **elements, s_redirections *redirs);
-s_redirection *add_red(e_tokentype type, char *value);
-void free_redirections(s_redirections *redirs);
+t_element *redirect_io(t_element **elements, t_redirections *redirs);
+t_redirection *add_red(e_tokentype type, char *value);
+void free_redirections(t_redirections *redirs);
 
 // scanner.c
 int len_word(char *str, int *start);
-s_token scanner_peek(char *itr, int *i);
+t_token scanner_peek(char *itr, int *i);
 int scanner_has_next(char *itr, int *i);
-s_token scanner_next(char *itr, int *i);
+t_token scanner_next(char *itr, int *i);
 
 // signal.c
 void catch_ctrl_c(int sig, siginfo_t *info, void *ucontext);
@@ -207,12 +229,13 @@ char next(char *itr, int *i, int length);
 // vector.c
 char* extract_word(char *input, int *i);
 char* extract_redirection(char *input, int *i);
-s_element *parse_cmd(char *input);
+t_element *parse_cmd(char *input);
 
 //format_argv.c
 void format_variable(char **argv, t_params *params);
 
 //format_cmd.c
 char	**put_argv(char **argv, char *input, t_params *params);
+
 
 #endif

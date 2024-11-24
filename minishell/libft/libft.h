@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 09:20:21 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/09/25 11:12:35 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/11/02 11:04:43 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
@@ -49,7 +49,7 @@ int					ft_memcmp(const void *s1, const void *s2, size_t n);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 
 size_t				ft_strlen(const char *str);
-size_t				ft_strlcpy(char *dest, char *src, size_t size);
+size_t				ft_strlcpy(char	*dest, const char *src, size_t size);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 
 void				ft_bzero(void *s, size_t n);

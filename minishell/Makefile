@@ -6,13 +6,23 @@
 #    By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/22 08:39:35 by rhanitra          #+#    #+#              #
-#    Updated: 2024/10/27 18:37:25 by rhanitra         ###   ########.fr        #
+#    Updated: 2024/11/24 14:45:44 by rhanitra         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-MINISHELL = child_process.c clean_arg.c exec_utils.c exec.c ft_check.c ft_cmd.c ft_multiline.c ft_path.c \
-	here_doc_utils.c here_doc.c list.c guards.c main.c node.c parser.c quote.c real_path.c \
-	redirection.c redirection_utils.c scanner.c signal.c tokens.c vector.c format_argv.c format_cmd.c
+MINISHELL = l_child_process.c l_exec_utils.c l_exec.c l_free.c l_ft_check.c \
+			l_ft_multiline.c l_ft_strcmp.c l_ft_utils_5.c l_ft_utils_6.c \
+			l_guards.c l_here_doc_utils.c l_here_doc.c l_list.c l_node.c \
+			l_parser.c l_quote.c l_real_path.c l_redirection_utils.c \
+			l_redirection.c l_scanner.c l_signal.c l_tokens.c \
+			l_vector.c main.c \
+			#r_check_behavior.c r_check_quotes.c r_format_argv.c \
+			r_format_cmd.c r_format_input.c r_format_quotes.c r_ft_cd1.c \
+			r_ft_cd2.c r_ft_cleaner.c r_ft_echo.c r_ft_env.c r_ft_export.c \
+			r_ft_is_token.c r_ft_pwd.c r_ft_utils_1.c r_ft_utils_2.c \
+			r_ft_utils_3.c r_ft_utils_4.c r_handle_quotes.c \
+			r_init_list_env.c r_init_list_params.c r_main.c \
+			r_parser.c r_signal.c
 
 DIR_MINISHELL = ./
 SRC_MINISHELL = $(addprefix $(DIR_MINISHELL),$(MINISHELL))
@@ -20,16 +30,11 @@ SRC_MINISHELL = $(addprefix $(DIR_MINISHELL),$(MINISHELL))
 DIR_LIBFT = ./libft
 LIBFT = $(DIR_LIBFT)/libft.a
 
-DIR_UTILS = ./utils
-UTILS = $(DIR_UTILS)/libutils.a
-
-DIR_BUILTINS = ./builtins
-
 OBJ_MINISHELL = $(SRC_MINISHELL:.c=.o)
 
 EXEC = minishell
 
-CFLAGS = -Wall -Wextra -Werror -g -I $(DIR_LIBFT) -I $(DIR_UTILS) -I $(DIR_BUILTINS)
+CFLAGS = -Wall -Wextra -Werror -g -I $(DIR_LIBFT)
 CC = cc
 RM = rm -rf
 AR = ar rcs
@@ -42,25 +47,16 @@ all : $(EXEC)
 $(LIBFT):
 	$(MAKE) -C $(DIR_LIBFT)
 
-$(UTILS):
-	$(MAKE) -C $(DIR_UTILS)
-	$(MAKE) -C $(DIR_BUILTINS)
-
-
-$(EXEC) : $(OBJ_MINISHELL) $(LIBFT) $(UTILS)
-	$(CC)  $(CFLAGS) -o $@ $^ -L$(DIR_LIBFT) -lft -L$(DIR_UTILS) -lutils -lreadline
+$(EXEC) : $(OBJ_MINISHELL) $(LIBFT)
+	$(CC)  $(CFLAGS) -o $@ $^ -L$(DIR_LIBFT) -lft -lreadline
 
 clean :
 	$(RM) $(OBJ_MINISHELL)
 	$(MAKE) -C $(DIR_LIBFT) clean
-	$(MAKE) -C $(DIR_UTILS) clean
-	$(MAKE) -C $(DIR_BUILTINS) clean
 
 fclean : clean
 	$(RM) $(EXEC)
 	$(MAKE) -C $(DIR_LIBFT) fclean
-	$(MAKE) -C $(DIR_UTILS) fclean
-	$(MAKE) -C $(DIR_BUILTINS) fclean
 
 re : fclean all
 
