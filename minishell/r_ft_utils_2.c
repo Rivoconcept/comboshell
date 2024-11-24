@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_utils_2.c                                       :+:      :+:    :+:   */
+/*   r_ft_utils_2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/24 12:59:19 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/11/24 20:58:54 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,12 @@ char    *format_str_without_quote(char *input)
     new_input[j] = '\0';
     free(input);
     return (new_input);
+}
+
+void close_pipe(int fd[2])
+{
+    if (fd[0] != -1)
+        close(fd[0]);
+    if (fd[1] != -1)
+        close(fd[1]);
 }
