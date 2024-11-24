@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 20:51:59 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/11/24 21:03:30 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/11/24 21:46:55 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,12 +253,6 @@ char* extract_word(char *input, int *i);
 char* extract_redirection(char *input, int *i);
 t_element *parse_cmd(char *input);
 
-//format_argv.c
-void format_variable(char **argv, t_params *params);
-
-//format_cmd.c
-char	**put_argv(char **argv, char *input, t_params *params);
-
 
 /***********************FT_RIVO************************************************************** */
 
@@ -341,7 +335,7 @@ int ft_pwd(void);
 
 // r_ft_utils_1.c
 void print_prompt();
-int ft_isspace(char c);
+int ft_is_space(char c);
 int while_check_char(char c, char *input);
 int find_first_index(const char *big, const char *little);
 void free_array(char **arr);
@@ -383,7 +377,7 @@ t_params *create_list_params(char **envp);
 
 // r_parser.c
 int put_word_len(char *str);
-int check_quote(char c, char *str, int *i);
+int ft_check_quote(char c, char *str, int *i);
 int word_count(char *str);
 char *split_word(char *str, int index);
 char **parse_command(char const *input);

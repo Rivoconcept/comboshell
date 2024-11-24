@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   r_parser.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 19:39:54 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/13 11:30:05 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/11/24 21:27:41 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -30,7 +30,7 @@ int put_word_len(char *str)
     return (i);
 }
 
-int check_quote(char c, char *str, int *i)
+int ft_check_quote(char c, char *str, int *i)
 {
     if (str[*i] == c)
     {
@@ -55,7 +55,7 @@ int word_count(char *str)
     j = 0;
     while (str[i] != '\0')
     {
-        if (check_quote('\'', str, &i) || check_quote('"', str, &i))
+        if (ft_check_quote('\'', str, &i) || ft_check_quote('"', str, &i))
             j++;
         else if (str[i] != ' ' && (i == 0 || str[i - 1] == ' '))
         {
