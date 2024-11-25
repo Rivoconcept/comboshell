@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:46:29 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/24 13:01:57 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/11/25 15:59:43 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -38,78 +38,6 @@ void print_cmd(t_params *params)
         current = current->next;
     }
 }
-
-void put_val_exit_status(t_params *params)
-{
-    int sig;
-    char *ws_val;
-    char *temp;
-
-    sig = 0;
-    ws_val = NULL;
-    temp = NULL;
-    if (WIFSIGNALED(params->status))
-    {
-        sig = WTERMSIG(params->status);
-        if (sig == SIGINT)
-            ws_val = ft_itoa(128 + sig);
-        else
-            ws_val = ft_itoa(128 + sig);
-    }
-    else if (WIFEXITED(params->status))
-        ws_val = ft_itoa(WEXITSTATUS(params->status));
-    else
-        printf("Error: Child process did not terminate properly.\n");
-    if (ws_val)
-    {
-        temp = ft_strjoin("?=", ws_val);
-        free(ws_val);
-        create_env(&params->myenvp, temp);
-        free(temp);
-    }
-    else
-        printf("Error: ws_val is NULL\n");
-}
-
-void init_var_env(t_env *myenv, char **envp)
-{
-    int i = 0;
-    while (envp[i] != NULL)
-    {
-        create_env(&myenv, envp[i]);
-        i++;
-    }
-}
-
-void close_pipe(int fd[2])
-{
-    if (fd[0] != -1)
-        close(fd[0]);
-    if (fd[1] != -1)
-        close(fd[1]);
-}
-
-int run_builtins(char **cmd, t_params *params, char *input)
-{
-    if (!cmd || !cmd[0])
-        return (0);
-    if (!ft_strcmp(cmd[0], "cd"))
-        return (ft_cd(cmd[1], params), 1);
-    if (!ft_strcmp(cmd[0], "pwd"))
-        return (ft_pwd(), 1);
-    if (!ft_strcmp(cmd[0], "env"))
-        return (ft_env(params), 1);
-    if (!ft_strcmp(cmd[0], "echo"))
-        return (ft_echo(cmd), 1);
-    if (!ft_strcmp(cmd[0], "unset"))
-        del_env_element(&params->myenvp, cmd[1]);
-    if (!ft_strcmp(cmd[0], "export"))
-        return (ft_export(cmd, params), 1);
-    if (!ft_strcmp(cmd[0], "exit"))
-        cleanup_and_exit(params, input, 1);
-    return (0);
-}
-
 
 int execution(t_params *params, char *input)
 {
@@ -190,26 +118,6 @@ int execution(t_params *params, char *input)
     if (in_fd != -1)
         close(in_fd);
 
-    return (0);
-}
-
-int cmd_not_found(t_params *params, char *input)
-{
-    t_cmd   *current;
-
-    current = params->cmd;
-    if (!current->cmd || !current->cmd[0])
-        return (0);
-    while (current != NULL)
-    {
-         if (access(current->cmd[0], X_OK | F_OK) != 0)
-         {
-            free(input);
-            free_list_cmd(params->cmd);
-            return (1);
-         }
-         current = current->next;
-    }
     return (0);
 }
 

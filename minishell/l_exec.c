@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 07:01:52 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/11/25 10:36:47 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:20:51 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -71,10 +71,10 @@ static void execute_command(t_element *cmd, int **pipes, int i, int num_cmds)
     t_element *commande;
     t_redirections redirs = {NULL, NULL, NULL, NULL};
 
-    //argv = put_argv(argv, cmd->value, NULL);
-   // free(cmd->value);
-    //cmd->value  = join_argv(argv);
-   // free(argv);
+    argv = put_argv(argv, cmd->value, NULL);
+    free(cmd->value);
+    cmd->value  = join_argv(argv);
+    free(argv);
 
     commande = parse_cmd(cmd->value);
     cmd = redirect_io(&commande, &redirs);

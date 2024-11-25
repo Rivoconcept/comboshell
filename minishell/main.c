@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 09:33:58 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/11/24 13:49:03 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:22:50 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -57,10 +57,10 @@ int main(int argc, char *argv[])
         {
             if (ft_strlen(input) > 0)
             {
-                //argv = put_argv(argv, input, params);
-                //free(input);
-                //input = join_argv(argv);
-                //free(argv);
+                params->cmd = put_argv(input, params);
+                free(input);
+                input = join_argv(argv);
+                free(argv);
                 while (has_next(input, &i))
                     node = parse(input, &i);
                 if (node)
