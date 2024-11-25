@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 20:51:59 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/11/24 21:46:55 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/11/25 10:31:44 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -387,5 +387,9 @@ void register_child(t_children *children, pid_t pid);
 void terminate_children(t_children *children);
 void sig_handler(int signal);
 void signal_handlers(int sign);
+
+// r_ft_builtins.c
+int cmd_not_found(t_params *params, char *input);
+int run_builtins(char **cmd, t_params *params, char *input);
 
 #endif
