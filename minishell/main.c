@@ -1,24 +1,27 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 09:33:58 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/11/25 14:22:50 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/08 15:38:03 by rrakoton         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "minishell.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv, char **envp)
 {
+    
+    
+    
     char *input;
     int i;
     int status = 0;
     t_node *node;
-    t_params *params;
+    t_params *params = create_list_params(envp);
     (void)argv;
 
     rl_catch_signals = 0;
@@ -34,12 +37,6 @@ int main(int argc, char *argv[])
     sa.sa_sigaction = catch_sigquit;
     sigaction(SIGQUIT, &sa, NULL);
 
-    params = (t_params *)malloc(sizeof(t_params));
-    if (!params)
-    {
-        perror("Failed to allocate memory for params");
-        exit(EXIT_FAILURE);
-    }
     params->status = 0;
     (void)argc;
 
@@ -57,7 +54,7 @@ int main(int argc, char *argv[])
         {
             if (ft_strlen(input) > 0)
             {
-                params->cmd = put_argv(input, params);
+                argv = put_argv(input, params);
                 free(input);
                 input = join_argv(argv);
                 free(argv);
@@ -65,7 +62,7 @@ int main(int argc, char *argv[])
                     node = parse(input, &i);
                 if (node)
                 {
-                    exec(node);
+                    exec(node, input, params);
                     node_drop(node);
                 }
                 add_history(input);

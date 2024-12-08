@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   r_ft_echo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 12:55:21 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/24 12:49:35 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/08 14:56:29 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	ft_print_echo(char *input, int fd)
 	return (count);
 }
 
-int run_echo(char **cmd, int flag[2], int fd)
+int run_echo(char **cmd, int flag[2])
 {
     int i = 1;
 
@@ -79,46 +79,22 @@ int run_echo(char **cmd, int flag[2], int fd)
         }
         if (strcmp(cmd[i], ">") == 0 || while_check_char(cmd[i][0], "&|<>;"))
             break;
-        ft_print_echo(cmd[i], fd);
+        ft_print_echo(cmd[i], STDOUT_FILENO);
+        close(STDOUT_FILENO);
         if (cmd[i + 1] != NULL && !ft_strcmp(cmd[i + 1], ">")
             && !while_check_char(cmd[i + 1][0], "&|<>;"))
-            write(fd, " ", 1);
+            write(1, " ", 1);
         i++;
     }
     if (!flag[1])
-        write(fd, "\n", 1);
+        write(1, "\n", 1);
     return (0);
 }
 
 int ft_echo(char **cmd)
 {
     int flag[2] = {0, 0};
-    int fd;
-    int i;
-
-    i = 0;
-    fd = STDOUT_FILENO;
-    while (cmd[i] != NULL)
-    {
-        if (strcmp(cmd[i], ">") == 0)
-        {
-            if (cmd[i + 1] == NULL)
-            {
-                perror("Error : unspecified file after '>'");
-                return (1);
-            }
-            fd = open(cmd[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            if (fd < 0)
-            {
-                perror("Error opening file");
-                return (1);
-            }
-            break;
-        }
-        i++;
-    }
-    run_echo(cmd, flag, fd);
-    if (fd != STDOUT_FILENO)
-        close(fd);
+   
+    run_echo(cmd, flag);
     return (0);
 }

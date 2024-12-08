@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_utils_6.c                                       :+:      :+:    :+:   */
+/*   l_ft_utils_6.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 13:09:54 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/11/24 13:14:19 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/08 14:22:07 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,27 @@ char	*ft_substrj(char *s, unsigned int start, size_t len)
 		ft_strncat(new, s + start, len);
 	free(s);
 	return (new);
+}
+
+char *join_argv(char **argv)
+{
+    int i;
+    char *new_str;
+    char *temp = NULL;
+
+    i = 1;
+    new_str = ft_strdup(argv[0]);
+    if (!new_str)
+        return (NULL);
+    while (argv[i] != NULL)
+    {
+        temp = ft_strjoin(new_str, " ");
+        free(new_str);
+        new_str = temp;
+        temp = ft_strjoin(new_str, argv[i]);
+        free(new_str);
+        new_str = temp;
+        i++;
+    }
+    return (new_str);
 }

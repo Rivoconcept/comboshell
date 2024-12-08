@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 20:51:59 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/11/25 10:31:44 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/08 14:55:19 by rrakoton         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -137,6 +137,7 @@ typedef struct s_params
 
 /******************************************** */
 
+
 // clean_arg.c
 char *join_argv(char **argv);
 
@@ -147,7 +148,7 @@ void close_pipes(int **pipes, int num_pipes);
 int **create_pipes(int num_pipes);
 
 // exec.c
-int exec(const t_node *node);
+int exec(const t_node *node, char *input, t_params *params);
 // free.c
 int count_array (char **argv);
 void	*ft_free(char **ar, int index);
@@ -312,7 +313,8 @@ void cleanup_and_exit(t_params *params, char *input, int status);
 // r_ft_echo.c
 int check_dash_n(char *str);
 int	ft_print_echo(char *input, int fd);
-int run_echo(char **cmd, int flag[2], int fd);
+//int run_echo(char **cmd, int flag[2], int fd);
+int run_echo(char **cmd, int flag[2]);
 int ft_echo(char **cmd);
 
 // r_ft_env.c
