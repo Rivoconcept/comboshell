@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 20:51:59 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/08 14:55:19 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:28:26 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -312,7 +312,7 @@ void cleanup_and_exit(t_params *params, char *input, int status);
 
 // r_ft_echo.c
 int check_dash_n(char *str);
-int	ft_print_echo(char *input, int fd);
+int	ft_print_echo(char *input);
 //int run_echo(char **cmd, int flag[2], int fd);
 int run_echo(char **cmd, int flag[2]);
 int ft_echo(char **cmd);

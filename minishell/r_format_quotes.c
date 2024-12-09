@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   format_quotes.c                                    :+:      :+:    :+:   */
+/*   r_format_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 19:02:23 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/24 12:59:21 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:30:04 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -45,7 +45,7 @@ char *format_quotes(char *command)
     int in_double_quote = 0;
     char *new_path;
 
-    new_path = (char *)malloc(sizeof(char) * ft_strlen(command) + 1);
+    new_path = (char *)malloc(sizeof(char) * (ft_strlen(command) + 1));
     if (!new_path)
         return (NULL);
     while (command[i] != '\0')

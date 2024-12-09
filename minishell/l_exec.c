@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   l_exec.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 07:01:52 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/08 15:27:25 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:14:04 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 void print_argv(char **argv)
@@ -146,7 +146,7 @@ static void execute_dynamic_pipeline(t_element *cmd, char *input, t_params *para
         free_elements(cmd);
         input_r(&redirs);
         output(&redirs);
-        print_argv(r_cmd);
+        //print_argv(r_cmd);
         run_builtins(r_cmd, params, input);
         
     }

@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_ft_echo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 12:55:21 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/08 14:56:29 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:35:53 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -38,7 +38,7 @@ int check_dash_n(char *str)
     return (0);
 }
 
-int	ft_print_echo(char *input, int fd)
+int	ft_print_echo(char *input)
 {
 	int	i;
 	int	count;
@@ -55,9 +55,7 @@ int	ft_print_echo(char *input, int fd)
             continue ;
         }
         else
-        {
-            ft_putchar_fd(input[i], fd);
-        }
+            write(1, &input[i], 1);
         i++;
     }
 	return (count);
@@ -65,8 +63,9 @@ int	ft_print_echo(char *input, int fd)
 
 int run_echo(char **cmd, int flag[2])
 {
-    int i = 1;
+    int i;
 
+    i = 1;
     while (cmd[i] != NULL)
     {   
         if (!check_dash_n(cmd[i]))
@@ -77,10 +76,10 @@ int run_echo(char **cmd, int flag[2])
             flag[1] = 1;
             continue;
         }
-        if (strcmp(cmd[i], ">") == 0 || while_check_char(cmd[i][0], "&|<>;"))
-            break;
-        ft_print_echo(cmd[i], STDOUT_FILENO);
-        close(STDOUT_FILENO);
+        ft_print_echo(cmd[i]);
+        /*if (strcmp(cmd[i], ">") == 0 || while_check_char(cmd[i][0], "&|<>;"))
+            break;*/
+
         if (cmd[i + 1] != NULL && !ft_strcmp(cmd[i + 1], ">")
             && !while_check_char(cmd[i + 1][0], "&|<>;"))
             write(1, " ", 1);
