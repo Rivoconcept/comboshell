@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_export.c                                        :+:      :+:    :+:   */
+/*   r_ft_export.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:27:25 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/23 13:47:25 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/13 18:44:22 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int ft_export(char **cmd, t_params *params)
     if (!ft_strcmp(cmd[0], "export"))
     {
         if (!cmd[1])
-            print_env(params);
+            ft_env(params);
         else if (params->var_temp && !ft_strchr(cmd[1], '='))
             create_env(&params->myenvp, params->var_temp);
         else if (ft_strchr(cmd[1], '='))

@@ -1,20 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_toupper.c                                       :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/27 10:00:32 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/02/27 10:00:50 by rhanitra         ###   ########.fr       */
+/*   Created: 2024/02/23 09:04:09 by rhanitra          #+#    #+#             */
+/*   Updated: 2024/12/11 14:45:09 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_toupper(int c)
+int ft_strlen(char *str)
 {
-	if (c >= 97 && c <= 122)
-		c -= 32;
-	return (c);
+	int i;
+
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
 }

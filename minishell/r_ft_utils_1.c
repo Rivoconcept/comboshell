@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 10:25:12 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/24 21:47:04 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:39:48 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,11 @@ void free_array(char **arr)
         return;
     while (arr[i] != NULL)
     {
-        free(arr[i]);
+        if (arr[i])
+            free(arr[i]);
         i++;
     }
-    free(arr);
+    if (arr)
+        free(arr);
 }
 

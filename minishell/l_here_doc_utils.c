@@ -1,16 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   here_doc_utils.c                                   :+:      :+:    :+:   */
+/*   l_here_doc_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:40:36 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/10/17 21:40:36 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/18 09:10:02 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int is_valid_heredoc_char(int ascii_value) {
+    if ((ascii_value >= 33 && ascii_value <= 34) ||
+        (ascii_value == 35) ||
+        (ascii_value >= 37 && ascii_value <= 38) ||
+        (ascii_value >= 40 && ascii_value <= 43) ||
+        (ascii_value >= 45 && ascii_value <= 46) ||
+        (ascii_value >= 48 && ascii_value <= 57) ||
+        (ascii_value >= 58 && ascii_value <= 59) ||
+        (ascii_value >= 63 && ascii_value <= 64) ||
+        (ascii_value >= 65 && ascii_value <= 90) ||
+        (ascii_value >= 94 && ascii_value <= 95) ||
+        (ascii_value >= 97 && ascii_value <= 122) ||
+        (ascii_value == 126)) {
+        return 1;
+    }
+    return 0;
+}
 
 static int count_heredoc(char *input)
 {
@@ -37,7 +55,7 @@ static int key_len (char *str, int pos)
 {
     while(str[pos])
     {
-        if (!((str[pos] >= 65 && str[pos] <= 90) || (str[pos] >= 97 && str[pos] <= 122)))
+        if (!(is_valid_heredoc_char(str[pos])))
            return (pos++);
         pos++;
     }

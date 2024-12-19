@@ -1,74 +1,62 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   r_parser.c                                         :+:      :+:    :+:   */
+/*   ft_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/24 19:39:54 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/24 21:27:41 by rhanitra         ###   ########.fr       */
+/*   Created: 2024/12/11 14:45:23 by rhanitra          #+#    #+#             */
+/*   Updated: 2024/12/11 14:45:24 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int put_word_len(char *str)
+void handle_quote(char c, int *squote, int *dquote)
 {
-    int i;
-    int in_single_quote;
-    int in_double_quote;
-
-    i = 0;
-    in_single_quote = 0;
-    in_double_quote = 0;
-    while (str[i] != '\0' && (str[i] != ' '
-        || in_single_quote || in_double_quote))
-    {
-        handle_quotes(str[i], &in_single_quote, &in_double_quote);
-        i++;
-    }
-    return (i);
+    if (c == '\'' && !(*dquote)) // Si on rencontre un simple quote hors d'un double quote
+        *squote = !(*squote);    // Alterne l'état du simple quote
+    if (c == '"' && !(*squote))
+        *dquote = !(*dquote);
 }
 
-int ft_check_quote(char c, char *str, int *i)
+int word_len(char *str)
 {
-    if (str[*i] == c)
+    int i = 0;
+    int squote = 0;
+    int dquote = 0;
+
+    while (str[i] != '\0' && (str[i] != ' ' || squote || dquote))
     {
-        (*i)++;
-        while (str[*i] != c && str[*i] != '\0')
-            (*i)++;
-        if (str[*i] == c && str[*i - 1] !=  c)
-        {
-            (*i)++;
-            return (1);
-        }
+        handle_quote(str[i], &squote, &dquote);
+        i++;
     }
-    return (0);
+    return i;
 }
 
 int word_count(char *str)
 {
-    int i;
-    int j;
+    int i = 0;
+    int count = 0;
+    int squote = 0;
+    int dquote = 0;
 
-    i = 0;
-    j = 0;
     while (str[i] != '\0')
     {
-        if (ft_check_quote('\'', str, &i) || ft_check_quote('"', str, &i))
-            j++;
-        else if (str[i] != ' ' && (i == 0 || str[i - 1] == ' '))
+        if (str[i] != ' ' && (i == 0 || str[i - 1] == ' '))
         {
-            j++; 
-            while (str[i] != ' ' && str[i] != '\0')
+            count++;
+            while (str[i] != '\0' && (str[i] != ' ' || squote || dquote))
+            {
+                handle_quote(str[i], &squote, &dquote);
                 i++;
+            }
         }
         else
             i++;
     }
-    return (j);
+    return count;
 }
-
 
 char *split_word(char *str, int index)
 {
@@ -80,13 +68,13 @@ char *split_word(char *str, int index)
     i = 0;
     in_single_quote = 0;
     in_double_quote = 0;
-    temp = (char *)malloc(sizeof(char) * (put_word_len(&str[index]) + 1));
+    temp = (char *)malloc(sizeof(char) * (word_len(&str[index]) + 1));
     if (!temp)
         return (NULL);
     while (str[index] != '\0' && (str[index] != ' '
         || in_single_quote || in_double_quote))
     {
-        handle_quotes(str[index], &in_single_quote, &in_double_quote);
+        handle_quote(str[index], &in_single_quote, &in_double_quote);
         temp[i++] = str[index++];
     }
     temp[i] = '\0';
@@ -112,7 +100,7 @@ char **parse_command(char const *input)
         if (input[i] != ' ')
         {
             split[j++] = split_word((char *)input, i);
-            i += put_word_len((char *)input + i);
+            i += word_len((char *)input + i);
         }
         else
             i++;

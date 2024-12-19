@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   r_ft_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 09:31:53 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/19 16:40:13 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/17 20:31:28 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -50,24 +50,23 @@ char *ft_getenv(t_params *params, char *name)
     while (current != NULL)
     {
         if (!ft_strcmp(current->name, name))
-            return (current->value);
+            return (ft_strdup(current->value));
         current = current->next;
     }
     return (NULL);
 }
 
-void print_env(t_params *params)
+int ft_env(t_params *params)
 {
-    t_env *current = params->myenvp;
+    t_env *current;
 
+    current = params->myenvp;
+    if (current == NULL)
+        return (1);
     while (current != NULL)
     {
         printf("%s=%s\n", current->name, current->value);
         current = current->next;
     }
-}
-
-void ft_env(t_params *params)
-{
-    print_env(params);
+    return (0);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_cleaner.c                                       :+:      :+:    :+:   */
+/*   r_ft_cleaner.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:40:14 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/23 11:20:34 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/17 22:12:59 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,26 +30,25 @@ void free_list_cmd(t_cmd *command)
 {
     t_cmd *temp;
 
-    while (command)
+    if (command == NULL)
+        return ;
+    while (command != NULL)
     {
-        temp = command;
-        command = command->next;
-        free_array(temp->cmd);
-        free(temp);
+        temp = command->next;
+        free_array(command->cmd);
+        if (command)
+            free(command);
+        command = temp;
     }
 }
 
-void cleanup_and_exit(t_params *params, char *input, int status)
+void cleanup_and_exit(t_params *params, int status)
 {
     if (params)
     {
         if (params->myenvp)
         {
             free_list_env(params->myenvp);
-        }
-        if (params->cmd)
-        {
-            free_list_cmd(params->cmd);
         }
         if (params->envp)
         {
@@ -62,7 +61,6 @@ void cleanup_and_exit(t_params *params, char *input, int status)
         }
         free(params);
     }
-    free(input); 
     exit(status);
 }
 

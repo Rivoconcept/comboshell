@@ -1,16 +1,17 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   l_exec.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 07:01:52 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/09 17:14:04 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/18 14:35:33 by rrakoton         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "minishell.h"
+
 void print_argv(char **argv)
 {
     int i = 0;
@@ -22,20 +23,39 @@ void print_argv(char **argv)
 
 }
 
-static void input_r(t_redirections *redirs) {
+static void input_r(t_redirections *redirs, int num_cmd) {
     int fd_in;
-    if (redirs->less) {
-        fd_in = open(redirs->less->value, O_RDONLY);
-        if (fd_in == -1) {
-            perror("open failed");
-            exit(1);
-        }
-        if (dup2(fd_in, STDIN_FILENO) == -1) {
-            perror("dup2 failed");
+    char *file;
+    if (redirs->less || redirs->here) {
+        if (redirs->less && (!redirs->here || redirs->here->rank < redirs->less->rank)) {
+            fd_in = open(redirs->less->value, O_RDONLY);
+            if (fd_in == -1) {
+                perror("open failed");
+                exit(1);
+            }
+            if (dup2(fd_in, STDIN_FILENO) == -1) {
+                perror("dup2 failed");
+                close(fd_in);
+                exit(1);
+            }
             close(fd_in);
-            exit(1);
+        } else if (redirs->here) {
+            file = ft_strjoin("/tmp/josia", ft_itoa(num_cmd));
+            fd_in = open(file, O_RDONLY);
+            if (fd_in == -1) {
+                perror("open failed");
+                free(file);
+                exit(1);
+            }
+            if (dup2(fd_in, STDIN_FILENO) == -1) {
+                perror("dup2 failed");
+                close(fd_in);
+                free(file);
+                exit(1);
+            }
+            free(file);
+            close(fd_in);
         }
-        close(fd_in);
     }
 }
 
@@ -43,32 +63,41 @@ static void output(t_redirections *redirs) {
     int fd_out;
     
     if (redirs->great || redirs->dgreat) {
-        if(redirs->great)
+        if(redirs->great && (!redirs->dgreat || redirs->dgreat->rank < redirs->great->rank))
         {
             printf("great\n");
             fd_out = open(redirs->great->value, O_WRONLY | O_CREAT | O_APPEND , 0644);
+            if (fd_out == -1) {
+                perror("open failed");
+                exit(1);
+            }
+            if (dup2(fd_out, STDOUT_FILENO) == -1) {
+                perror("dup2 failed");
+                close(fd_out);
+                exit(1);
+            }
+            close(fd_out);
 
-        }
-        if(redirs->dgreat)
+        } else if(redirs->dgreat)
         {
             printf("degreat\n");
             fd_out = open(redirs->dgreat->value, O_WRONLY | O_CREAT | O_TRUNC , 0644);
-        }
-        if (fd_out == -1) {
-            perror("open failed");
-            exit(1);
-        }
-        if (dup2(fd_out, STDOUT_FILENO) == -1) {
-            perror("dup2 failed");
+            if (fd_out == -1) {
+                perror("open failed");
+                exit(1);
+            }
+            if (dup2(fd_out, STDOUT_FILENO) == -1) {
+                perror("dup2 failed");
+                close(fd_out);
+                exit(1);
+            }
             close(fd_out);
-            exit(1);
         }
-        close(fd_out);
     }
 }
 
 static void pipet_fd(int i, int num_cmds, int **pipes, t_redirections *redirs) {
-    if (i > 0 && !redirs->less) {
+    if (i > 0 && !redirs->less && !redirs->here) {
         if (dup2(pipes[i - 1][0], STDIN_FILENO) == -1) {
             perror("dup2 failed");
             exit(1);
@@ -82,7 +111,7 @@ static void pipet_fd(int i, int num_cmds, int **pipes, t_redirections *redirs) {
     }
 }
 
-static void execute_command(t_element *cmd, int **pipes, int i, int num_cmds, t_params *params)
+static void execute_command(t_element *cmd, int **pipes, int i, int num_cmds, t_params *params, int j)
 {
     char **argv = NULL;
     pid_t pid;
@@ -110,14 +139,18 @@ static void execute_command(t_element *cmd, int **pipes, int i, int num_cmds, t_
     if (pid == 0)
     {
         write_pid(getpid());
-        input_r(&redirs);
+        input_r(&redirs, j);
         output(&redirs);
         pipet_fd(i, num_cmds, pipes, &redirs);
         free_redirections(&redirs);
         close_pipes(pipes, num_cmds - 1);
-        if (execvp(argv[0], argv) == -1) {
+        if(isbuiltins(argv[0]))
+            run_builtins(argv, params, cmd->value);
+        else {
+            if (execve(argv[0], argv, params->envp) == -1) {
             perror("execvp failed");
             exit(1);
+            }
         }
     }
    ft_free(argv, count_array(argv));
@@ -128,6 +161,7 @@ static void execute_dynamic_pipeline(t_element *cmd, char *input, t_params *para
     int num_cmds;
     int **pipes = NULL;
     int i;
+    int j;
     int fd_oout = dup(1);
     int fd_oin = dup(0);
     t_element *current_cmd;
@@ -144,20 +178,20 @@ static void execute_dynamic_pipeline(t_element *cmd, char *input, t_params *para
         free_array(r_cmd);
         r_cmd = list_to_array(cmd);
         free_elements(cmd);
-        input_r(&redirs);
+        input_r(&redirs, num_cmds);
         output(&redirs);
-        //print_argv(r_cmd);
         run_builtins(r_cmd, params, input);
-        
     }
     else {
         pipes = create_pipes(num_cmds - 1);
         current_cmd = cmd;
         i = 0;
+        j = 1;
         while (current_cmd) {
-            execute_command(current_cmd, pipes, i, num_cmds, params);
+            execute_command(current_cmd, pipes, i, num_cmds, params, j);
             current_cmd = current_cmd->next;
             i++;
+            j++;
         }
         if (num_cmds > 1)
             close_pipes(pipes, num_cmds - 1);
@@ -165,7 +199,6 @@ static void execute_dynamic_pipeline(t_element *cmd, char *input, t_params *para
     }
     dup2(fd_oin, STDIN_FILENO);
     dup2(fd_oout, STDOUT_FILENO);
-        
 }
 
 int exec(const t_node *node, char *input, t_params *params) {

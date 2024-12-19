@@ -6,93 +6,110 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/24 20:55:40 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/18 14:53:31 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void init_var_env(t_env *myenv, char **envp)
+int	isoperator(char *input)
 {
-    int i = 0;
-    while (envp[i] != NULL)
-    {
-        create_env(&myenv, envp[i]);
-        i++;
-    }
+	int		i;
+	char	*op[11];
+
+	if (!input)
+		return (0);
+	op[0] = ">";
+	op[1] = ">>";
+	op[2] = "<";
+	op[3] = "<<";
+	op[4] = "&";
+	op[5] = "&&";
+	op[6] = "|";
+	op[7] = "||";
+	op[8] = ";";
+	op[9] = ";;";
+	op[10] = NULL;
+	i = 0;
+	while (op[i] != NULL)
+	{
+		if (!ft_strncmp(input, op[i], ft_strlen(op[i])))
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
-int count_list_env(t_params *params)
+int	check_path(const char *path)
 {
-    int     i;
-    t_env    *current;
+	struct stat	statbuf;
+	char		*last_slash;
+	char		parent_path[1024];
+
+	ft_strlcpy(parent_path, path, sizeof(parent_path) - 1);
+	parent_path[sizeof(parent_path) - 1] = '\0';
+	last_slash = ft_strrchr(parent_path, '/');
+	if (path[0] != '/' && access(path, X_OK) != 0)
+		return (printf("minishell: %s: command not found\n", path), 127);
+	if (last_slash && last_slash != parent_path)
+	{
+		*last_slash = '\0';
+		if (stat(parent_path, &statbuf) != 0)
+			return (perror(path), 127);
+		if (!S_ISDIR(statbuf.st_mode))
+			return (printf("minishell: %s: Not a directory\n", path), 126);
+	}
+	if (stat(path, &statbuf) != 0)
+		return (printf("minishell: %s: No such file or directory\n", path), 127);
+	if (S_ISDIR(statbuf.st_mode))
+		return (printf("%s: is a directory\n", path), 126);
+	return (0);
+}
+
+int check_errors(t_params *params)
+{
+    int		i;
+	t_cmd	*current;
 
     i = 0;
-    current = params->myenvp;
+	current = params->command;
+	if (current && ft_strcmp(current->cmd[0], "|") == 0)
+    {
+		printf("minishell: syntax error near unexpected token `%s'\n",
+				current->cmd[0]);
+        params->last_exit_code = 2;
+        return (1);
+    }
     while(current != NULL)
     {
-        i++;
+		if (ft_strcmp(current->cmd[0], "|") == 0)
+        {
+            current = current->next;
+            continue ;
+        }
+		if (!isbuiltins(current->cmd[0]))
+		{
+			params->last_exit_code = check_path(current->cmd[0]);
+			if (params->last_exit_code)
+				i++;
+		}
         current = current->next;
     }
-    return (i);
+	return (i);
 }
 
-char **put_envp(t_params *params)
-{	
-    int i;
-    t_env *current;
-    char **myenvp;
-    char *temp;
-
-    i = 0;
-    myenvp = (char **)malloc(sizeof(char *) * (count_list_env(params) + 1));
-    if (!myenvp)
-        return (NULL);
-    current = params->myenvp;
-    while (current != NULL)
-    {
-        temp = ft_strjoin(current->name, "=");
-        if (!temp)
-            return (free_array(myenvp), NULL);
-        myenvp[i] = ft_strjoin(temp, current->value);
-        free(temp);
-        if (!myenvp[i])
-            return (free_array(myenvp), NULL);
-        current = current->next;
-        i++;
-    }
-    myenvp[i] = NULL;
-    return (myenvp);
-}
-
-void put_val_exit_status(t_params *params)
+void	exit_error(const char *error)
 {
-    int sig;
-    char *ws_val;
-    char *temp;
+	printf("%s", error);
+	exit(EXIT_FAILURE);
+}
 
-    sig = 0;
-    ws_val = NULL;
-    temp = NULL;
-    if (WIFSIGNALED(params->status))
-    {
-        sig = WTERMSIG(params->status);
-        if (sig == SIGINT)
-            ws_val = ft_itoa(128 + sig);
-        else
-            ws_val = ft_itoa(128 + sig);
-    }
-    else if (WIFEXITED(params->status))
-        ws_val = ft_itoa(WEXITSTATUS(params->status));
-    else
-        printf("Error: Child process did not terminate properly.\n");
-    if (ws_val)
-    {
-        temp = ft_strjoin("?=", ws_val);
-        free(ws_val);
-        create_env(&params->myenvp, temp);
-        free(temp);
-    }
-    else
-        printf("Error: ws_val is NULL\n");
+void	*safe_malloc(size_t bytes)
+{
+	void	*res;
+
+	res = malloc(bytes);
+	if (res == NULL)
+		exit_error("Error\nThere are errors in memory allocation");
+	return (res);
 }

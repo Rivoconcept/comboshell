@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_cd1.c                                           :+:      :+:    :+:   */
+/*   r_ft_cd_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 15:11:07 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/24 13:02:23 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/13 20:25:38 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*return_pdir(const char *cwd)
 	path = malloc(sizeof(char) * (len + 1));
 	if (path)
 	{
-		ft_strlcpy(path, cwd, len);
+		ft_strlcpy(path, cwd, len + 1);
 		path[len] = '\0';
 	}
 	return (path);

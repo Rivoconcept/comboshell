@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirection_utils.c                                :+:      :+:    :+:   */
+/*   l_redirection_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 15:57:10 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/11/24 11:41:17 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/18 13:48:16 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void free_redirection(t_redirection *redir)
     free(redir);
 }
 
-void handle_redirection(t_redirection **redir, e_tokentype type, char *value) {
+void handle_redirection(t_redirection **redir, e_tokentype type, char *value, int rank) {
     free_redirection(*redir);
-    *redir = add_red(type, value);
+    *redir = add_red(type, value, rank);
 }
 
 void remove_current_element(t_element **elements, t_element **prev, t_element **current) {

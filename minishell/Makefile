@@ -1,4 +1,4 @@
-#******************************************************************************#
+# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
@@ -6,23 +6,25 @@
 #    By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/22 08:39:35 by rhanitra          #+#    #+#              #
-#    Updated: 2024/11/25 16:23:38 by rhanitra         ###   ########.fr        #
+#    Updated: 2024/12/18 15:41:57 by rhanitra         ###   ########.fr        #
 #                                                                              #
-#******************************************************************************#
+# **************************************************************************** #
 
-MINISHELL = l_child_process.c l_exec_utils.c l_exec.c l_free.c l_ft_check.c \
+MINISHELL = r_check_behavior.c r_check_quotes.c r_format_argv.c r_ft_cd_1.c \
+			r_format_cmd.c r_format_input.c r_format_quotes.c r_ft_cd_2.c \
+			r_ft_cleaner.c r_ft_echo.c r_ft_env.c r_ft_export.c \
+			r_ft_is_token.c r_ft_pwd.c r_ft_utils_1.c r_ft_utils_2.c r_exec.c \
+			r_ft_utils_3.c r_ft_utils_4.c r_handle_quotes.c r_init_list_cmd.c \
+			r_init_list_env_1.c r_init_list_env_2.c r_init_list_params.c \
+			r_ft_parser.c r_signal.c r_ft_builtins.c main.c r_utils.c \
+
+#			l_child_process.c l_exec_utils.c l_exec.c l_free.c l_ft_check.c \
 			l_ft_multiline.c l_ft_utils_5.c l_ft_utils_6.c \
 			l_guards.c l_here_doc_utils.c l_here_doc.c l_list.c l_node.c \
 			l_parser.c l_quote.c l_real_path.c l_redirection_utils.c \
 			l_redirection.c l_scanner.c l_signal.c l_tokens.c \
 			l_vector.c main.c \
-			r_check_behavior.c r_check_quotes.c r_format_argv.c \
-			r_format_cmd.c r_format_input.c r_format_quotes.c r_ft_cd1.c \
-			r_ft_cd2.c r_ft_cleaner.c r_ft_echo.c r_ft_env.c r_ft_export.c \
-			r_ft_is_token.c r_ft_pwd.c r_ft_utils_1.c r_ft_utils_2.c \
-			r_ft_utils_3.c r_ft_utils_4.c r_handle_quotes.c \
-			r_init_list_env.c r_init_list_params.c \
-			r_parser.c r_signal.c r_ft_builtins.c
+			
 
 DIR_MINISHELL = ./
 SRC_MINISHELL = $(addprefix $(DIR_MINISHELL),$(MINISHELL))

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_utils_3.c                                       :+:      :+:    :+:   */
+/*   r_ft_utils_3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/24 12:59:19 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/11 13:57:35 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int count_cmd(t_params *params)
     t_cmd   *current;
 
     count  = 0;
-    current = params->cmd;
+    current = params->command;
     while(current != NULL)
     {
         count++;
