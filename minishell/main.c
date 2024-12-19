@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/18 15:25:43 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:39:32 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,7 @@ void	run_minishell(t_params *params)
 		parsed = parse_command(new_input);
 		format_variable(parsed, params);
 		del_quotes(parsed);
-		if (put_var_temp(parsed, params))
+		if (put_var_export(parsed, params))
 		{
 			free(new_input);
 			free_array(parsed);

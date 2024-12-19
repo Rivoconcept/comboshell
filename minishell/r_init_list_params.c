@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 10:21:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/18 14:38:06 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/18 18:57:06 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_params *create_list_params(char **envp)
 {
-    int i;
+    int     i;
     t_params *params;
     
     i = 0;
@@ -22,6 +22,7 @@ t_params *create_list_params(char **envp)
     if (!params)
         return (perror("malloc"), NULL);
     params->myenvp = NULL;
+    params->myexport = NULL;
     params->command = NULL;
     params->envp = NULL;
     params->var_temp = NULL;
@@ -30,10 +31,9 @@ t_params *create_list_params(char **envp)
     while (envp[i])
     {
         if (!create_env(&params->myenvp, envp[i]))
-        {
-            cleanup_and_exit(params, EXIT_FAILURE);
-            return (NULL);
-        }
+            return (cleanup_and_exit(params, EXIT_FAILURE), NULL);
+        if (!create_export(&params->myexport, envp[i]))
+            return (cleanup_and_exit(params, EXIT_FAILURE), NULL);
         i++;
     }
     return (params);

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 20:57:46 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/15 14:20:28 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:30:00 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int run_builtins(char **cmd, t_params *params)
     if (!ft_strcmp(cmd[0], "echo"))
         return (ft_echo(cmd));
     if (!ft_strcmp(cmd[0], "unset"))
-        del_env_element(&params->myenvp, cmd[1]);
+        ft_unset(cmd, params);
     if (!ft_strcmp(cmd[0], "export"))
         return (ft_export(cmd, params));
     if (!ft_strcmp(cmd[0], "exit"))

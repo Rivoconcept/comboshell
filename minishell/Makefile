@@ -6,17 +6,17 @@
 #    By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/22 08:39:35 by rhanitra          #+#    #+#              #
-#    Updated: 2024/12/18 15:41:57 by rhanitra         ###   ########.fr        #
+#    Updated: 2024/12/19 15:52:58 by rhanitra         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 MINISHELL = r_check_behavior.c r_check_quotes.c r_format_argv.c r_ft_cd_1.c \
 			r_format_cmd.c r_format_input.c r_format_quotes.c r_ft_cd_2.c \
-			r_ft_cleaner.c r_ft_echo.c r_ft_env.c r_ft_export.c \
+			r_ft_cleaner.c r_ft_echo.c r_ft_env.c r_ft_export_1.c r_ft_export_2.c \
 			r_ft_is_token.c r_ft_pwd.c r_ft_utils_1.c r_ft_utils_2.c r_exec.c \
 			r_ft_utils_3.c r_ft_utils_4.c r_handle_quotes.c r_init_list_cmd.c \
 			r_init_list_env_1.c r_init_list_env_2.c r_init_list_params.c \
-			r_ft_parser.c r_signal.c r_ft_builtins.c main.c r_utils.c \
+			r_ft_parser.c r_signal.c r_ft_builtins.c main.c r_utils.c  r_ft_unset.c \
 
 #			l_child_process.c l_exec_utils.c l_exec.c l_free.c l_ft_check.c \
 			l_ft_multiline.c l_ft_utils_5.c l_ft_utils_6.c \

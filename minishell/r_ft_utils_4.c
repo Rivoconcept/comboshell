@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/18 14:53:31 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:58:42 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,25 @@ int	check_path(const char *path)
 	return (0);
 }
 
+int	 pre_test(char *arg, t_params *params)
+{
+	if (arg && ft_strncmp(arg, "|", 2) == 0)
+    {
+		printf("minishell: syntax error near unexpected token `%s'\n",
+				arg);
+        params->last_exit_code = 2;
+        return (1);
+    }
+	if (arg && ft_strncmp(arg, "||", 3) == 0)
+    {
+		printf("minishell: syntax error near unexpected token `%s'\n",
+				arg);
+        params->last_exit_code = 2;
+        return (1);
+    }
+	return (0);
+}
+
 int check_errors(t_params *params)
 {
     int		i;
@@ -73,13 +92,8 @@ int check_errors(t_params *params)
 
     i = 0;
 	current = params->command;
-	if (current && ft_strcmp(current->cmd[0], "|") == 0)
-    {
-		printf("minishell: syntax error near unexpected token `%s'\n",
-				current->cmd[0]);
-        params->last_exit_code = 2;
-        return (1);
-    }
+	if (pre_test(current->cmd[0], params))
+		return (1);
     while(current != NULL)
     {
 		if (ft_strcmp(current->cmd[0], "|") == 0)

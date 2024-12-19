@@ -6,14 +6,14 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 20:51:59 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/18 15:39:12 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/19 17:23:39 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include <stddef.h>
+# include <stddef.h>
 # include <limits.h>
 # include <ctype.h>
 # include <fcntl.h>
@@ -23,15 +23,15 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-#include <sys/stat.h>
+# include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-#include <signal.h>
-#include <errno.h>
+# include <signal.h>
+# include <errno.h>
 # include "./libft/libft.h"
 
-#define PID_FILE "/tmp/child_pids.txt"
+# define PID_FILE "/tmp/child_pids.txt"
 
 typedef struct {
     pid_t *child_pids;
@@ -116,6 +116,13 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
+typedef struct s_export
+{
+	char			*name;
+	char			*value;
+	struct s_export	*next;
+}					t_export;
+
 typedef struct s_cmd
 {
     char            **cmd;
@@ -127,6 +134,7 @@ typedef struct s_params
 {
 	t_cmd			*command;
 	t_env			*myenvp;
+    t_export        *myexport;
 	char			**envp;
 	char			*var_temp;
 	int				last_exit_code;
@@ -298,6 +306,7 @@ int	ft_cd(const char *arg, t_params *params);
 
 // r_ft_cleaner.c
 void free_list_env(t_env *myenv);
+void free_list_export(t_export *myexp);
 void free_list_cmd(t_cmd *command);
 void cleanup_and_exit(t_params *params, int status);
 
@@ -357,10 +366,24 @@ void put_var_env(char *input, int *i, char **temp, t_params *params);
 char *format_var_env(char *arg, t_params *params);
 void format_variable(char **argv, t_params *params);
 
-// r_ft_export.c
-int check_error_var_temp(char *cmd);
-int put_var_temp(char **cmd, t_params *params);
+// r_ft_export_1.c
+char *ft_get_export_value(t_params *params, char *name);
+int print_export(t_params *params);
+int check_error_var_export(char *cmd);
+int put_var_export(char **cmd, t_params *params);
 int ft_export(char **cmd, t_params *params);
+
+// r_ft_export_2.c
+int	find_export_name(t_export *myexport, char *name);
+char	*put_name_export(char *str);
+char	*put_value_export(char *str);
+void del_export_element(t_export **myexport, char *envp);
+t_export *create_new_list_export(char *envp);
+int create_export(t_export **myexport, char *envp);
+char *put_export_val(t_export *myexport, char *name);
+
+//r_ft_unset.c
+int ft_unset(char **cmd, t_params *params);
 
 // r_ft_pwd.c
 int ft_pwd(void);

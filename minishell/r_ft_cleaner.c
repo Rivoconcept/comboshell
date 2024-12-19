@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:40:14 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/17 22:12:59 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:02:21 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,20 @@ void free_list_env(t_env *myenv)
     {
         temp = myenv;
         myenv = myenv->next;
+        free(temp->name);
+        free(temp->value);
+        free(temp);
+    }
+}
+
+void free_list_export(t_export *myexp)
+{
+    t_export *temp;
+
+    while (myexp)
+    {
+        temp = myexp;
+        myexp = myexp->next;
         free(temp->name);
         free(temp->value);
         free(temp);
@@ -49,6 +63,10 @@ void cleanup_and_exit(t_params *params, int status)
         if (params->myenvp)
         {
             free_list_env(params->myenvp);
+        }
+        if (params->myenvp)
+        {
+            free_list_export(params->myexport);
         }
         if (params->envp)
         {
