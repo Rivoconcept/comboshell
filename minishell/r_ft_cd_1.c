@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 15:11:07 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/13 20:25:38 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/20 18:59:57 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*get_home(t_params *params)
 	char	*home;
 
 	home = ft_getenv(params, "HOME");
-	if (!home)
+	if (!home || home == NULL)
 	{
 		printf("minishell: cd: HOME not set\n");
 		return (NULL);

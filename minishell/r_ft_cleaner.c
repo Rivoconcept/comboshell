@@ -3,14 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   r_ft_cleaner.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:40:14 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/19 15:02:21 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/22 21:06:33 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void free_array(char **arr)
+{
+    int i = 0;
+    if (!arr)
+        return;
+    while (arr[i] != NULL)
+    {
+        if (arr[i])
+        {
+            free(arr[i]);
+            arr[i] = NULL;
+        }
+        i++;
+    }
+    if (arr)
+        free(arr);
+    arr = NULL;
+}
 
 void free_list_env(t_env *myenv)
 {
@@ -21,7 +40,9 @@ void free_list_env(t_env *myenv)
         temp = myenv;
         myenv = myenv->next;
         free(temp->name);
+        temp->name = NULL;
         free(temp->value);
+        temp->value = NULL;
         free(temp);
     }
 }
@@ -35,7 +56,9 @@ void free_list_export(t_export *myexp)
         temp = myexp;
         myexp = myexp->next;
         free(temp->name);
+        temp->name = NULL;
         free(temp->value);
+        temp->value = NULL;
         free(temp);
     }
 }
@@ -49,6 +72,12 @@ void free_list_cmd(t_cmd *command)
     while (command != NULL)
     {
         temp = command->next;
+        if (command->less)
+            free(command->less);
+        if (command->dgreat)
+            free(command->dgreat);
+        if (command->great)
+            free(command->great);
         free_array(command->cmd);
         if (command)
             free(command);
@@ -58,27 +87,27 @@ void free_list_cmd(t_cmd *command)
 
 void cleanup_and_exit(t_params *params, int status)
 {
+    char *status_str;
+
     if (params)
     {
+         if(params->fd_in)
+			close(params->fd_in);
+		if(params->fd_out)
+			close(params->fd_out);
         if (params->myenvp)
-        {
             free_list_env(params->myenvp);
-        }
-        if (params->myenvp)
-        {
+        if (params->myexport)
             free_list_export(params->myexport);
-        }
         if (params->envp)
-        {
             free_array(params->envp);
-        }
-        if (params->var_temp)
-        {
-            free(params->var_temp);
-            params->var_temp = NULL;
-        }
         free(params);
+    }
+    status_str = ft_itoa(status);
+    if (status_str)
+    {
+        ft_putstr_fd(status_str, STDOUT_FILENO);
+        free(status_str);
     }
     exit(status);
 }
-

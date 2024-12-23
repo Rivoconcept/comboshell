@@ -6,73 +6,99 @@
 /*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 08:20:34 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/18 14:02:47 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/22 08:22:33 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_element *redirect_io(t_element **elements, t_redirections *redirs) {
-    t_element *current = *elements, *prev = NULL;
+static void del_in(t_cmd *input, int here) {
+    int i = 0;
+    int j = 0;
     int in_rank = 0;
-    int out_rank = 0;
-    while (current) {
-        if (current->type == LESS_TOKEN || current->type == GREAT_TOKEN || 
-            current->type == DGREAT_TOKEN || current->type == HERE_TOKEN)
-            {
-                if (current->type == LESS_TOKEN)
-                    handle_redirection(&redirs->less, current->type, current->value, in_rank++);
-                else if (current->type == GREAT_TOKEN)
-                    handle_redirection(&redirs->great, current->type, current->value, out_rank++);
-                else if (current->type == DGREAT_TOKEN)
-                    handle_redirection(&redirs->dgreat, current->type, current->value, out_rank++);
-                else if (current->type == HERE_TOKEN)
-                    handle_redirection(&redirs->here, current->type, current->value, in_rank++);
-                remove_current_element(elements, &prev, &current);
+
+    while (input->cmd[i] != NULL) {
+        if (ft_strcmp(input->cmd[i], "<<") == 0) {
+            del_here(input, &in_rank, here, &i);
+        } else if (ft_strcmp(input->cmd[i], "<") == 0) {
+            del_less(input, &in_rank, &i);
         } else {
-            prev = current;
-            current = current->next;
+            input->cmd[j++] = input->cmd[i];
+        }
+        i++;
+    }
+    input->cmd[j] = NULL;
+}
+
+static void del_out(t_cmd *out)
+{
+    int i = 0;
+    int j = 0;
+    int out_rank = 0;
+
+    while (out->cmd[i] != NULL)
+    {
+        if (ft_strcmp(out->cmd[i], ">") == 0 || ft_strcmp(out->cmd[i], ">>") == 0)
+            handle_out_redirection(out, &out_rank, &i, out->cmd[i]);
+        else
+            out->cmd[j++] = out->cmd[i];
+        i++;
+    }
+    out->cmd[j] = NULL;
+}
+
+void manage_red(t_params *params)
+{
+    int rank_cmd;
+
+    rank_cmd = 0;
+    t_cmd *current = params->command;
+    while (current != NULL)
+    {
+        del_in(current, rank_cmd);
+        rank_cmd++;
+        current = current->next;
+    }
+    current =  params->command;
+    while (current != NULL)
+    {
+        del_out(current);
+        current = current->next;
+    }
+}
+
+void input_r(t_cmd *current, int num_cmd) {
+    int fd_in;
+    char *file;
+
+    if (current->here >= 0 || current->less) {
+        if (current->less && (current->here < 0 || current->rank_here < current->rank_less)) {
+            fd_in = open_input_file(current->less, O_RDONLY);
+            dup2_stdin(fd_in, current->less);
+            close(fd_in);
+        } else if (current->here >= 0) {
+            file = prepare_temp_file(num_cmd);
+            fd_in = open_input_file(file, O_RDONLY);
+            dup2_stdin(fd_in, file);
+            free(file);
+            close(fd_in);
         }
     }
-    return *elements;
 }
 
-t_redirection *add_red(e_tokentype type, char *value, int rank) {
-    int file;
-    t_redirection *redirection = malloc(sizeof(t_redirection));
-    if (!redirection)
-        return NULL;
-    redirection->type = type;
-    redirection->rank = rank;
-    if(value)
-        redirection->value = ft_strdup(value);
-    else
-        redirection->value = NULL;
-    if (value && !redirection->value)
-    {
-        free(redirection);
-        return NULL;
+void output(t_cmd *current) {
+    int fd_out;
+
+    if (current->great || current->dgreat) {
+        if (current->great && (!current->dgreat || current->rank_dgreat < current->rank_great)) {
+            fd_out = open_file(current->great, O_WRONLY | O_CREAT | O_TRUNC);
+            dup2_stdout(fd_out, current->great);
+            close(fd_out);
+
+        } else if (current->dgreat) {
+            fd_out = open_file(current->dgreat, O_WRONLY | O_CREAT | O_APPEND);
+            dup2_stdout(fd_out, current->dgreat);
+            close(fd_out);
+        }
     }
-    if(redirection->type == DGREAT_TOKEN)
-    {
-        file = open(redirection->value, O_WRONLY | O_CREAT | O_TRUNC , 0644);
-        close(file);
-    }
-    if(redirection->type == GREAT_TOKEN)
-    {
-        file = open(redirection->value, O_WRONLY | O_CREAT | O_APPEND , 0644);
-        close(file);
-    }
-
-
-
-    return redirection;
-}
-
-void free_redirections(t_redirections *redirs)
-{
-    free_redirection(redirs->less);
-    free_redirection(redirs->great);
-    free_redirection(redirs->dgreat);
-    free_redirection(redirs->here);
 }

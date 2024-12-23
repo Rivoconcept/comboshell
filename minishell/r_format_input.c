@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 11:04:32 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/17 22:39:11 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/22 12:09:57 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,10 @@ int put_new_size(char *input)
     int new_size;
 
 	i = -1;
+    if (!input || input[0] == '\0')
+    {
+        return (0);
+    }
 	new_size = 0;
     while (input[++i])
     {

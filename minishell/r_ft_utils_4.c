@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/18 15:58:42 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/22 12:45:36 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	check_path(const char *path)
 	char		*last_slash;
 	char		parent_path[1024];
 
+	if (path[0] == '\0' || !path || path == NULL)
+		return (0);
 	ft_strlcpy(parent_path, path, sizeof(parent_path) - 1);
 	parent_path[sizeof(parent_path) - 1] = '\0';
 	last_slash = ft_strrchr(parent_path, '/');

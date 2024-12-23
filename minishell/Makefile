@@ -3,28 +3,25 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+         #
+#    By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/03/22 08:39:35 by rhanitra          #+#    #+#              #
-#    Updated: 2024/12/19 15:52:58 by rhanitra         ###   ########.fr        #
+#    Created: 2024/12/11 13:00:11 by rhanitra          #+#    #+#              #
+#    Updated: 2024/12/22 20:54:43 by rrakoton         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 MINISHELL = r_check_behavior.c r_check_quotes.c r_format_argv.c r_ft_cd_1.c \
 			r_format_cmd.c r_format_input.c r_format_quotes.c r_ft_cd_2.c \
-			r_ft_cleaner.c r_ft_echo.c r_ft_env.c r_ft_export_1.c r_ft_export_2.c \
+			r_ft_cleaner.c r_ft_echo.c r_ft_export_1.c r_ft_export_2.c \
+			r_ft_export_3.c r_ft_export_4.c r_ft_exit.c  r_ft_utils_5.c\
 			r_ft_is_token.c r_ft_pwd.c r_ft_utils_1.c r_ft_utils_2.c r_exec.c \
 			r_ft_utils_3.c r_ft_utils_4.c r_handle_quotes.c r_init_list_cmd.c \
-			r_init_list_env_1.c r_init_list_env_2.c r_init_list_params.c \
+			r_ft_env_1.c r_ft_env_2.c r_ft_env_3.c r_init_list_params.c \
 			r_ft_parser.c r_signal.c r_ft_builtins.c main.c r_utils.c  r_ft_unset.c \
+			l_here_doc.c l_here_doc_utils.c l_ft_utils_6.c l_ft_utils_5.c \
+			l_ft_check.c l_redirection.c l_inout_utils.c l_del_utils.c l_expand.c \
+			l_handle_here.c
 
-#			l_child_process.c l_exec_utils.c l_exec.c l_free.c l_ft_check.c \
-			l_ft_multiline.c l_ft_utils_5.c l_ft_utils_6.c \
-			l_guards.c l_here_doc_utils.c l_here_doc.c l_list.c l_node.c \
-			l_parser.c l_quote.c l_real_path.c l_redirection_utils.c \
-			l_redirection.c l_scanner.c l_signal.c l_tokens.c \
-			l_vector.c main.c \
-			
 
 DIR_MINISHELL = ./
 SRC_MINISHELL = $(addprefix $(DIR_MINISHELL),$(MINISHELL))
@@ -37,7 +34,7 @@ OBJ_MINISHELL = $(SRC_MINISHELL:.c=.o)
 EXEC = minishell
 
 CFLAGS = -Wall -Wextra -Werror -g -I $(DIR_LIBFT)
-CC = cc
+CC = gcc
 RM = rm -rf
 AR = ar rcs
 
@@ -63,4 +60,3 @@ fclean : clean
 re : fclean all
 
 .PHONY: all clean fclean re
-

@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/24 20:51:59 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/19 17:23:39 by rhanitra         ###   ########.fr       */
+/*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
+/*   Updated: 2024/12/22 20:45:43 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stddef.h>
+#include <stdint.h>
+#include <stddef.h>
 # include <limits.h>
 # include <ctype.h>
 # include <fcntl.h>
@@ -23,89 +24,13 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-# include <sys/stat.h>
+#include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <signal.h>
-# include <errno.h>
+#include <signal.h>
+#include <errno.h>
 # include "./libft/libft.h"
-
-# define PID_FILE "/tmp/child_pids.txt"
-
-typedef struct {
-    pid_t *child_pids;
-    int child_count;
-} s_state;
-
-typedef enum e_tokentype {
-    END_TOKEN = 0,
-    CMD_TOKEN = 1,
-	PIPE_TOKEN = 2,
-    STR_TOKEN = 3,
-    COL_TOKEN = 4,
-    HERE_TOKEN = 5, // <<
-    LESS_TOKEN = 6, // <
-    GREAT_TOKEN = 7, // >
-    DGREAT_TOKEN =8 // >>
-} e_tokentype;
-
-typedef struct s_redirection {
-    e_tokentype type;
-    int rank;
-    char *value;
-} t_redirection;
-
-typedef struct s_redirections {
-    t_redirection *less;
-    t_redirection *great;
-    t_redirection *dgreat;
-    t_redirection *here;
-} t_redirections;
-
-typedef struct s_element {
-    e_tokentype type;
-    char *value;
-    struct s_element *next;
-} t_element;
-
-typedef struct s_slice {
-    char *start;
-    size_t length;
-} t_slice;
-
-typedef struct s_token {
-    e_tokentype type;
-    t_slice location;
-} t_token;
-
-typedef struct Node t_node;
-
-typedef enum e_nodetype {
-    ERROR_NODE = -1,
-    CHAR_NODE = 0,
-    PAIR_NODE = 1,
-    STR_NODE = 2
-} e_nodetype;
-
-typedef struct s_pairvalue {
-    t_node *left;
-    t_node *right;
-} t_pairvalue;
-
-typedef union {
-    t_pairvalue pair;
-    char value;
-    char *error;
-    char *str;
-} u_nodevalue;
-
-struct Node {
-    e_nodetype type;
-    u_nodevalue data;
-};
-
-/********************************************** */
 
 extern volatile sig_atomic_t g_sig_num;
 
@@ -126,6 +51,15 @@ typedef struct s_export
 typedef struct s_cmd
 {
     char            **cmd;
+	int             here;
+    int             rank_here;
+    int             flag_less;
+    char            *less;
+    int             rank_less;
+    char            *great;
+    int             rank_great;
+    char            *dgreat;
+    int             rank_dgreat;
     struct s_cmd    *next;
     struct s_cmd    *previous;
 }                   t_cmd;
@@ -134,46 +68,48 @@ typedef struct s_params
 {
 	t_cmd			*command;
 	t_env			*myenvp;
-    t_export        *myexport;
+	int             fd_in;
+    int             fd_out;
+	t_export		*myexport;
 	char			**envp;
-	char			*var_temp;
 	int				last_exit_code;
-	int				tmp;
 }					t_params;
 
-/******************************************** */
+// l_handle_here.c
+void handle_here(char *delimiter, char **here_content, int j, int quote, t_params *params);
+//l_expand.c
+char *expand_variable_in_input(char *line, t_params *params);
+//l_del_utils.c
+void handle_out_redirection(t_cmd *out, int *out_rank, int *i, const char *type);
+void del_here(t_cmd *input, int *in_rank, int here, int *i);
+void del_less(t_cmd *input, int *in_rank, int *i);
 
+//l_ft_utils_5.c
+void reset_cmd_flags(t_cmd *cmd);
+
+//l_ft_utils_6.c
+//void process_command(t_params *params, char **parsed);
+
+//l_inout_utils.c
+int open_file(char *filename, int flags);
+void dup2_stdout(int fd_out, char *filename);
+int open_input_file(char *filename, int flags);
+void dup2_stdin(int fd_in, char *filename);
+char *prepare_temp_file(int num_cmd);
 
 // clean_arg.c
 char *join_argv(char **argv);
 
-// exec_utils.c
-void node_list(const t_node *node, t_element **elements);
-void wait_for_children(int num_cmds);
-void close_pipes(int **pipes, int num_pipes);
-int **create_pipes(int num_pipes);
-
-// exec.c
-int exec(const t_node *node, char *input, t_params *params);
-// free.c
-int count_array (char **argv);
-void	*ft_free(char **ar, int index);
-
 // ft_check.c
-int check_infile(char **argv);
-
-// ft_cmd.c
-char	*check_shell(char *path);
-char *is_valid_cmd(char *path, char *cmd);
-
-// ft_multiline.c
-char *multiline(char **input);
+int check_less(t_params *params);
+int check_infile(t_cmd *current);
+void manage_less(t_params *params);
 
 // ft_strcat.c
 char *ft_strcat(char *dest, char *src);
 
 // ft_strcmp.c
-int	ft_strcmp(const char *first, const char *second);
+//int	ft_strcmp(const char *first, const char *second);
 
 // ft_strcpy.c 
 char    *ft_strcpy(char *s1, char *s2);
@@ -182,85 +118,33 @@ char    *ft_strcpy(char *s1, char *s2);
 char	*ft_strndup(const char *s, size_t size);
 
 // ft_realloc.c
-void *ft_realloc(void *ptr, size_t new_size);
+//void *ft_realloc(void *ptr, size_t new_size);
+void *ft_realloc(void *ptr, size_t old_size, size_t new_size);
 
 // ft_subfirst.c
 char	*ft_subfirst(char *s, unsigned int start, size_t len);
 char	*ft_substrj(char *s, unsigned int start, size_t len);
 
-// ft_path.c
-char	*get_path(char *envp[], char *rgx);
-
-// guard.c
-void* guard(void *ptr, char *file, int number);
-
 // here_doc_utils.c
-char **here_key(char *input);
+//char **here_key(char *input);
+//char **here_key(char **input);
+void manage_here(t_params *params);
 
 // here_doc.c
-void process_here(char **input, char **keys, int j);
+//void process_here(char **input, char **keys, int j);
+void process_here(char **keys, int j, t_params *params);
 
-// list.c
-t_element *add_element(t_element *list, char *value, e_tokentype type);
-void print_elements(t_element *list);
-void free_elements(t_element *list);
-char **list_to_array(t_element *list);
-int count_elements(t_element *list);
-
-// node.c 
-t_node *strnode_new(char *c);
-t_node *charnode_new(char c);
-t_node *pairnode_new(t_node *left, t_node *right);
-t_node *errornode_new(char *msg);
-void *node_drop(t_node *node);
-
-// parser.c
-t_node *parse(char *itr, int *i);
-
-// quote.c
-int check_quote(char *str);
-int dquote_length(char *str, int pos, char quote);
-
-// real_path.c
-int is_absolute_path(const char *path);
-int is_executable_name(const char *path);
-char* simplify_path(const char *path);
-
-// redirection_utils.c
-void free_redirection(t_redirection *redir);
-void handle_redirection(t_redirection **redir, e_tokentype type, char *value, int rank);
-void remove_current_element(t_element **elements, t_element **prev, t_element **current);
 
 // redirection.c
-t_element *redirect_io(t_element **elements, t_redirections *redirs);
-t_redirection *add_red(e_tokentype type, char *value, int rank);
-void free_redirections(t_redirections *redirs);
-
-// scanner.c
-int len_word(char *str, int *start);
-t_token scanner_peek(char *itr, int *i);
-int scanner_has_next(char *itr, int *i);
-t_token scanner_next(char *itr, int *i);
-
-// signal.c
-void catch_ctrl_c(int sig, siginfo_t *info, void *ucontext);
-void catch_sigquit(int sig, siginfo_t *info, void *ucontext);
-void write_pid(pid_t pid);
-
-
-// tokens.c
-int has_next(const char *itr, int *i);
-char peek(const char *itr, int *i);
-char next(char *itr, int *i, int length);
-
-// vector.c
-char* extract_word(char *input, int *i);
-char* extract_redirection(char *input, int *i);
-t_element *parse_cmd(char *input);
+//t_element *redirect_io(t_element **elements, t_redirections *redirs);
+//t_redirection *add_red(e_tokentype type, char *value, int rank);
+//void free_redirections(t_redirections *redirs);
+void manage_red(t_params *params);
+void input_r(t_cmd *current, int num_cmd);
+void output(t_cmd *current);
 
 
 /***********************FT_RIVO************************************************************** */
-
 void print_cmd(t_params *params);
 
 int word_count(char *str);
@@ -330,7 +214,7 @@ int    format_path(char **argv, t_params *params);
 void    format_cmd(t_params *params);
 
 // r_ft_utils_1.c
-void print_prompt();
+int find_char(char *str, char c);
 int ft_is_space(char c);
 int while_check_char(char c, char *input);
 int find_first_index(const char *big, const char *little);
@@ -349,6 +233,7 @@ int	ft_strcmp(const char *s1, const char *s2);
 int putchar_count(const char *src, char c);
 
 // r_ft_utils_4.c
+long long int	ft_atoi_lld(const char *str, int *overflow);
 int	isoperator(char *input);
 int check_path(const char *path);
 int check_errors(t_params *params);
@@ -367,20 +252,30 @@ char *format_var_env(char *arg, t_params *params);
 void format_variable(char **argv, t_params *params);
 
 // r_ft_export_1.c
-char *ft_get_export_value(t_params *params, char *name);
 int print_export(t_params *params);
-int check_error_var_export(char *cmd);
-int put_var_export(char **cmd, t_params *params);
-int ft_export(char **cmd, t_params *params);
+int check_error_var_temp(char *cmd);
+int check_var_temp(char **cmd);
+void    clean_export(char *exist_value, char *enter_value, char *name);
 
 // r_ft_export_2.c
-int	find_export_name(t_export *myexport, char *name);
+int check_error_export(char *cmd);
 char	*put_name_export(char *str);
 char	*put_value_export(char *str);
-void del_export_element(t_export **myexport, char *envp);
-t_export *create_new_list_export(char *envp);
-int create_export(t_export **myexport, char *envp);
-char *put_export_val(t_export *myexport, char *name);
+t_export	*create_new_list_export(char *arg);
+int	create_export(t_export **myexport, char *envp);
+
+// r_ft_export_3.c
+int	find_export_name(t_export *myexport, char *name);
+int del_export_element(t_export **myexport, char *envp);
+char	*put_export_str(t_export *myexport, char *name);
+char	*put_export_value(t_export *myexport, char *name);
+
+// r_ft_export_4.c
+int    handle_export_1(char *arg, t_params *params);
+int    handle_export_2(char *arg, t_params *params);
+int    handle_export_3(char *arg, t_params *params);
+int    handle_export_4(char *arg, t_params *params);
+int ft_export(char **cmd, t_params *params);
 
 //r_ft_unset.c
 int ft_unset(char **cmd, t_params *params);
@@ -416,8 +311,6 @@ char *format_input(char *input);
 
 // r_ft_builtins.c
 int run_builtins(char **cmd, t_params *params);
-int run_builtins_in_child(char **cmd, t_params *params);
-int run_builtins_in_parent(char **cmd, t_params *params);
 int cmd_not_found(t_params *params);
 
 // r_check_behavior.c
@@ -431,4 +324,13 @@ void sig_handler(int signal);
 void signal_handlers(int sign);
 
 t_params *create_list_params(char **envp);
+char	*put_export_value(t_export *myexport, char *name);
+char	*put_export_str(t_export *myexport, char *name);
+int check_error_export(char *cmd);
+
+//r_ft_exit.c
+void	ft_exit(char **parsed, t_params *params);
+int check_input_is_all_space(char *input);
+int pass_errors_test(char *input);
+int	is_command(t_params *params, char *command);
 #endif

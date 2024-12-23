@@ -6,27 +6,31 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 10:25:12 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/16 15:39:48 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/22 08:45:16 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void print_prompt()
-{
-    char cwd[1024];
-
-    if (getcwd(cwd, sizeof(cwd)) != NULL)
-    {
-        printf("minishell: %s$ ", cwd);
-    } else {
-        perror("getcwd() error");
-    }
-}
-
 int ft_is_space(char c)
 {
     return ((c >= '\t' && c <= '\r') || c == 32);
+}
+
+int find_char(char *str, char c)
+{
+    int i;
+
+    i = 0;
+    if (!str)
+        return (-1);
+    while (str[i] != '\0')
+    {
+        if (str[i] == c)
+            return (1);
+        i++;
+    }
+    return (0);
 }
 
 int while_check_char(char c, char *input)
@@ -68,19 +72,3 @@ int find_first_index(const char *big, const char *little)
     }
     return (0);
 }
-
-void free_array(char **arr)
-{
-    int i = 0;
-    if (!arr)
-        return;
-    while (arr[i] != NULL)
-    {
-        if (arr[i])
-            free(arr[i]);
-        i++;
-    }
-    if (arr)
-        free(arr);
-}
-

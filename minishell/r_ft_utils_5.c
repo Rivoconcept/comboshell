@@ -1,18 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   r_format_cmd.c                                     :+:      :+:    :+:   */
+/*   r_ft_utils_5.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/22 15:13:30 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/22 13:17:30 by rhanitra         ###   ########.fr       */
+/*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
+/*   Updated: 2024/12/22 13:20:15 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*check_access(char *command, char *path)
+int	check_input_is_all_space(char *input)
+{
+	int	i;
+
+	if (!input || !strcmp(input, "\0"))
+		return (0);
+
+	i = 0;
+	while (input[i])
+	{
+		if (!ft_is_space(input[i]) && input[i] != '\'' && input[i] != '"')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+char	*check_is_path(char *command, char *path)
 {
 	char	*temp;
 
@@ -35,7 +52,7 @@ char	*check_access(char *command, char *path)
 	return (temp);
 }
 
-char	*put_path(char **dirs, char *command)
+char	*check_access_path(char **dirs, char *command)
 {
 	int		i;
 	char	*path;
@@ -50,7 +67,7 @@ char	*put_path(char **dirs, char *command)
 		path = ft_strjoin(dirs[i], "/");
 		if (!path)
 			return (NULL);
-		full_path = check_access(command, path);
+		full_path = check_is_path(command, path);
 		free(path);
 		if (stat(full_path, &statbuf) == 0 && (statbuf.st_mode & S_IFREG) 
 			&& access(full_path, X_OK | F_OK) == 0)
@@ -61,7 +78,7 @@ char	*put_path(char **dirs, char *command)
 	return (NULL);
 }
 
-char	*check_cmd_standard(t_params *params, char *command)
+int	is_command(t_params *params, char *command)
 {
 	char	**dirs;
 	char	*path_env;
@@ -69,46 +86,25 @@ char	*check_cmd_standard(t_params *params, char *command)
 
 	full_path = NULL;
 	if (!command || *command == '\0')
-		return (NULL);
+		return (0);
+    if (isbuiltins(command))
+    {
+        return (1);
+    }
 	path_env = ft_getenv(params, "PATH");
 	if (!path_env || path_env == NULL)
-		return (NULL);
+		return (0);
 	dirs = ft_split(path_env, ':');
 	free(path_env);
 	if (!dirs)
 	{
 		printf("Debug: PATH directories could not be split.\n");
-		return (NULL);
+		return (0);
 	}
 	full_path = put_path(dirs, command);
 	free_array(dirs);
 	if (!full_path)
-		return (NULL);
-	return (full_path);
-}
-
-void	format_cmd(t_params *params)
-{
-	t_cmd	*current;
-	char	*cmd;
-
-	cmd = NULL;
-	current = params->command;
-	while (current != NULL)
-	{
-		if (ft_strcmp(current->cmd[0], "|") == 0)
-		{
-			current = current->next;
-			continue ;
-		}
-		if (!isbuiltins(current->cmd[0]))
-		{
-			cmd = check_cmd_standard(params, current->cmd[0]);
-			if (!cmd)
-				return ;
-			free(current->cmd[0]);
-			current->cmd[0] = cmd;
-		}
-		current = current->next;
-	}
+		return (0);
+    free(full_path);
+	return (1);
 }

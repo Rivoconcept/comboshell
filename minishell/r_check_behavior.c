@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_behavior.c                                   :+:      :+:    :+:   */
+/*   r_check_behavior.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:03:19 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/10/05 14:42:03 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/22 10:18:35 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,12 @@ int check_error_newline(char *s)
     return (0);
 }
 
-int check_behavior(char *s)
+int pass_error_test_1(char *s)
 {
-    if (check_input(s, "\t\n\v\f\r ") || !ft_strcmp(s, ":") || !ft_strcmp(s, "!"))
+    if (!strcmp(s, "\0") || !strcmp(s, "\n") || check_input_is_all_space(s))
         return (1);
+    if (check_input(s, "\t\n\v\f\r ") || !ft_strcmp(s, ":") || !ft_strcmp(s, "!"))
+        return (1); 
     if (check_str(s, "<>", "<> "))
         return (printf("bash: syntax error near unexpected token '<>'\n"), 1);
     if (check_str(s, "><<<", "<> ") || check_str(s, " <<<", "<> ")
@@ -43,6 +45,11 @@ int check_behavior(char *s)
     if (check_str(s, " <", "<> ") || check_str(s, "><", "<> ")
         || !ft_strcmp(s, "<<<<"))
         return (printf("bash: syntax error near unexpected token '<'\n"), 1);
+    return (0);
+}
+
+int pass_error_test_2(char *s)
+{
     if (check_str(s, " >>", "<> ") || !ft_strcmp(s, "<>>>")
         || !ft_strcmp(s, ">>>>"))
         return (printf("bash: syntax error near unexpected token '>>'\n"), 1);
@@ -63,5 +70,14 @@ int check_behavior(char *s)
     if (!ft_strcmp(s, ";;"))
         return (printf("bash: syntax error near unexpected token ';;'\n"), 1);
 
+    return (0);
+}
+
+int pass_errors_test(char *input)
+{
+    if (pass_error_test_1(input))
+        return (1);
+    if (pass_error_test_2(input))
+        return (1);
     return (0);
 }

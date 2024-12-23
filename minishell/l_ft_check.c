@@ -6,21 +6,53 @@
 /*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 13:38:41 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/18 14:37:49 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/22 07:50:11 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int check_infile(char **argv)
+int check_less(t_params *params)
 {
-    int i;
-	i = 0;
-    while (argv[i] != NULL)
+    t_cmd *current = params->command;
+
+    while (current != NULL)
     {
-        if (ft_strcmp(argv[i], "<") == 0 && access(argv[i + 1], F_OK | W_OK) != 0)
-			return (0);
+        if (current->flag_less)
+            return (1);
+        current = current->next;
+    }
+    return (0);
+}
+
+int check_infile(t_cmd *current)
+{
+    struct stat	statbuf;
+    int i;
+
+    i = 0;
+    while (current->cmd[i] != NULL)
+    {
+        if (ft_strcmp(current->cmd[i], "<") == 0 )
+        {
+            if (stat(current->cmd[++i], &statbuf) != 0)
+            {
+                current->flag_less = 1;
+                return (printf("minishell: %s: No such file or directory\n", current->cmd[i]), 127);
+            }
+        }
         i++;
     }
-	return (1);
+    return (0);
+}
+
+
+void manage_less(t_params *params)
+{
+    t_cmd *current = params->command;
+    while (current != NULL)
+    {
+        check_infile(current);
+        current = current->next;
+    }
 }

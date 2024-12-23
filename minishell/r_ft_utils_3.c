@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   r_ft_utils_3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/11 13:57:35 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/22 20:48:03 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,27 +45,12 @@ int count_cmd(t_params *params)
 
 int	ft_strcmp(const char *s1, const char *s2)
 {
-	size_t 			n;
-	unsigned int	i;
-	unsigned char	*str1;
-	unsigned char	*str2;
+	size_t	i;
 
 	i = 0;
-	n = ft_strlen((char *)s2);
-	str1 = (unsigned char *)s1;
-	str2 = (unsigned char *)s2;
-	if (n > 0)
-	{
-		while (str1[i] == str2[i] && str1[i] != '\0'
-			&& str2[i] != '\0' && 1 < n)
-		{
-			i++;
-			n--;
-		}
-		return (str1[i] - str2[i]);
-	}
-	else
-		return (0);
+	while (s1[i] == s2[i] && s1[i] != '\0')
+		i++;
+	return ((unsigned char)(s1[i]) - (unsigned char)(s2[i]));
 }
 
 int putchar_count(const char *src, char c)
