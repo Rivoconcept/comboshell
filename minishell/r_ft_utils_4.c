@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/23 11:33:06 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/23 18:24:21 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,12 +114,12 @@ int check_errors(t_params *params)
 	return (i);
 }
 
-void	*safe_malloc(size_t bytes)
+void	*safe_malloc(size_t bytes, char *errors)
 {
 	void	*res;
 
 	res = malloc(bytes);
 	if (res == NULL)
-		exit_error("Error\nThere are errors in memory allocation");
+		exit_error(errors);
 	return (res);
 }

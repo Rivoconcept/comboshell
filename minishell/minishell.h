@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/23 15:38:12 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/23 18:32:08 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,7 +343,7 @@ int	isoperator(char *input);
 int	check_path(const char *path);
 int	 pre_test(char *arg, t_params *params);
 int check_errors(t_params *params);
-void	*safe_malloc(size_t bytes);
+void	*safe_malloc(size_t bytes, char *errors);
 
 //r_ft_utils_5.c
 int	check_input_is_all_space(char *input);
