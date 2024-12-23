@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/22 12:45:36 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/23 11:33:06 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,12 +112,6 @@ int check_errors(t_params *params)
         current = current->next;
     }
 	return (i);
-}
-
-void	exit_error(const char *error)
-{
-	printf("%s", error);
-	exit(EXIT_FAILURE);
 }
 
 void	*safe_malloc(size_t bytes)

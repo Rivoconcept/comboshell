@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 16:01:50 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/20 17:55:04 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/23 12:09:35 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,6 @@ valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all ./minishell
 
 
 */
-
-valeur long long exit
-
 
 
 rrakoton@c1r9s3:~/Downloads/comboshell-main/minishell$ fghjkl

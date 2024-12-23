@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   r_exec.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/22 21:19:02 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:38:48 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void clean_pipe_fd(int ***fd, int pipe_count) {
+void clean_pipe_fd(int ***fd, int pipe_count)
+{
     int i = 0;
     while(i < pipe_count){
         if ((*fd)[i]) {
@@ -26,7 +27,8 @@ void clean_pipe_fd(int ***fd, int pipe_count) {
     *fd = NULL;
 }
 
-int put_nbr_pipes(t_cmd *command) {
+int put_nbr_pipes(t_cmd *command)
+{
     int count = 0;
     while (command != NULL) {
         if (!ft_strcmp(command->cmd[0], "|"))
@@ -36,7 +38,8 @@ int put_nbr_pipes(t_cmd *command) {
     return count;
 }
 
-void init_pipe_fd(int ***fd, t_params *params) {
+void init_pipe_fd(int ***fd, t_params *params)
+{
     int i = 0;
     int pipe_count = put_nbr_pipes(params->command);
     *fd = malloc(sizeof(int *) * pipe_count);
@@ -60,7 +63,8 @@ void init_pipe_fd(int ***fd, t_params *params) {
     }
 }
 
-int setup_pipe(int **fd, t_cmd *current, int i) {
+int setup_pipe(int **fd, t_cmd *current, int i)
+{
     if (current->previous && !ft_strcmp(current->previous->cmd[0], "|")) {
         if (dup2(fd[i - 1][0], STDIN_FILENO) == -1)
             return (perror("dup2"), -1);
@@ -74,7 +78,8 @@ int setup_pipe(int **fd, t_cmd *current, int i) {
     return 0;
 }
 
-void exec_cmd(t_params *params) {
+void exec_cmd(t_params *params)
+{
     int nbr_pipes = put_nbr_pipes(params->command);
     int **fd;
     t_cmd *current = params->command;

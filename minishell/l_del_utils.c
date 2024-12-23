@@ -39,7 +39,8 @@ void handle_out_redirection(t_cmd *out, int *out_rank, int *i, const char *type)
     (*i)++;
 }
 
-void del_here(t_cmd *input, int *in_rank, int here, int *i) {
+void del_here(t_cmd *input, int *in_rank, int here, int *i)
+{
     input->rank_here = (*in_rank)++;
     input->here = here;
     free(input->cmd[*i]);
@@ -47,7 +48,8 @@ void del_here(t_cmd *input, int *in_rank, int here, int *i) {
     (*i)++;
 }
 
-void del_less(t_cmd *input, int *in_rank, int *i) {
+void del_less(t_cmd *input, int *in_rank, int *i)
+{
     input->rank_less = (*in_rank)++;
     if (input->less)
         free(input->less);

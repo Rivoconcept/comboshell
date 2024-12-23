@@ -3,24 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   l_redirection.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 08:20:34 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/22 08:22:33 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:01:48 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void del_in(t_cmd *input, int here) {
+static void del_in(t_cmd *input, int here)
+{
     int i = 0;
     int j = 0;
     int in_rank = 0;
 
-    while (input->cmd[i] != NULL) {
-        if (ft_strcmp(input->cmd[i], "<<") == 0) {
+    while (input->cmd[i] != NULL)
+{
+        if (ft_strcmp(input->cmd[i], "<<") == 0)
+{
             del_here(input, &in_rank, here, &i);
-        } else if (ft_strcmp(input->cmd[i], "<") == 0) {
+        } else if (ft_strcmp(input->cmd[i], "<") == 0)
+{
             del_less(input, &in_rank, &i);
         } else {
             input->cmd[j++] = input->cmd[i];
@@ -67,16 +71,20 @@ void manage_red(t_params *params)
     }
 }
 
-void input_r(t_cmd *current, int num_cmd) {
+void input_r(t_cmd *current, int num_cmd)
+{
     int fd_in;
     char *file;
 
-    if (current->here >= 0 || current->less) {
-        if (current->less && (current->here < 0 || current->rank_here < current->rank_less)) {
+    if (current->here >= 0 || current->less)
+{
+        if (current->less && (current->here < 0 || current->rank_here < current->rank_less))
+{
             fd_in = open_input_file(current->less, O_RDONLY);
             dup2_stdin(fd_in, current->less);
             close(fd_in);
-        } else if (current->here >= 0) {
+        } else if (current->here >= 0)
+{
             file = prepare_temp_file(num_cmd);
             fd_in = open_input_file(file, O_RDONLY);
             dup2_stdin(fd_in, file);
@@ -86,16 +94,20 @@ void input_r(t_cmd *current, int num_cmd) {
     }
 }
 
-void output(t_cmd *current) {
+void output(t_cmd *current)
+{
     int fd_out;
 
-    if (current->great || current->dgreat) {
-        if (current->great && (!current->dgreat || current->rank_dgreat < current->rank_great)) {
+    if (current->great || current->dgreat)
+{
+        if (current->great && (!current->dgreat || current->rank_dgreat < current->rank_great))
+{
             fd_out = open_file(current->great, O_WRONLY | O_CREAT | O_TRUNC);
             dup2_stdout(fd_out, current->great);
             close(fd_out);
 
-        } else if (current->dgreat) {
+        } else if (current->dgreat)
+{
             fd_out = open_file(current->dgreat, O_WRONLY | O_CREAT | O_APPEND);
             dup2_stdout(fd_out, current->dgreat);
             close(fd_out);

@@ -3,23 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   l_here_doc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:41:20 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/22 08:08:36 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:01:48 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int process_quotes(char **key) {
+static int process_quotes(char **key)
+{
     int quote = 0;
     char *temp;
 
     if (ft_memchr(*key, '"', ft_strlen(*key) + 1) || ft_memchr(*key, '\'', ft_strlen(*key) + 1))
         quote = 1;
 
-    if (ft_strcmp(*key, "\"\"") != 0 || ft_strcmp(*key, "''") != 0) {
+    if (ft_strcmp(*key, "\"\"") != 0 || ft_strcmp(*key, "''") != 0)
+{
         temp = format_quotes(*key);
         free(*key);
         *key = ft_strdup(temp);
@@ -29,16 +31,19 @@ static int process_quotes(char **key) {
     return quote;
 }
 
-void process_here(char **keys, int j, t_params *params) {
+void process_here(char **keys, int j, t_params *params)
+{
     int i = 0;
     char *here_content = NULL;
     int quote;
 
-    while (keys[i]) {
+    while (keys[i])
+{
         quote = process_quotes(&keys[i]);
         handle_here(keys[i], &here_content, j, quote, params);
 
-        if (here_content) {
+        if (here_content)
+{
             free(here_content);
             here_content = NULL;
         }

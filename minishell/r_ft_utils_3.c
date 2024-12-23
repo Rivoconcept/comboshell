@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   r_ft_utils_3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/22 20:48:03 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/23 11:33:33 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,10 @@ int putchar_count(const char *src, char c)
         i++;
     }
     return (count);
+}
+
+void	exit_error(const char *error)
+{
+	printf("%s", error);
+	exit(EXIT_FAILURE);
 }

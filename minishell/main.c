@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/22 20:59:57 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:40:37 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,10 @@ void	run_minishell(t_params *params)
 			continue ;	
 		}
 		if (input)
+		{
 			add_history(input);
+			push_history(input);
+		}
 		if (g_sig_num == SIGINT)
 			params->last_exit_code = 130;
 		new_input = format_input(input);
@@ -322,6 +325,8 @@ int	main(int argc, char **argv, char **envp)
 	params = create_list_params(envp);
 	if (!params)
 		return (1);
+	ignore_leaks_readline();
+	add_old_history();
 	run_minishell(params);
 	cleanup_and_exit(params, 0);
 	return (0);

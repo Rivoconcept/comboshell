@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 14:45:23 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/22 08:32:11 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/23 11:25:25 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void handle_quote(char c, int *squote, int *dquote)
 {
-    if (c == '\'' && !(*dquote)) // Si on rencontre un simple quote hors d'un double quote
-        *squote = !(*squote);    // Alterne l'état du simple quote
+    if (c == '\'' && !(*dquote))
+        *squote = !(*squote);
     if (c == '"' && !(*squote))
         *dquote = !(*dquote);
 }

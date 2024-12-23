@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   r_ft_cleaner.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:40:14 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/22 21:06:33 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:39:54 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,10 @@ void cleanup_and_exit(t_params *params, int status)
 
     if (params)
     {
-         if(params->fd_in)
-			close(params->fd_in);
-		if(params->fd_out)
-			close(params->fd_out);
+        //  if(params->fd_in)
+		// 	close(params->fd_in);
+		// if(params->fd_out)
+		// 	close(params->fd_out);
         if (params->myenvp)
             free_list_env(params->myenvp);
         if (params->myexport)

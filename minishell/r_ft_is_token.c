@@ -1,32 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_is_token.c                                      :+:      :+:    :+:   */
+/*   r_ft_is_token.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 18:57:35 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/24 12:39:57 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/23 11:23:08 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int check_variable(char *arg)
-{
-    int i;
-
-    i = 0;
-    while (arg[i] != '\0')
-    {
-        if (arg[i] == '$')
-            return (1);
-        i++;
-    }
-    return (0);
-}
-
-int token_type(char *arg)
+/*int token_type(char *arg)
 {
     char    *temp;
 
@@ -49,4 +35,4 @@ int token_type(char *arg)
         return (3);
     }
     return (free(temp), 0);
-}
+}*/

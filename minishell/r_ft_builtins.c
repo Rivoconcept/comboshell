@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 20:57:46 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/22 07:54:54 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:41:40 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,34 +48,3 @@ int run_builtins(char **cmd, t_params *params)
         ft_exit(cmd, params);
     return (0);
 }
-
-/*int run_builtins_in_parent(char **cmd, t_params *params)
-{
-    if (!cmd || !cmd[0])
-        return (0);
-    if (!ft_strcmp(cmd[0], "echo"))
-        return (ft_echo(cmd), 1);
-    if (!ft_strcmp(cmd[0], "cd"))
-        return (ft_cd(cmd[1], params));
-    if (!ft_strcmp(cmd[0], "unset"))
-        del_env_element(&params->myenvp, cmd[1]);
-    if (!ft_strcmp(cmd[0], "export"))
-        return (ft_export(cmd, params));
-    if (!ft_strcmp(cmd[0], "exit"))
-        cleanup_and_exit(params, 1);
-    return (0);
-}
-
-int run_builtins_in_child(char **cmd, t_params *params)
-{
-    if (!cmd || !cmd[0])
-        return (0);
-    if (!ft_strcmp(cmd[0], "pwd"))
-        return (ft_pwd());
-    if (!ft_strcmp(cmd[0], "echo"))
-        return (ft_echo(cmd));
-    if (!ft_strcmp(cmd[0], "env"))
-        return (ft_env(params));
-    return (127);
-}*/
-

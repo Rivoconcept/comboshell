@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 19:02:23 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/22 13:52:10 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/23 11:07:12 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,6 @@ void copy_var_env(char *env, char *new_str, int *index)
         (*index)++;
         i++;
     }
-    // if (ft_strcmp(env, new_str))
-    //     free(env);
 }
 
 void	del_quotes(char **argv)
@@ -107,7 +105,6 @@ void	del_quotes(char **argv)
 	i = 0;
     while (argv[i] != NULL)
     {
-        // if (!argv[i] || !find_char(argv[i], '\'' || !find_char(argv[i], '"')))
         if (!argv[i])
         {
             i++;

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:40:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/20 19:24:41 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/23 11:18:53 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,3 @@ char	*put_export_value(t_export *myexport, char *name)
 	}
 	return (NULL);
 }
-
-

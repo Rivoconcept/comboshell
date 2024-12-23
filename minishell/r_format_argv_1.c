@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   r_format_argv.c                                    :+:      :+:    :+:   */
+/*   r_format_argv_1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 18:26:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/22 14:11:49 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/23 10:45:53 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ char	*check_val_env(char *str, int *index, char *env_value, t_params *params)
 	env_value = put_env_val(params->myenvp, var_env);
 	if (env_value)
 		return (env_value);
-	else{
+	else
+	{
 		return (NULL);
 	}
 }
@@ -68,10 +69,10 @@ void	put_var_env(char *input, int *i, char **temp, t_params *params)
 		if (input[*i - 1] == '\'' && *i > 1)
 			*temp = check_val_env(input, i, env_value, params);
 		else
-			*temp = "$";
+			*temp = ft_strdup("$");
 	}
 	else if (var_in_apostrophe(input, *i))
-		*temp = "$";
+		*temp = ft_strdup("$");
 	else if (pure_quote(input))
 		*temp = check_val_env(input, i, env_value, params);
 	else if (input != NULL && !pure_quote(input) && !pure_apostrophe(input)
@@ -81,46 +82,16 @@ void	put_var_env(char *input, int *i, char **temp, t_params *params)
 	}
 }
 
-char *format_var_env(char *arg, t_params *params)
+int	is_in_myenvp(char *temp, t_env *myenvp)
 {
-    int i[3];
-    char *temp;
-    static char new_str[1024];
+	t_env	*current;
 
-    i[0] = -1;
-    i[1] = 0;
-    i[2] = 0;
-    while (arg[++i[0]] != '\0')
-    {
-        if (arg[i[0]] == '$')
-        {
-            temp = NULL;
-            put_var_env(arg, &i[0], &temp, params);
-            if (temp != NULL)
-            {
-                copy_var_env(temp, new_str, &i[1]);
-				if (ft_strcmp(temp, new_str))
-					free(temp);
-            }
-        }
-        else
-            new_str[(i[1])++] = arg[i[0]];
-        new_str[i[1]] = '\0';
-    }
-    return (new_str);
-}
-
-void	format_variable(char **argv, t_params *params)
-{
-	int		i;
-	char	*tmp;
-
-	i = 0;
-	while (argv[i] != NULL)
+	current = myenvp;
+	while (current)
 	{
-		tmp = ft_strdup(format_var_env(argv[i], params));
-		free(argv[i]);
-		argv[i] = tmp;
-		i++;
+		if (temp == current->value)
+			return (1);
+		current = current->next;
 	}
+	return (0);
 }

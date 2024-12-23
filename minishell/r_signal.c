@@ -6,33 +6,11 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:11:18 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/16 17:21:58 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/23 11:42:00 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*void register_child(t_children *children, pid_t pid)
-{
-    if (children->count < MAX_CHILDREN) {
-        children->pids[children->count++] = pid;
-    }
-}
-
-void terminate_children(t_children *children)
-{
-    int i;
-
-    i = 0;
-    while (i < children->count)
-    {
-        if (children->pids[i] > 0)
-            kill(children->pids[i], SIGKILL);
-        i++;
-    }
-    children->count = 0;
-}*/
-
 
 void sig_handler(int signal)
 {
