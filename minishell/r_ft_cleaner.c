@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:40:14 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/23 15:39:54 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 11:15:29 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,6 @@ void free_list_cmd(t_cmd *command)
 
 void cleanup_and_exit(t_params *params, int status)
 {
-    char *status_str;
-
     if (params)
     {
         //  if(params->fd_in)
@@ -102,12 +100,6 @@ void cleanup_and_exit(t_params *params, int status)
         if (params->envp)
             free_array(params->envp);
         free(params);
-    }
-    status_str = ft_itoa(status);
-    if (status_str)
-    {
-        ft_putstr_fd(status_str, STDOUT_FILENO);
-        free(status_str);
     }
     exit(status);
 }

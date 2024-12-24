@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/23 18:32:08 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 12:02:24 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,9 @@ typedef struct s_params
 	t_export		*myexport;
 	char			**envp;
 	int				last_exit_code;
+	pid_t			*pid_tab;
+	int				prev_pipe_read;
+	int				rank_cmd;
 }					t_params;
 
 // l_handle_here.c

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 09:12:58 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 11:19:28 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,26 @@ int initialize_cmd(int var[3], char ***temp, t_cmd *cmd, char **argv)
     return (0);
 }
 
+void check_end_cmd(int var[3], char ***temp, t_cmd **cmd, char **argv)
+{
+	if (!argv[var[0] + 1] || ft_strncmp(argv[var[0] + 1], "|", 1) == 0)
+	{
+		if (*temp && var[1] > 0)
+		{
+			(*temp)[var[1]] = NULL;
+			(*cmd) = add_command((*cmd), *temp);
+			*temp = NULL;
+			var[2] = 0;
+		}
+	}
+}
+void clean_cmd(t_cmd **cmd, char ***temp)
+{
+	reset_cmd_flags(*cmd);
+    if (*temp)
+        free(*temp);
+}
+
 t_cmd *init_command(char **argv)
 {
     t_cmd *cmd = NULL;
@@ -90,24 +110,11 @@ t_cmd *init_command(char **argv)
         {
             if (initialize_cmd(var, &temp, cmd, argv))
                 return (NULL);
-
-            if (!argv[var[0] + 1] || ft_strncmp(argv[var[0] + 1], "|", 1) == 0)
-            {
-                if (temp && var[1] > 0)
-                {
-                    temp[var[1]] = NULL;
-                    cmd = add_command(cmd, temp);
-                    temp = NULL;
-                    var[2] = 0;
-                }
-            }
+			check_end_cmd(var, &temp, &cmd, argv);
         }
         var[0]++;
     }
-    reset_cmd_flags(cmd);
-    if (temp)
-        free(temp);
-    return (cmd);
+    return (clean_cmd(&cmd, &temp), cmd);
 }
 
 void	print_list(t_cmd *command)
