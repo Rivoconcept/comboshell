@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/23 18:24:21 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 15:41:40 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,55 +62,55 @@ int	check_path(const char *path)
 			return (printf("minishell: %s: Not a directory\n", path), 126);
 	}
 	if (stat(path, &statbuf) != 0)
-		return (printf("minishell: %s: No such file or directory\n", path), 127);
+		return (printf("minishell: %s: No such file or directory\n", path),
+			127);
 	if (S_ISDIR(statbuf.st_mode))
 		return (printf("%s: is a directory\n", path), 126);
 	return (0);
 }
 
-int	 pre_test(char *arg, t_params *params)
+int	pre_test(char *arg, t_params *params)
 {
 	if (arg && ft_strncmp(arg, "|", 2) == 0)
-    {
-		printf("minishell: syntax error near unexpected token `%s'\n",
-				arg);
-        params->last_exit_code = 2;
-        return (1);
-    }
+	{
+		printf("minishell: syntax error near unexpected token `%s'\n", arg);
+		params->last_exit_code = 2;
+		return (1);
+	}
 	if (arg && ft_strncmp(arg, "||", 3) == 0)
-    {
-		printf("minishell: syntax error near unexpected token `%s'\n",
-				arg);
-        params->last_exit_code = 2;
-        return (1);
-    }
+	{
+		printf("minishell: syntax error near unexpected token `%s'\n", arg);
+		params->last_exit_code = 2;
+		return (1);
+	}
 	return (0);
 }
 
-int check_errors(t_params *params)
+int	check_errors(t_params *params)
 {
-    int		i;
+	int		i;
 	t_cmd	*current;
 
-    i = 0;
+	i = 0;
 	current = params->command;
 	if (pre_test(current->cmd[0], params))
 		return (1);
-    while(current != NULL)
-    {
+	while (current != NULL)
+	{
 		if (ft_strcmp(current->cmd[0], "|") == 0)
-        {
-            current = current->next;
-            continue ;
-        }
-		if (!isbuiltins(current->cmd[0]))
 		{
+			current = current->next;
+			continue ;
+		}
+		else if (!isbuiltins(current->cmd[0]) && !isoperator(current->cmd[0]))
+		{
+			printf("%d\n", isoperator(current->cmd[0]));
 			params->last_exit_code = check_path(current->cmd[0]);
 			if (params->last_exit_code)
 				i++;
 		}
-        current = current->next;
-    }
+		current = current->next;
+	}
 	return (i);
 }
 

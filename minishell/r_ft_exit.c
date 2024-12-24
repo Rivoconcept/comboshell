@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 10:48:59 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/23 15:39:26 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 13:48:50 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	is_numeric(const char *str)
 
 long long int	ft_atoi_lld(const char *str)
 {
-	int				i;
-	int				sign;
-	long long		res;
+	int			i;
+	int			sign;
+	long long	res;
 
 	i = 0;
 	sign = 1;
@@ -55,9 +55,9 @@ long long int	ft_atoi_lld(const char *str)
 	return (res * sign);
 }
 
-unsigned long long ft_atoi_ull(const char *str)
+unsigned long long	ft_atoi_ull(const char *str)
 {
-	int	    			i;
+	int					i;
 	unsigned long long	res;
 
 	i = 0;
@@ -76,7 +76,7 @@ unsigned long long ft_atoi_ull(const char *str)
 	return (res);
 }
 
-void check_errors_exit(char **parsed, t_params *params)
+void	check_errors_exit(char **parsed, t_params *params)
 {
 	if (!parsed[1])
 	{
@@ -87,7 +87,7 @@ void check_errors_exit(char **parsed, t_params *params)
 	if (parsed[2])
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
-		write(STDERR_FILENO, "minishell: exit: too many arguments\n", 
+		write(STDERR_FILENO, "minishell: exit: too many arguments\n",
 			ft_strlen("minishell: exit: too many arguments\n"));
 		free_array(parsed);
 		cleanup_and_exit(params, 1);
@@ -97,7 +97,7 @@ void check_errors_exit(char **parsed, t_params *params)
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
 		write(STDOUT_FILENO, "minishell: exit:", ft_strlen("minishell: exit:"));
 		write(STDOUT_FILENO, parsed[1], ft_strlen(parsed[1]));
-		write(STDOUT_FILENO, ": numeric argument required\n", 
+		write(STDOUT_FILENO, ": numeric argument required\n",
 			ft_strlen(": numeric argument required\n"));
 		free_array(parsed);
 		cleanup_and_exit(params, 2);
@@ -108,7 +108,7 @@ void	ft_exit(char **parsed, t_params *params)
 {
 	unsigned long long	value;
 	unsigned long long	res;
-	long long 			exit_code;
+	long long			exit_code;
 
 	check_errors_exit(parsed, params);
 	value = (unsigned long long)INT64_MAX;
@@ -130,4 +130,3 @@ void	ft_exit(char **parsed, t_params *params)
 	free_array(parsed);
 	cleanup_and_exit(params, (unsigned char)exit_code);
 }
-

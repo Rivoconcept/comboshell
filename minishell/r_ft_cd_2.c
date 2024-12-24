@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 15:11:07 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/13 19:07:10 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 13:48:12 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 char	*split_path(char **dirs, char *temp_path, t_params *params)
 {
-	int	i;
-	char *temp;
+	int		i;
+	char	*temp;
 
 	i = 0;
 	temp = NULL;
@@ -46,15 +46,15 @@ char	*format_tilde(t_params *params, char **dirs)
 	new_path = ft_strdup(home);
 	while (dirs[i] != NULL)
 	{
-        temp = ft_strjoin(new_path, "/");
-        free(new_path);
-        new_path = temp;
-        temp = ft_strjoin(new_path, dirs[i]);
-        free(new_path);
-        new_path = temp;
-        i++;
+		temp = ft_strjoin(new_path, "/");
+		free(new_path);
+		new_path = temp;
+		temp = ft_strjoin(new_path, dirs[i]);
+		free(new_path);
+		new_path = temp;
+		i++;
 	}
-    return (free_array(dirs), new_path);
+	return (free_array(dirs), new_path);
 }
 
 char	*return_new_path(const char *arg, t_params *params)
@@ -69,7 +69,7 @@ char	*return_new_path(const char *arg, t_params *params)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		return (perror("Error on getcwd"), ft_strdup(""));
-	if (arg == NULL || (!ft_strcmp(arg, "~") && ft_strlen(arg) == 1)) 
+	if (arg == NULL || (!ft_strcmp(arg, "~") && ft_strlen(arg) == 1))
 		return (free(cwd), ft_strdup(get_home(params)));
 	if (!ft_strcmp(arg, "/") && ft_strlen(arg) == 1)
 		return (free(cwd), ft_strdup("/"));
@@ -89,11 +89,11 @@ int	ft_cd(const char *arg, t_params *params)
 	char	*new_path;
 
 	i = 0;
-    while (params->command->cmd[i] != NULL)
-        i++;
-    if (i > 2)
-        return (printf("minishell: cd: too many arguments\n"), 1);
-    new_path = return_new_path(arg, params);
+	while (params->command->cmd[i] != NULL)
+		i++;
+	if (i > 2)
+		return (printf("minishell: cd: too many arguments\n"), 1);
+	new_path = return_new_path(arg, params);
 	if (new_path && access(new_path, F_OK) == 0)
 	{
 		if (chdir(new_path) != 0)
@@ -102,6 +102,6 @@ int	ft_cd(const char *arg, t_params *params)
 	}
 	else
 		return (printf("minishell: cd: %s: is not a directory\n", new_path),
-		free(new_path), 1);
+			free(new_path), 1);
 	return (0);
 }

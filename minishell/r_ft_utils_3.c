@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/23 11:33:33 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 15:07:36 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,40 @@
 int	isbuiltins(char *command)
 {
 	int		i;
-	char	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env",
-			"exit", NULL};
+	char	*builtins[8];
 
+	builtins[0] = "echo";
+	builtins[1] = "cd";
+	builtins[2] = "pwd";
+	builtins[3] = "export";
+	builtins[4] = "unset";
+	builtins[5] = "env";
+	builtins[6] = "exit";
+	builtins[7] = NULL;
 	i = 0;
 	while (builtins[i] != NULL)
 	{
-		if (!ft_strcmp(command, builtins[i]) && ft_strlen(command) == ft_strlen(builtins[i]))
+		if (!ft_strcmp(command, builtins[i])
+			&& ft_strlen(command) == ft_strlen(builtins[i]))
 			return (1);
-        i++;
+		i++;
 	}
 	return (0);
 }
 
-int count_cmd(t_params *params)
+int	count_cmd(t_params *params)
 {
-    int     count;
-    t_cmd   *current;
+	int		count;
+	t_cmd	*current;
 
-    count  = 0;
-    current = params->command;
-    while(current != NULL)
-    {
-        count++;
-        current = current->next;
-    }
-    return (count);
+	count = 0;
+	current = params->command;
+	while (current != NULL)
+	{
+		count++;
+		current = current->next;
+	}
+	return (count);
 }
 
 int	ft_strcmp(const char *s1, const char *s2)
@@ -53,22 +61,22 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return ((unsigned char)(s1[i]) - (unsigned char)(s2[i]));
 }
 
-int putchar_count(const char *src, char c)
+int	putchar_count(const char *src, char c)
 {
-    size_t i;
-    size_t count;
+	size_t	i;
+	size_t	count;
 
-    i = 0;
-    count = 0;
-    if (!*src)
-        return (0);
-    while (src[i] != '\0')
-    {
-        if (src[i] == c)
-            count++;
-        i++;
-    }
-    return (count);
+	i = 0;
+	count = 0;
+	if (!*src)
+		return (0);
+	while (src[i] != '\0')
+	{
+		if (src[i] == c)
+			count++;
+		i++;
+	}
+	return (count);
 }
 
 void	exit_error(const char *error)

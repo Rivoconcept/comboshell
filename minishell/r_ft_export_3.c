@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:40:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/23 11:18:53 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 13:49:04 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,36 +22,37 @@ int	find_export_name(t_export *myexport, char *name)
 	while (current != NULL)
 	{
 		if (!ft_strncmp(current->name, name, ft_strlen(current->name))
-		&& ft_strlen(current->name) == ft_strlen(name))
+			&& ft_strlen(current->name) == ft_strlen(name))
 			return (1);
 		current = current->next;
 	}
 	return (0);
 }
 
-int del_export_element(t_export **myexport, char *envp)
+int	del_export_element(t_export **myexport, char *envp)
 {
-    t_export *current;
-    t_export *previous;
+	t_export	*current;
+	t_export	*previous;
 
-    if (!myexport || !*myexport || !envp)
-        return (0);
-    current = *myexport;
-    previous = NULL;
-    while (current)
-    {
-        if (ft_strlen(current->name) == ft_strlen(envp) && 
-            ft_strncmp(current->name, envp, ft_strlen(current->name)) == 0)
-        {
-            if (previous == NULL)
-                *myexport = current->next;
-            else
-                previous->next = current->next;
-            return (free(current->name), free(current->value), free(current), 1);
-        }
-        previous = current;
-        current = current->next;
-    }
+	if (!myexport || !*myexport || !envp)
+		return (0);
+	current = *myexport;
+	previous = NULL;
+	while (current)
+	{
+		if (ft_strlen(current->name) == ft_strlen(envp)
+			&& ft_strncmp(current->name, envp, ft_strlen(current->name)) == 0)
+		{
+			if (previous == NULL)
+				*myexport = current->next;
+			else
+				previous->next = current->next;
+			return (free(current->name), free(current->value), free(current),
+				1);
+		}
+		previous = current;
+		current = current->next;
+	}
 	return (0);
 }
 
@@ -88,8 +89,8 @@ char	*put_export_value(t_export *myexport, char *name)
 	current = myexport;
 	while (current != NULL)
 	{
-		if (!ft_strcmp(current->name, name) 
-		&& ft_strlen(current->name) == ft_strlen(name))
+		if (!ft_strcmp(current->name, name)
+			&& ft_strlen(current->name) == ft_strlen(name))
 		{
 			if (current->value == NULL)
 				return (ft_strdup(""));

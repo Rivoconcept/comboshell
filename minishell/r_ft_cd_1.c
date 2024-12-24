@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 15:11:07 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/23 16:00:02 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 13:48:05 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*get_home(t_params *params)
 		printf("minishell: cd: HOME not set\n");
 		return (NULL);
 	}
-    return (home);
+	return (home);
 }
 
 char	*return_pdir(const char *cwd)
@@ -64,7 +64,7 @@ char	*join_paths(const char *path1, const char *path2)
 
 int	standard_path(char **dirs, int *i, char **temp_path, t_params *params)
 {
-	char *temp;
+	char	*temp;
 
 	temp = NULL;
 	if (!ft_strcmp(dirs[*i], "~"))

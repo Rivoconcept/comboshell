@@ -6,31 +6,31 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:40:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/20 19:23:55 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 13:48:59 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int check_error_export(char *cmd)
+int	check_error_export(char *cmd)
 {
-    int i;
+	int	i;
 
-    if (cmd[0] == '\0' || cmd[0] == '=' || ft_isdigit(cmd[0]))
-        return (1);
-    i = 0;
-    while (cmd[i] && (ft_isalnum(cmd[i]) || cmd[i] == '_' || cmd[i] == '+'))
-    {
-        if (cmd[i] == '+')
-        {
-            if (cmd[i + 1] != '=')
-                return (1);
-        }
-        i++;
-    }
-    if (cmd[i] != '\0' && cmd[i] != '=')
-        return (1);
-    return (0);
+	if (cmd[0] == '\0' || cmd[0] == '=' || ft_isdigit(cmd[0]))
+		return (1);
+	i = 0;
+	while (cmd[i] && (ft_isalnum(cmd[i]) || cmd[i] == '_' || cmd[i] == '+'))
+	{
+		if (cmd[i] == '+')
+		{
+			if (cmd[i + 1] != '=')
+				return (1);
+		}
+		i++;
+	}
+	if (cmd[i] != '\0' && cmd[i] != '=')
+		return (1);
+	return (0);
 }
 
 char	*put_name_export(char *str)
@@ -90,13 +90,13 @@ t_export	*create_new_list_export(char *arg)
 {
 	t_export	*new_exp;
 
-    new_exp = malloc(sizeof(t_export));
+	new_exp = malloc(sizeof(t_export));
 	if (!arg || !new_exp)
 		return (NULL);
 	new_exp->name = put_name_export(arg);
-    if (!new_exp->name)
+	if (!new_exp->name)
 	{
-        return (free(new_exp), NULL);
+		return (free(new_exp), NULL);
 	}
 	if (find_char(arg, '='))
 	{

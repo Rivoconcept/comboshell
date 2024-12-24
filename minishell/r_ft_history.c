@@ -6,47 +6,31 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 17:50:43 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/23 15:59:55 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 15:05:15 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int ignore_leaks_readline(void)
+int	ignore_leaks_readline(void)
 {
-    int fd;
-    const char *content = 
-        "{\n"
-        "    leak readline\n"
-        "    Memcheck:Leak\n"
-        "    ...\n"
-        "    fun:readline\n"
-        "}\n"
-        "{\n"
-        "    leak add_history\n"
-        "    Memcheck:Leak\n"
-        "    ...\n"
-        "    fun:add_history\n"
-        "}\n";
+	int			fd;
+	const char	*content;
 
-    fd = open(READLINE_IGN, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd == -1)
+	content = "{\n""    leak readline\n""    Memcheck:Leak\n"
+		"    ...\n""    fun:readline\n""}\n""{\n""    leak add_history\n"
+		"    Memcheck:Leak\n""    ...\n""    fun:add_history\n""}\n";
+	fd = open(READLINE_IGN, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+		return (perror("Error opening .readline.ign file"), 1);
+	if (write(fd, content, ft_strlen(content)) == -1)
 	{
-        perror("Error opening .readline.ign file");
-        return 1;
-    }
-
-    if (write(fd, content, strlen(content)) == -1)
-	{
-        perror("Error writing to .readline.ign file");
-        close(fd);
-        return 1;
-    }
-
-    close(fd);
-    return 0;
+		perror("Error writing to .readline.ign file");
+		return (close(fd), 1);
+	}
+	close(fd);
+	return (0);
 }
-
 
 void	add_old_history(void)
 {
@@ -62,7 +46,7 @@ void	add_old_history(void)
 	input = get_next_line(fd);
 	while (input)
 	{
-		input[strlen(input) - 1] = '\0';
+		input[ft_strlen(input) - 1] = '\0';
 		add_history(input);
 		free(input);
 		input = get_next_line(fd);
@@ -80,7 +64,7 @@ void	push_history(const char *input)
 		perror("Error opening history file");
 		return ;
 	}
-	write(fd, input, strlen(input));
+	write(fd, input, ft_strlen(input));
 	write(fd, "\n", 1);
 	close(fd);
 }

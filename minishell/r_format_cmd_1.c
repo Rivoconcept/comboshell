@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   r_format_cmd.c                                     :+:      :+:    :+:   */
+/*   r_format_cmd_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 15:13:30 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/22 13:17:30 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 13:54:27 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ char	*check_access(char *command, char *path)
 
 char	*put_path(char **dirs, char *command)
 {
-	int		i;
-	char	*path;
-	char	*full_path;
-	struct	stat statbuf;
-	
+	int			i;
+	char		*path;
+	char		*full_path;
+	struct stat	statbuf;
+
 	i = 0;
 	path = NULL;
 	full_path = NULL;
@@ -52,7 +52,7 @@ char	*put_path(char **dirs, char *command)
 			return (NULL);
 		full_path = check_access(command, path);
 		free(path);
-		if (stat(full_path, &statbuf) == 0 && (statbuf.st_mode & S_IFREG) 
+		if (stat(full_path, &statbuf) == 0 && (statbuf.st_mode & S_IFREG)
 			&& access(full_path, X_OK | F_OK) == 0)
 			return (full_path);
 		free(full_path);

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/23 11:34:32 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 15:01:14 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,8 @@ int	check_input_is_all_space(char *input)
 {
 	int	i;
 
-	if (!input || !strcmp(input, "\0"))
+	if (!input || !ft_strcmp(input, "\0"))
 		return (0);
-
 	i = 0;
 	while (input[i])
 	{
@@ -35,7 +34,7 @@ char	*check_is_path(char *command, char *path)
 
 	temp = NULL;
 	if (putchar_count(command, '/') > 1 && command[0] == '/')
-		temp = ft_strjoin(path, (strrchr(command, '/') + 1));
+		temp = ft_strjoin(path, (ft_strrchr(command, '/') + 1));
 	else if (!putchar_count(command, '/'))
 		temp = ft_strjoin(path, command);
 	if (!temp)
@@ -54,11 +53,11 @@ char	*check_is_path(char *command, char *path)
 
 char	*check_access_path(char **dirs, char *command)
 {
-	int		i;
-	char	*path;
-	char	*full_path;
-	struct	stat statbuf;
-	
+	int			i;
+	char		*path;
+	char		*full_path;
+	struct stat	statbuf;
+
 	i = 0;
 	path = NULL;
 	full_path = NULL;
@@ -69,7 +68,7 @@ char	*check_access_path(char **dirs, char *command)
 			return (NULL);
 		full_path = check_is_path(command, path);
 		free(path);
-		if (stat(full_path, &statbuf) == 0 && (statbuf.st_mode & S_IFREG) 
+		if (stat(full_path, &statbuf) == 0 && (statbuf.st_mode & S_IFREG)
 			&& access(full_path, X_OK | F_OK) == 0)
 			return (full_path);
 		free(full_path);
@@ -87,10 +86,8 @@ int	is_command(t_params *params, char *command)
 	full_path = NULL;
 	if (!command || *command == '\0')
 		return (0);
-    if (isbuiltins(command))
-    {
-        return (1);
-    }
+	if (isbuiltins(command))
+		return (1);
 	path_env = ft_getenv(params, "PATH");
 	if (!path_env || path_env == NULL)
 		return (0);
@@ -105,6 +102,6 @@ int	is_command(t_params *params, char *command)
 	free_array(dirs);
 	if (!full_path)
 		return (0);
-    free(full_path);
+	free(full_path);
 	return (1);
 }

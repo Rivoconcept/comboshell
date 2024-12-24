@@ -6,16 +6,16 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:40:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/22 14:01:49 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 13:48:32 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env *create_new_list_env(char *envp)
+t_env	*create_new_list_env(char *envp)
 {
 	t_env	*new_env;
-	char		**temp;
+	char	**temp;
 
 	if (!envp)
 		return (NULL);
@@ -40,7 +40,7 @@ t_env *create_new_list_env(char *envp)
 	return (free_array(temp), new_env);
 }
 
-int create_env(t_env **myenvp, char *envp)
+int	create_env(t_env **myenvp, char *envp)
 {
 	t_env	*current;
 	t_env	*new_env;
@@ -69,8 +69,8 @@ char	*put_env_val(t_env *myenv, char *name)
 	current = myenv;
 	while (current != NULL)
 	{
-		if (!ft_strcmp(current->name, name) 
-		&& ft_strlen(current->name) == ft_strlen(name))
+		if (!ft_strcmp(current->name, name)
+			&& ft_strlen(current->name) == ft_strlen(name))
 		{
 			if (current->value == NULL)
 				return (ft_strdup(""));
