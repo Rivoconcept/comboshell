@@ -12,76 +12,43 @@
 
 #include "minishell.h"
 
-static int process_quotes(char **key)
+static int	process_quotes(char **key)
 {
-    int quote = 0;
-    char *temp;
+	int		quote;
+	char	*temp;
 
-    if (ft_memchr(*key, '"', ft_strlen(*key) + 1) || ft_memchr(*key, '\'', ft_strlen(*key) + 1))
-        quote = 1;
-
-    if (ft_strcmp(*key, "\"\"") != 0 || ft_strcmp(*key, "''") != 0)
-{
-        temp = format_quotes(*key);
-        free(*key);
-        *key = ft_strdup(temp);
-        free(temp);
-    }
-
-    return quote;
+	quote = 0;
+	if (ft_memchr(*key, '"', ft_strlen(*key) + 1) || ft_memchr(*key, '\'',
+			ft_strlen(*key) + 1))
+		quote = 1;
+	if (ft_strcmp(*key, "\"\"") != 0 || ft_strcmp(*key, "''") != 0)
+	{
+		temp = format_quotes(*key);
+		free(*key);
+		*key = ft_strdup(temp);
+		free(temp);
+	}
+	return (quote);
 }
 
-void process_here(char **keys, int j, t_params *params)
+void	process_here(char **keys, int j, t_params *params)
 {
-    int i = 0;
-    char *here_content = NULL;
-    int quote;
+	int			i;
+	char		*here_content;
+	t_here_data	here_data;
 
-    while (keys[i])
-{
-        quote = process_quotes(&keys[i]);
-        handle_here(keys[i], &here_content, j, quote, params);
-
-        if (here_content)
-{
-            free(here_content);
-            here_content = NULL;
-        }
-        i++;
-    }
+	here_content = NULL;
+	here_data.j = j;
+	i = 0;
+	while (keys[i])
+	{
+		here_data.quote = process_quotes(&keys[i]);
+		handle_here(keys[i], &here_content, &here_data, params);
+		if (here_content)
+		{
+			free(here_content);
+			here_content = NULL;
+		}
+		i++;
+	}
 }
-
-
-/*
-void process_here(char **keys, int j, t_params *params)
-{
-    int i;
-    char *here_content;
-    int quote;
-    char *temp;
-
-    i = 0;
-    quote = 0;
-    here_content = NULL;
-    while (keys[i])
-    {
-        if (ft_memchr(keys[i], '"', ft_strlen(keys[i]) + 1)
-            || ft_memchr(keys[i], '\'', ft_strlen(keys[i]) + 1) )
-            quote = 1;
-        if (ft_strcmp(keys[i], "\"\"") != 0 || ft_strcmp(keys[i], "''") != 0)
-        {
-            temp = format_quotes(keys[i]);
-            free(keys[i]);
-            keys[i] = ft_strdup(temp);
-            free(temp);
-        }
-        handle_here(keys[i], &here_content, j, quote, params);
-        if (here_content)
-        {
-            free(here_content);
-            here_content = NULL;
-        }
-        i++;
-    }
-}
-*/

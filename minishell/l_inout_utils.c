@@ -12,56 +12,63 @@
 
 #include "minishell.h"
 
-int open_file(char *filename, int flags)
+int	open_file(char *filename, int flags)
 {
-    int fd = open(filename, flags, 0644);
-    if (fd == -1)
-{
-        free(filename);
-        perror("open failed");
-        exit(1);
-    }
-    return fd;
+	int	fd;
+
+	fd = open(filename, flags, 0644);
+	if (fd == -1)
+	{
+		free(filename);
+		perror("open failed");
+		exit(1);
+	}
+	return (fd);
 }
 
-void dup2_stdout(int fd_out, char *filename)
+void	dup2_stdout(int fd_out, char *filename)
 {
-    if (dup2(fd_out, STDOUT_FILENO) == -1)
-{
-        free(filename);
-        perror("dup2 failed");
-        close(fd_out);
-        exit(1);
-    }
+	if (dup2(fd_out, STDOUT_FILENO) == -1)
+	{
+		free(filename);
+		perror("dup2 failed");
+		close(fd_out);
+		exit(1);
+	}
 }
 
-int open_input_file(char *filename, int flags)
+int	open_input_file(char *filename, int flags)
 {
-    int fd = open(filename, flags);
-    if (fd == -1)
-{
-        free(filename);
-        perror("open failed");
-        exit(1);
-    }
-    return fd;
+	int	fd;
+
+	fd = open(filename, flags);
+	if (fd == -1)
+	{
+		free(filename);
+		perror("open failed");
+		exit(1);
+	}
+	return (fd);
 }
 
-void dup2_stdin(int fd_in,char *filename )
+void	dup2_stdin(int fd_in, char *filename)
 {
-    if (dup2(fd_in, STDIN_FILENO) == -1)
-{
-        free(filename);
-        perror("dup2 failed");
-        close(fd_in);
-        exit(1);
-    }
+	if (dup2(fd_in, STDIN_FILENO) == -1)
+	{
+		free(filename);
+		perror("dup2 failed");
+		close(fd_in);
+		exit(1);
+	}
 }
 
-char *prepare_temp_file(int num_cmd)
+char	*prepare_temp_file(int num_cmd)
 {
-    char *rank_cmd = ft_itoa(num_cmd);
-    char *file = ft_strjoin("/tmp/josia", rank_cmd);
-    free(rank_cmd);
-    return file;
+	char	*rank_cmd;
+	char	*file;
+
+	rank_cmd = ft_itoa(num_cmd);
+	file = ft_strjoin("/tmp/josia", rank_cmd);
+	free(rank_cmd);
+	return (file);
 }

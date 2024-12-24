@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 12:02:24 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 13:13:29 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,14 @@ typedef struct s_params
 	int				rank_cmd;
 }					t_params;
 
+typedef struct s_here_data
+{
+    int j;
+    int quote;
+} t_here_data;
+
 // l_handle_here.c
-void handle_here(char *delimiter, char **here_content, int j, int quote, t_params *params);
+void handle_here(char *delimiter, char **here_content, t_here_data *here_data, t_params *params);
 //l_expand.c
 char *expand_variable_in_input(char *line, t_params *params);
 //l_del_utils.c

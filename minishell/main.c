@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 11:19:28 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 13:27:39 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ int	put_size(char **argv, int i)
 	}
 	return (count);
 }
-
-
 int add_separator(int var[3], char ***temp, t_cmd *cmd, char **argv)
 {
     if (*temp && var[1] > 0)

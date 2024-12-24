@@ -86,33 +86,34 @@ char	*ft_substrj(char *s, unsigned int start, size_t len)
 	return (new);
 }
 
-char *join_argv(char **argv)
+char	*join_argv(char **argv)
 {
-    int i;
-    char *new_str;
-    char *temp = NULL;
+	int		i;
+	char	*new_str;
+	char	*temp;
 
-    i = 1;
-    new_str = ft_strdup(argv[0]);
-    if (!new_str)
-        return (NULL);
-    while (argv[i] != NULL)
-    {
-        temp = ft_strjoin(new_str, " ");
-        free(new_str);
-        new_str = temp;
-        temp = ft_strjoin(new_str, argv[i]);
-        free(new_str);
-        new_str = temp;
-        i++;
-    }
-    return (new_str);
+	temp = NULL;
+	i = 1;
+	new_str = ft_strdup(argv[0]);
+	if (!new_str)
+		return (NULL);
+	while (argv[i] != NULL)
+	{
+		temp = ft_strjoin(new_str, " ");
+		free(new_str);
+		new_str = temp;
+		temp = ft_strjoin(new_str, argv[i]);
+		free(new_str);
+		new_str = temp;
+		i++;
+	}
+	return (new_str);
 }
 /*
-void process_command(t_params *params, char **parsed)
+void	process_command(t_params *params, char **parsed)
 {
-    params->command = init_command(parsed);
-    format_cmd(params);
-    manage_here(params);
-    free_list_cmd(params->command);
+	params->command = init_command(parsed);
+	format_cmd(params);
+	manage_here(params);
+	free_list_cmd(params->command);
 }*/

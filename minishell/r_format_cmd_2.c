@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:16:23 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 12:20:57 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 13:23:35 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ t_cmd *add_command(t_cmd *command, char **argv)
     new_cmd->previous = current;
     return (command);
 }
+
 
 t_params *create_list_params(char **envp)
 {

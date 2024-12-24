@@ -6,17 +6,21 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 12:26:03 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 13:21:31 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void clean_pipe_fd(int ***fd, int pipe_count)
+void	clean_pipe_fd(int ***fd, int pipe_count)
 {
-	int i = 0;
-	while(i < pipe_count){
-		if ((*fd)[i]) {
+	int	i;
+
+	i = 0;
+	while (i < pipe_count)
+	{
+		if ((*fd)[i])
+		{
 			close((*fd)[i][0]);
 			close((*fd)[i][1]);
 			free((*fd)[i]);
@@ -27,34 +31,44 @@ void clean_pipe_fd(int ***fd, int pipe_count)
 	*fd = NULL;
 }
 
-int put_nbr_pipes(t_cmd *command)
+int	put_nbr_pipes(t_cmd *command)
 {
-	int count = 0;
-	while (command != NULL) {
+	int	count;
+
+	count = 0;
+	while (command != NULL)
+	{
 		if (!ft_strcmp(command->cmd[0], "|"))
 			count++;
 		command = command->next;
 	}
-	return count;
+	return (count);
 }
 
-void init_pipe_fd(int ***fd, t_params *params)
+void	init_pipe_fd(int ***fd, t_params *params)
 {
-	int i = 0;
-	int pipe_count = put_nbr_pipes(params->command);
+	int	i;
+	int	pipe_count;
+
+	i = 0;
+	pipe_count = put_nbr_pipes(params->command);
 	*fd = malloc(sizeof(int *) * pipe_count);
-	if (!*fd) {
+	if (!*fd)
+	{
 		perror("malloc");
 		cleanup_and_exit(params, EXIT_FAILURE);
 	}
-	while(i < pipe_count){
+	while (i < pipe_count)
+	{
 		(*fd)[i] = malloc(sizeof(int) * 2);
-		if (!(*fd)[i]) {
+		if (!(*fd)[i])
+		{
 			perror("malloc");
 			clean_pipe_fd(fd, i);
 			cleanup_and_exit(params, EXIT_FAILURE);
 		}
-		if (pipe((*fd)[i]) == -1) {
+		if (pipe((*fd)[i]) == -1)
+		{
 			perror("pipe");
 			clean_pipe_fd(fd, i);
 			cleanup_and_exit(params, EXIT_FAILURE);
@@ -63,25 +77,27 @@ void init_pipe_fd(int ***fd, t_params *params)
 	}
 }
 
-int setup_pipe(int **fd, t_cmd *current, int i)
+int	setup_pipe(int **fd, t_cmd *current, int i)
 {
-	if (current->previous && !ft_strcmp(current->previous->cmd[0], "|")) {
+	if (current->previous && !ft_strcmp(current->previous->cmd[0], "|"))
+	{
 		if (dup2(fd[i - 1][0], STDIN_FILENO) == -1)
 			return (perror("dup2"), -1);
 		close(fd[i - 1][0]);
 	}
-	if (current->next && !ft_strcmp(current->next->cmd[0], "|")) {
+	if (current->next && !ft_strcmp(current->next->cmd[0], "|"))
+	{
 		if (dup2(fd[i][1], STDOUT_FILENO) == -1)
 			return (perror("dup2"), -1);
 		close(fd[i][1]);
 	}
-	return 0;
+	return (0);
 }
 
-int ft_get_pid_nbr(t_params *params)
+int	ft_get_pid_nbr(t_params *params)
 {
-	int nbr;
-	t_cmd *current;
+	int		nbr;
+	t_cmd	*current;
 
 	current = params->command;
 	nbr = 0;
@@ -98,7 +114,7 @@ int ft_get_pid_nbr(t_params *params)
 	return (nbr);
 }
 
-void exec_builtins(t_params *params, t_cmd *current)
+void	exec_builtins(t_params *params, t_cmd *current)
 {
 	input_r(current, params->rank_cmd);
 	output(current);
@@ -117,13 +133,12 @@ int	ft_check_continue(t_params *params, t_cmd **current)
 	}
 	if (isbuiltins((*current)->cmd[0]) && (*current)->next == NULL)
 	{
-		
 		exec_builtins(params, (*current));
 		(*current) = (*current)->next;
 		return (1);
 	}
-	 if (isbuiltins((*current)->cmd[0]) && (!(*current)->next || \
-	 ft_strcmp((*current)->next->cmd[0], "|") != 0))
+	if (isbuiltins((*current)->cmd[0]) && (!(*current)->next
+			|| ft_strcmp((*current)->next->cmd[0], "|") != 0))
 	{
 		if (params->prev_pipe_read != -1)
 			close(params->prev_pipe_read);
@@ -133,7 +148,7 @@ int	ft_check_continue(t_params *params, t_cmd **current)
 	return (0);
 }
 
-void check_fork_error(t_params *params, t_cmd *current, int tab, int fd[2])
+void	check_fork_error(t_params *params, t_cmd *current, int tab, int fd[2])
 {
 	if (params->pid_tab[tab] == -1)
 	{
@@ -160,7 +175,7 @@ void	exec_child_builtins(t_params *params, t_cmd *current)
 	}
 }
 
-void exec_child(t_params *params, t_cmd *current, int fd[2])
+void	exec_child(t_params *params, t_cmd *current, int fd[2])
 {
 	free(params->pid_tab);
 	close(params->fd_in);
@@ -188,7 +203,7 @@ void exec_child(t_params *params, t_cmd *current, int fd[2])
 	}
 }
 
-void exec_child_process(t_params *params, t_cmd *current, int tab, int fd[2])
+void	exec_child_process(t_params *params, t_cmd *current, int tab, int fd[2])
 {
 	if (params->pid_tab[tab] == 0)
 	{
@@ -198,7 +213,6 @@ void exec_child_process(t_params *params, t_cmd *current, int tab, int fd[2])
 	{
 		if (params->prev_pipe_read != -1)
 			close(params->prev_pipe_read);
-
 		if (current->next && !ft_strcmp(current->next->cmd[0], "|"))
 		{
 			close(fd[1]);
@@ -211,7 +225,7 @@ void exec_child_process(t_params *params, t_cmd *current, int tab, int fd[2])
 	}
 }
 
-void check_pipe_error(t_params *params)
+void	check_pipe_error(t_params *params)
 {
 	perror("pipe");
 	if (params->prev_pipe_read != -1)
@@ -220,88 +234,88 @@ void check_pipe_error(t_params *params)
 	cleanup_and_exit(params, EXIT_FAILURE);
 }
 
-void ft_handle_child(t_params *params)
+void	ft_handle_child(t_params *params)
 {
-    int fd[2];
-    t_cmd *current;
-    int tab;
+	int		fd[2];
+	t_cmd	*current;
+	int		tab;
 
-    current = params->command;
-    tab = 0;
-    while (current != NULL)
-    {
-        if (ft_check_continue(params, &current) == 1)
-            continue ;
-        if (current->next && !ft_strcmp(current->next->cmd[0], "|"))
-        {
+	current = params->command;
+	tab = 0;
+	while (current != NULL)
+	{
+		if (ft_check_continue(params, &current) == 1)
+			continue ;
+		if (current->next && !ft_strcmp(current->next->cmd[0], "|"))
+		{
 			if (pipe(fd) == -1)
-        		check_pipe_error(params);
-        }
-        params->pid_tab[tab] = fork();
+				check_pipe_error(params);
+		}
+		params->pid_tab[tab] = fork();
 		check_fork_error(params, current, tab, fd);
 		exec_child_process(params, current, tab, fd);
-        tab++;
-        params->rank_cmd++;
-        current = current->next;
-        if (current && !ft_strcmp(current->cmd[0], "|"))
-            current = current->next;
-    }
+		tab++;
+		params->rank_cmd++;
+		current = current->next;
+		if (current && !ft_strcmp(current->cmd[0], "|"))
+			current = current->next;
+	}
 }
 
-void wait_pid(t_params *params, t_cmd *current, int status)
+void	wait_pid(t_params *params, t_cmd *current, int status)
 {
-	int tab;
+	int	tab;
 
 	tab = 0;
-    while (current != NULL)
-    {
-        if (!ft_strcmp(current->cmd[0], "|"))
-        {
-            current = current->next;
-            continue;
-        }
-        waitpid(params->pid_tab[tab], &status, 0);
-        if (WIFEXITED(status))
-            params->last_exit_code = WEXITSTATUS(status);
-        else if (WIFSIGNALED(status))
-        {
-            if (WTERMSIG(status) == SIGQUIT)
-                printf("Quit (core dumped)\n");
-            else if (WTERMSIG(status) == SIGINT)
-                params->last_exit_code = 128 + WTERMSIG(status);
-            else
-                params->last_exit_code = 128 + WTERMSIG(status);
-        }
-        current = current->next;
-        tab++;
-    }
+	while (current != NULL)
+	{
+		if (!ft_strcmp(current->cmd[0], "|"))
+		{
+			current = current->next;
+			continue ;
+		}
+		waitpid(params->pid_tab[tab], &status, 0);
+		if (WIFEXITED(status))
+			params->last_exit_code = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+		{
+			if (WTERMSIG(status) == SIGQUIT)
+				printf("Quit (core dumped)\n");
+			else if (WTERMSIG(status) == SIGINT)
+				params->last_exit_code = 128 + WTERMSIG(status);
+			else
+				params->last_exit_code = 128 + WTERMSIG(status);
+		}
+		current = current->next;
+		tab++;
+	}
 }
 
-void exec_cmd(t_params *params)
+void	exec_cmd(t_params *params)
 {
-    t_cmd *current;
-    int status;
+	t_cmd	*current;
+	int		status;
 
-    current = params->command;
-    params->fd_in = dup(STDIN_FILENO);
-    params->fd_out = dup(STDOUT_FILENO);
-    if (params->envp)
-        free_array(params->envp);
-    params->envp = put_envp(params);
-    params->pid_tab = malloc(sizeof(pid_t) * ft_get_pid_nbr(params));
-    if (!params->pid_tab)
-    {
-        perror("malloc");
-        cleanup_and_exit(params, EXIT_FAILURE);
-    }
+	current = params->command;
+	params->fd_in = dup(STDIN_FILENO);
+	params->fd_out = dup(STDOUT_FILENO);
+	if (params->envp)
+		free_array(params->envp);
+	params->envp = put_envp(params);
+	params->pid_tab = malloc(sizeof(pid_t) * ft_get_pid_nbr(params));
+	if (!params->pid_tab)
+	{
+		perror("malloc");
+		cleanup_and_exit(params, EXIT_FAILURE);
+	}
 	ft_memset(params->pid_tab, 0, sizeof(pid_t) * ft_get_pid_nbr(params));
-    status = 0;
-    ft_handle_child(params);
-    current = params->command;
+	status = 0;
+	ft_handle_child(params);
+	current = params->command;
 	wait_pid(params, current, status);
-    free(params->pid_tab);
-    dup2(params->fd_in, STDIN_FILENO);
-    dup2(params->fd_out, STDOUT_FILENO);
-    close(params->fd_in);
-    close(params->fd_out);
+	free(params->pid_tab);
+	dup2(params->fd_in, STDIN_FILENO);
+	dup2(params->fd_out, STDOUT_FILENO);
+	close(params->fd_in);
+	close(params->fd_out);
 }
