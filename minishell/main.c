@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/23 23:58:36 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/24 09:12:58 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,62 +27,7 @@ int	put_size(char **argv, int i)
 	}
 	return (count);
 }
-/*
-int add_separator(int var[3], char ***temp, t_cmd *cmd, char ***argv)
-{
-	if (*temp && j > 0)
-	{
-		*temp[j] = NULL;
-		cmd = add_command(cmd, *temp);
-		temp = NULL;
-		size = 0;
-	}
-	*temp = malloc(sizeof(char *) * 2);
-	if (!*temp)
-		return (free_list_cmd(cmd), perror("malloc"), 1);
-	*temp[0] = ft_strdup(*argv[i]);
-	if (!*temp[0])
-		return (free_list_cmd(cmd), free(*temp), perror("strdup"), 1);
-	*temp[1] = NULL;
-	cmd = add_command(cmd, *temp);
-	*temp = NULL;
-	return (0);
-}
-*/
-/*int initialize_commande(int var[3], char ***temp, t_cmd *cmd, char **argv)
-{
-		// Initialisation de la commande
-	if (!size)
-	{
-		size = put_size(argv, i);
-		*temp = malloc(sizeof(char *) * (size + 1));
-		if (!*temp)
-			return (free_list_cmd(cmd), perror("malloc"), 1);
-		j = 0;
-	}
 
-	// Ajout des arguments à la commande
-	if (argv[i][0] != '\0') // Ignorer les arguments vides
-	{
-		*temp[j] = strdup(argv[i]);
-		if (!temp[j])
-			return (free_list_cmd(cmd), free(*temp), perror("strdup"), 1);
-		(j)++;
-	}
-
-	// Fin de la commande
-	if (!argv[i + 1] || strcmp(argv[i + 1], "|") == 0)
-	{
-		if (*temp && j > 0)
-		{
-			*temp[j] = NULL;
-			cmd = add_command(cmd, *temp);
-			*temp = NULL;
-			size = 0;
-		}
-	}
-	return (0);
-}*/
 
 int add_separator(int var[3], char ***temp, t_cmd *cmd, char **argv)
 {
@@ -145,6 +90,7 @@ t_cmd *init_command(char **argv)
         {
             if (initialize_cmd(var, &temp, cmd, argv))
                 return (NULL);
+
             if (!argv[var[0] + 1] || ft_strncmp(argv[var[0] + 1], "|", 1) == 0)
             {
                 if (temp && var[1] > 0)
@@ -163,161 +109,6 @@ t_cmd *init_command(char **argv)
         free(temp);
     return (cmd);
 }
-
-	
-/*t_cmd *init_command(char **argv)
-{
-    t_cmd *cmd = NULL;
-    char **temp = NULL;
-	int		var[3];
-
-	var[0] = 0;
-	var[1] = 0;
-	var[2] = 0;
-
-	    // int i = 0, j = 0, size = 0;
-    while (argv[var[0]] != NULL)
-    {
-        if (strcmp(argv[var[0]], "|") == 0)
-        {
-			if (add_separator(&var[3], &temp, cmd, argv))
-				return (NULL);*/
-            //  Ajout de la commande courante (si valide)
-            /*if (temp && j > 0)
-            {
-                temp[j] = NULL;
-                cmd = add_command(cmd, temp);
-                temp = NULL;
-                size = 0;
-            }
-
-            // Ajout du séparateur "|"
-			temp = malloc(sizeof(char *) * 2);
-			if (!temp)
-				return (free_list_cmd(cmd), perror("malloc"), NULL);
-			temp[0] = ft_strdup(argv[i]);
-			if (!temp[0])
-				return (free_list_cmd(cmd), free(temp), perror("strdup"), NULL);
-			temp[1] = NULL;
-			cmd = add_command(cmd, temp);
-			temp = NULL;*/
-       /* }
-        else
-        {
-            // Initialisation de la commande
-            if (!var[2])
-            {
-                var[2] = put_size(argv, var[0]);
-                temp = malloc(sizeof(char *) * (var[2] + 1));
-                if (!temp)
-                    return (free_list_cmd(cmd), perror("malloc"), NULL);
-                var[1] = 0;
-            }
-
-            // Ajout des arguments à la commande
-            if (argv[var[0]][0] != '\0') // Ignorer les arguments vides
-            {
-                temp[var[1]] = strdup(argv[var[0]]);
-                if (!temp[var[1]])
-                    return (free_list_cmd(cmd), free(temp), perror("strdup"), NULL);
-                var[1]++;
-            }
-
-            // Fin de la commande
-            if (!argv[var[0] + 1] || strcmp(argv[var[0] + 1], "|") == 0)
-            {
-                if (temp && var[1] > 0)
-                {
-                    temp[var[1]] = NULL;
-                    cmd = add_command(cmd, temp);
-                    temp = NULL;
-                    var[2] = 0;
-                }
-            }
-        }
-        var[0]++;
-    }
-	reset_cmd_flags(cmd);
-    // Libérer `temp` en cas de fuite mémoire
-    if (temp)
-        free(temp);
-
-    return cmd;
-}*/
-
-
-/*t_cmd *init_command(char **argv)
-{
-    t_cmd *cmd = NULL;
-    char **temp = NULL;
-    int i = 0, j = 0, size = 0;
-
-    while (argv[i] != NULL)
-    {
-        if (strcmp(argv[i], "|") == 0)
-        {
-            // Ajout de la commande courante (si valide)
-            if (temp && j > 0)
-            {
-                temp[j] = NULL;
-                cmd = add_command(cmd, temp);
-                temp = NULL;
-                size = 0;
-            }
-
-            // Ajout du séparateur "|"
-            temp = malloc(sizeof(char *) * 2);
-            if (!temp)
-                return (free_list_cmd(cmd), perror("malloc"), NULL);
-            temp[0] = strdup(argv[i]);
-            if (!temp[0])
-                return (free_list_cmd(cmd), free(temp), perror("strdup"), NULL);
-            temp[1] = NULL;
-            cmd = add_command(cmd, temp);
-            temp = NULL;
-        }
-        else
-        {
-            // Initialisation de la commande
-            if (!size)
-            {
-                size = put_size(argv, i);
-                temp = malloc(sizeof(char *) * (size + 1));
-                if (!temp)
-                    return (free_list_cmd(cmd), perror("malloc"), NULL);
-                j = 0;
-            }
-
-            // Ajout des arguments à la commande
-            if (argv[i][0] != '\0') // Ignorer les arguments vides
-            {
-                temp[j] = strdup(argv[i]);
-                if (!temp[j])
-                    return (free_list_cmd(cmd), free(temp), perror("strdup"), NULL);
-                j++;
-            }
-
-            // Fin de la commande
-            if (!argv[i + 1] || strcmp(argv[i + 1], "|") == 0)
-            {
-                if (temp && j > 0)
-                {
-                    temp[j] = NULL;
-                    cmd = add_command(cmd, temp);
-                    temp = NULL;
-                    size = 0;
-                }
-            }
-        }
-        i++;
-    }
-
-    // Libérer `temp` en cas de fuite mémoire
-    if (temp)
-        free(temp);
-
-    return cmd;
-}*/
 
 void	print_list(t_cmd *command)
 {
