@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 14:15:59 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 18:20:42 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,20 +130,15 @@ int	ft_check_continue(t_params *params, t_cmd **current)
 		params->rank_cmd++;
 		return (1);
 	}
-	if (isbuiltins((*current)->cmd[0]) && (*current)->next == NULL)
-	{
-		exec_builtins(params, (*current));
-		(*current) = (*current)->next;
-		return (1);
-	}
-	if (isbuiltins((*current)->cmd[0]) && (!(*current)->next
-			|| ft_strcmp((*current)->next->cmd[0], "|") != 0))
-	{
-		if (params->prev_pipe_read != -1)
-			close(params->prev_pipe_read);
-		exec_builtins(params, (*current));
-		return (1);
-	}
+	
+	// if (isbuiltins((*current)->cmd[0]) && (!(*current)->next
+	// 		|| ft_strcmp((*current)->next->cmd[0], "|") != 0))
+	// {
+	// 	if (params->prev_pipe_read != -1)
+	// 		close(params->prev_pipe_read);
+	// 	exec_builtins(params, (*current));
+	// 	return (1);
+	// }
 	return (0);
 }
 
@@ -241,23 +236,33 @@ void	ft_handle_child(t_params *params)
 
 	current = params->command;
 	tab = 0;
-	while (current != NULL)
+	if (isbuiltins((current)->cmd[0]) && (current)->next == NULL)
 	{
-		if (ft_check_continue(params, &current) == 1)
-			continue ;
-		if (current->next && !ft_strcmp(current->next->cmd[0], "|"))
+		exec_builtins(params, (current));
+		(current) = (current)->next;
+		// return (1);
+	}
+	else
+	{
+
+		while (current != NULL)
 		{
-			if (pipe(fd) == -1)
-				check_pipe_error(params);
-		}
-		params->pid_tab[tab] = fork();
-		check_fork_error(params, current, tab, fd);
-		exec_child_process(params, current, tab, fd);
-		tab++;
-		params->rank_cmd++;
-		current = current->next;
-		if (current && !ft_strcmp(current->cmd[0], "|"))
+			if (ft_check_continue(params, &current) == 1)
+				continue ;
+			if (current->next && !ft_strcmp(current->next->cmd[0], "|"))
+			{
+				if (pipe(fd) == -1)
+					check_pipe_error(params);
+			}
+			params->pid_tab[tab] = fork();
+			check_fork_error(params, current, tab, fd);
+			exec_child_process(params, current, tab, fd);
+			tab++;
+			params->rank_cmd++;
 			current = current->next;
+			if (current && !ft_strcmp(current->cmd[0], "|"))
+				current = current->next;
+		}
 	}
 }
 

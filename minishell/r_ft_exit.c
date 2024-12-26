@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 10:48:59 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 13:48:50 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:43:46 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ void	check_errors_exit(char **parsed, t_params *params)
 	if (!parsed[1])
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
-		free_array(parsed);
 		cleanup_and_exit(params, params->last_exit_code);
 	}
 	if (parsed[2])
@@ -89,7 +88,6 @@ void	check_errors_exit(char **parsed, t_params *params)
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
 		write(STDERR_FILENO, "minishell: exit: too many arguments\n",
 			ft_strlen("minishell: exit: too many arguments\n"));
-		free_array(parsed);
 		cleanup_and_exit(params, 1);
 	}
 	if (!is_numeric(parsed[1]))
@@ -99,7 +97,6 @@ void	check_errors_exit(char **parsed, t_params *params)
 		write(STDOUT_FILENO, parsed[1], ft_strlen(parsed[1]));
 		write(STDOUT_FILENO, ": numeric argument required\n",
 			ft_strlen(": numeric argument required\n"));
-		free_array(parsed);
 		cleanup_and_exit(params, 2);
 	}
 }
@@ -122,11 +119,9 @@ void	ft_exit(char **parsed, t_params *params)
 		write(STDERR_FILENO, parsed[1], ft_strlen(parsed[1]));
 		write(STDERR_FILENO, ": numeric argument required\n",
 			ft_strlen(": numeric argument required\n"));
-		free_array(parsed);
 		cleanup_and_exit(params, 2);
 	}
 	exit_code = ft_atoi_lld(parsed[1]);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
-	free_array(parsed);
 	cleanup_and_exit(params, (unsigned char)exit_code);
 }

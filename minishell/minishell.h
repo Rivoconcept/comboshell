@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 13:03:54 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:13:57 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ typedef struct s_params
 	pid_t						*pid_tab;
 	int							prev_pipe_read;
 	int							rank_cmd;
+	char						*new_input;
+	char						**parsed;
 }								t_params;
 
 typedef struct s_here_data

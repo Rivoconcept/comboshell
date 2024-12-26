@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 15:11:07 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 13:48:12 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 18:11:31 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,17 @@ int	ft_cd(const char *arg, t_params *params)
 	char	*new_path;
 
 	i = 0;
+	(void)arg;
 	while (params->command->cmd[i] != NULL)
 		i++;
 	if (i > 2)
 		return (printf("minishell: cd: too many arguments\n"), 1);
-	new_path = return_new_path(arg, params);
+	if (i == 1)
+		new_path = get_home(params);
+	// if (arg[0] == '~')
+
+
+	// new_path = return_new_path(arg, params);
 	if (new_path && access(new_path, F_OK) == 0)
 	{
 		if (chdir(new_path) != 0)

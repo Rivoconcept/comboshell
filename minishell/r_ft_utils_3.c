@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 15:07:36 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:26:13 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,4 @@ int	putchar_count(const char *src, char c)
 		i++;
 	}
 	return (count);
-}
-
-void	exit_error(const char *error)
-{
-	printf("%s", error);
-	exit(EXIT_FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 11:04:32 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 13:41:32 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:26:29 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	is_operator(char c)
 	char	*operators;
 
 	j = 0;
-	operators = "&|<>;";
+	operators = "|<>";
 	while (operators[j])
 	{
 		if (c == operators[j])

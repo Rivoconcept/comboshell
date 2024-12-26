@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 14:51:20 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:26:02 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,22 +123,8 @@ int check_errors(t_params *params)
         }
 		if (pass_errors_test(current->cmd[0], params))
 			return (1);
-		// if (is_command(params, current->cmd[0]) 
-		// 	&& !ft_strncmp(current->next->cmd[0], "|", 1))
-		// 	return (printf("minishell: command after pipe note found\n"),
-		// 		params->last_exit_code = 127, 1);
 		check_cmd_not_found(params, current->cmd[0], &i);
         current = current->next;
     }
 	return (i);
-}
-
-void	*safe_malloc(size_t bytes, char *errors)
-{
-	void	*res;
-
-	res = malloc(bytes);
-	if (res == NULL)
-		exit_error(errors);
-	return (res);
 }

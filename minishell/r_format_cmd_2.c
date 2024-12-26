@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:16:23 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 13:47:25 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:12:29 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ t_params	*create_list_params(char **envp)
 	params->prev_pipe_read = -1;
 	params->rank_cmd = 0;
 	params->last_exit_code = 0;
+	params->new_input = NULL;
+	params->parsed = NULL;
 	while (envp[i])
 	{
 		if (!create_env(&params->myenvp, envp[i]))

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 20:57:46 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 13:48:00 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 17:05:17 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ int	run_builtins(char **cmd, t_params *params)
 	if (!cmd || !cmd[0])
 		return (0);
 	if (!ft_strcmp(cmd[0], "cd"))
+	{
 		return (ft_cd(cmd[1], params));
+	}
 	if (!ft_strcmp(cmd[0], "pwd"))
 		return (ft_pwd());
 	if (!ft_strcmp(cmd[0], "env"))

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:40:14 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 11:50:09 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 16:42:31 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	free_array(char **arr)
 	int	i;
 
 	i = 0;
-	if (!arr)
+	if (!arr || arr == NULL)
 		return ;
 	while (arr[i] != NULL)
 	{
@@ -95,12 +95,20 @@ void	cleanup_and_exit(t_params *params, int status)
 {
 	if (params)
 	{
+		// if (params->new_input)
+		// 	free(params->new_input);
+		// if (params->parsed)
+		// 	free_array(params->parsed);
 		if (params->myenvp)
 			free_list_env(params->myenvp);
 		if (params->myexport)
 			free_list_export(params->myexport);
 		if (params->envp)
 			free_array(params->envp);
+		if (params->pid_tab)
+			free(params->pid_tab);
+		if (params->command)
+			free_list_cmd(params->command);
 		free(params);
 	}
 	exit(status);

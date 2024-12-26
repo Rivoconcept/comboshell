@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 14:53:12 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 17:29:50 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int initialize_cmd(int var[3], char ***temp, t_cmd *cmd, char **argv)
     }
     if (argv[var[0]][0] != '\0')
     {
-        (*temp)[var[1]] = strdup(argv[var[0]]);
+        (*temp)[var[1]] = ft_strdup(argv[var[0]]);
         if (!(*temp)[var[1]])
             return (free_list_cmd(cmd), free(temp), perror("strdup"), 1);
         var[1]++;
@@ -133,15 +133,33 @@ void	print_list(t_cmd *command)
 	}
 }
 
+void print_argv(char **argv)
+{
+    int i = 0;
+    while (argv[i] != NULL)
+    {
+        printf("%s\n", argv[i]);
+        // ft_putstr_fd(argv[i], 2);
+        // ft_putstr_fd("\n", 2);
+        i++;
+    }
+
+}
+void print_cmd(t_params *params)
+{
+    t_cmd *current = params->command;
+
+    while (current != NULL)
+    {
+        print_argv(current->cmd);
+        current = current->next;
+    }
+}
 void	run_minishell(t_params *params)
 {
-	char	**parsed;
 	char	*input;
-	char	*new_input;
 
-	parsed = NULL;
 	input = NULL;
-	new_input = NULL;
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
@@ -164,37 +182,31 @@ void	run_minishell(t_params *params)
 		}
 		if (g_sig_num == SIGINT)
 			params->last_exit_code = 130;
-		new_input = format_input(input);
-		if (!new_input)
-			exit(EXIT_FAILURE);
+		params->new_input = format_input(input);
 		free(input);
-		parsed = parse_command(new_input);
-		format_variable(parsed, params);
+		input = NULL;
+		if (!params->new_input)
+			exit(EXIT_FAILURE);
+		params->parsed = parse_command(params->new_input);
+		format_variable(params->parsed, params);
 		// josia modification init_commad
-		params->command = init_command(parsed);
+		params->command = init_command(params->parsed);
 		format_cmd(params);
 		//josia
 		manage_here(params);
 		//josia mod free_list_cmd
 		free_list_cmd(params->command);
-		del_quotes(parsed);
-		if (check_var_temp(parsed))
+		del_quotes(params->parsed);
+		if (check_var_temp(params->parsed))
 		{
-			free(new_input);
-			free_array(parsed);
+			free(params->new_input);
+			free_array(params->parsed);
 			continue ;
 		}
-		if (!new_input || ft_strncmp(parsed[0], "exit", 4) == 0)
-		{
-			free(new_input);
-			ft_exit(parsed, params);
-			break ;
-		}
 		//print_argv(parsed);
-		//printf("%s\n", new_input);
-		params->command = init_command(parsed);
-		free_array(parsed);
-		free(new_input);
+		params->command = init_command(params->parsed);
+		free_array(params->parsed);
+		free(params->new_input);
 		format_cmd(params);
 		//josia
 		manage_less(params);
@@ -206,7 +218,7 @@ void	run_minishell(t_params *params)
 		}
 		//josia
 		manage_red(params);
-		//print_cmd(params);
+		print_cmd(params);
 		exec_cmd(params);
 		free_list_cmd(params->command);
 	}
