@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 13:37:51 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:15:59 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	init_pipe_fd(int ***fd, t_params *params)
 	int	i;
 	int	pipe_count;
 
-	i = 0;
+	i = -1;
 	pipe_count = put_nbr_pipes(params->command);
 	*fd = malloc(sizeof(int *) * pipe_count);
 	if (!*fd)
@@ -58,7 +58,7 @@ void	init_pipe_fd(int ***fd, t_params *params)
 		perror("malloc");
 		cleanup_and_exit(params, EXIT_FAILURE);
 	}
-	while (i < pipe_count)
+	while (++i < pipe_count)
 	{
 		(*fd)[i] = malloc(sizeof(int) * 2);
 		if (!(*fd)[i])
@@ -73,7 +73,6 @@ void	init_pipe_fd(int ***fd, t_params *params)
 			clean_pipe_fd(fd, i);
 			cleanup_and_exit(params, EXIT_FAILURE);
 		}
-		i++;
 	}
 }
 

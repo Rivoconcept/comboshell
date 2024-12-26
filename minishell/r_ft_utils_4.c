@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 14:11:49 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:51:20 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,20 +110,23 @@ int check_errors(t_params *params)
 
     i = 0;
 	current = params->command;
-	if (pre_test(current->cmd[0], params))
-		return (1);
     while(current != NULL)
     {
-		if (ft_strncmp(current->cmd[0], "|", 1) == 0 &&  !ft_strncmp(current->cmd[0], "echo", 5)
-			&& current->previous->cmd && current->next->cmd 
-			&& (ft_strcmp(current->previous->cmd[0], "|") != 0
-			|| ft_strcmp(current->next->cmd[0], "|") != 0))
+		if (ft_strncmp(current->cmd[0], "|", 1) == 0 && current->previous->cmd
+			&& is_command(params, current->previous->cmd[0]))
         {
-            current = current->next;
+            if (current->next == NULL)
+				return (printf("minishell: command after pipe not found\n"),
+					params->last_exit_code = 127, 1);
+			current = current->next;
             continue ;
         }
 		if (pass_errors_test(current->cmd[0], params))
 			return (1);
+		// if (is_command(params, current->cmd[0]) 
+		// 	&& !ft_strncmp(current->next->cmd[0], "|", 1))
+		// 	return (printf("minishell: command after pipe note found\n"),
+		// 		params->last_exit_code = 127, 1);
 		check_cmd_not_found(params, current->cmd[0], &i);
         current = current->next;
     }
