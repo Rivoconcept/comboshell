@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   l_ft_utils_7.c                                     :+:      :+:    :+:   */
+/*   l_ft_utils_6.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 13:09:54 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/24 14:53:02 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/21 10:39:06 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,3 +109,11 @@ char	*join_argv(char **argv)
 	}
 	return (new_str);
 }
+/*
+void	process_command(t_params *params, char **parsed)
+{
+	params->command = init_command(parsed);
+	format_cmd(params);
+	manage_here(params);
+	free_list_cmd(params->command);
+}*/

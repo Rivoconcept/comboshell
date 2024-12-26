@@ -6,64 +6,13 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 17:26:16 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 13:40:21 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 volatile sig_atomic_t	g_sig_num = 0;
-
-void	print_argv(char **argv)
-{
-	int	i;
-
-	i = 0;
-	while (argv[i] != NULL)
-	{
-		printf("%s\n", argv[i]);
-		// ft_putstr_fd(argv[i], 2);
-		// ft_putstr_fd("\n", 2);
-		i++;
-	}
-}
-
-void	print_cmd(t_params *params)
-{
-	t_cmd	*current;
-
-	current = params->command;
-	while (current != NULL)
-	{
-		print_argv(current->cmd);
-		current = current->next;
-	}
-}
-
-/*int	token_type(char *arg)
-{
-	char	*temp;
-
-	temp = format_quotes(arg);
-	if (ft_strcmp(temp, "|") == 0 || ft_strcmp(temp, ">") == 0
-		|| ft_strcmp(temp, "<") == 0 || ft_strcmp(temp, ">>") == 0
-		|| ft_strcmp(temp, "&&") == 0 || ft_strcmp(temp, "||") == 0)
-	{
-		free(temp);
-		return (1);
-	}
-	if (temp[0] == '-')
-	{
-		free(temp);
-		return (2);
-	}
-	if (!check_variable(temp))
-	{
-		free(temp);
-		return (3);
-	}
-	return (free(temp), 0);
-}*/
 
 int	put_size(char **argv, int i)
 {
@@ -78,48 +27,48 @@ int	put_size(char **argv, int i)
 	}
 	return (count);
 }
-int	add_separator(int var[3], char ***temp, t_cmd *cmd, char **argv)
+int add_separator(int var[3], char ***temp, t_cmd *cmd, char **argv)
 {
-	if (*temp && var[1] > 0)
-	{
-		(*temp)[var[1]] = NULL;
-		cmd = add_command(cmd, *temp);
-		*temp = NULL;
-		var[2] = 0;
-	}
-	*temp = malloc(sizeof(char *) * 2);
-	if (!*temp)
-		return (free_list_cmd(cmd), perror("malloc"), 1);
-	(*temp)[0] = ft_strdup(argv[var[0]]);
-	if (!(*temp)[0])
-		return (free_list_cmd(cmd), free(*temp), perror("strdup"), 1);
-	(*temp)[1] = NULL;
-	cmd = add_command(cmd, *temp);
-	*temp = NULL;
-	return (0);
+    if (*temp && var[1] > 0)
+    {
+        (*temp)[var[1]] = NULL;
+        cmd = add_command(cmd, *temp);
+        *temp = NULL;
+        var[2] = 0;
+    }
+    *temp = malloc(sizeof(char *) * 2);
+    if (!*temp)
+        return (free_list_cmd(cmd), perror("malloc"), 1);
+    (*temp)[0] = ft_strdup(argv[var[0]]);
+    if (!(*temp)[0])
+        return (free_list_cmd(cmd), free(*temp), perror("strdup"), 1);
+    (*temp)[1] = NULL;
+    cmd = add_command(cmd, *temp);
+    *temp = NULL;
+    return (0);
 }
 
-/*int	initialize_cmd(int var[3], char ***temp, t_cmd *cmd, char **argv)
+int initialize_cmd(int var[3], char ***temp, t_cmd *cmd, char **argv)
 {
-	if (!var[2])
-	{
-		var[2] = put_size(argv, var[0]);
-		*temp = malloc(sizeof(char *) * (var[2] + 1));
-		if (!*temp)
-			return (free_list_cmd(cmd), perror("malloc"), 1);
-		var[1] = 0;
-	}
-	if (argv[var[0]][0] != '\0')
-	{
-		(*temp)[var[1]] = strdup(argv[var[0]]);
-		if (!(*temp)[var[1]])
-			return (free_list_cmd(cmd), free(temp), perror("strdup"), 1);
-		var[1]++;
-	}
-	return (0);
+    if (!var[2])
+    {
+        var[2] = put_size(argv, var[0]);
+        *temp = malloc(sizeof(char *) * (var[2] + 1));
+        if (!*temp)
+            return (free_list_cmd(cmd), perror("malloc"), 1);
+        var[1] = 0;
+    }
+    if (argv[var[0]][0] != '\0')
+    {
+        (*temp)[var[1]] = strdup(argv[var[0]]);
+        if (!(*temp)[var[1]])
+            return (free_list_cmd(cmd), free(temp), perror("strdup"), 1);
+        var[1]++;
+    }
+    return (0);
 }
 
-void	check_end_cmd(int var[3], char ***temp, t_cmd **cmd, char **argv)
+void check_end_cmd(int var[3], char ***temp, t_cmd **cmd, char **argv)
 {
 	if (!argv[var[0] + 1] || ft_strncmp(argv[var[0] + 1], "|", 1) == 0)
 	{
@@ -132,125 +81,44 @@ void	check_end_cmd(int var[3], char ***temp, t_cmd **cmd, char **argv)
 		}
 	}
 }
-void	clean_cmd(t_cmd **cmd, char ***temp)
+void clean_cmd(t_cmd **cmd, char ***temp)
 {
 	reset_cmd_flags(*cmd);
-	if (*temp)
-		free(*temp);
+    if (*temp)
+        free(*temp);
 }
-
-t_cmd	*init_command(char **argv)
-{
-	t_cmd	*cmd;
-	char	**temp;
-	int		var[3];
-
-	cmd = NULL;
-	temp = NULL;
-	var[0] = 0;
-	var[1] = 0;
-	var[2] = 0;
-	while (argv[var[0]] != NULL)
-	{
-		if (ft_strcmp(argv[var[0]], "|") == 0)
-		{
-			if (add_separator(var, &temp, cmd, argv))
-				return (NULL);
-		}
-		else
-		{
-			if (initialize_cmd(var, &temp, cmd, argv))
-				return (NULL);
-			check_end_cmd(var, &temp, &cmd, argv);
-		}
-		var[0]++;
-	}
-	return (clean_cmd(&cmd, &temp), cmd);
-}*/
 
 t_cmd *init_command(char **argv)
 {
     t_cmd *cmd = NULL;
     char **temp = NULL;
-    int i = 0, j = 0, size = 0;
+    int var[3];
 
-    while (argv[i] != NULL)
+    var[0] = 0;
+    var[1] = 0;
+    var[2] = 0;
+    while (argv[var[0]] != NULL)
     {
-        if (strcmp(argv[i], "|") == 0)
+        if (ft_strcmp(argv[var[0]], "|") == 0)
         {
-            // Ajout de la commande courante (si valide)
-            if (temp && j > 0)
-            {
-                temp[j] = NULL;
-                cmd = add_command(cmd, temp);
-                temp = NULL;
-                size = 0;
-            }
-
-            // Ajout du séparateur "|"
-            temp = malloc(sizeof(char *) * 2);
-            if (!temp)
-                return (free_list_cmd(cmd), perror("malloc"), NULL);
-            temp[0] = strdup(argv[i]);
-            if (!temp[0])
-                return (free_list_cmd(cmd), free(temp), perror("strdup"), NULL);
-            temp[1] = NULL;
-            cmd = add_command(cmd, temp);
-            temp = NULL;
+            if (add_separator(var, &temp, cmd, argv))
+                return (NULL);
         }
         else
         {
-            // Initialisation de la commande
-            if (!size)
-            {
-                size = put_size(argv, i);
-                temp = malloc(sizeof(char *) * (size + 1));
-                if (!temp)
-                    return (free_list_cmd(cmd), perror("malloc"), NULL);
-                j = 0;
-            }
-
-            // Ajout des arguments à la commande
-            if (argv[i][0] != '\0') // Ignorer les arguments vides
-            {
-                temp[j] = strdup(argv[i]);
-                if (!temp[j])
-				{
-					free_array(temp);
-					return (free_list_cmd(cmd), free(temp), perror("strdup"), NULL);
-				}
-                    
-                j++;
-            }
-
-            // Fin de la commande
-            if (!argv[i + 1] || strcmp(argv[i + 1], "|") == 0)
-            {
-                if (temp && j > 0)
-                {
-                    temp[j] = NULL;
-                    cmd = add_command(cmd, temp);
-                    temp = NULL;
-                    size = 0;
-                }
-            }
+            if (initialize_cmd(var, &temp, cmd, argv))
+                return (NULL);
+			check_end_cmd(var, &temp, &cmd, argv);
         }
-        i++;
+        var[0]++;
     }
-	reset_cmd_flags(cmd);
-    // Libérer `temp` en cas de fuite mémoire
-    if (temp)
-        free(temp);
-
-    return cmd;
+    return (clean_cmd(&cmd, &temp), cmd);
 }
 
 void	print_list(t_cmd *command)
 {
-	int	i;
-	int	list_num;
-
-	list_num = 1;
+	int i;
+    int list_num = 1;
 	while (command)
 	{
 		printf("Liste%d: ", list_num++);
@@ -284,10 +152,10 @@ void	run_minishell(t_params *params)
 			printf("exit\n");
 			cleanup_and_exit(params, params->last_exit_code);
 		}
-		if (pass_errors_test(input))
+		if (pass_errors_test(input, params))
 		{
 			free(input);
-			continue ;
+			continue ;	
 		}
 		if (input)
 		{
@@ -305,9 +173,9 @@ void	run_minishell(t_params *params)
 		// josia modification init_commad
 		params->command = init_command(parsed);
 		format_cmd(params);
-		// josia
+		//josia
 		manage_here(params);
-		// josia mod free_list_cmd
+		//josia mod free_list_cmd
 		free_list_cmd(params->command);
 		del_quotes(parsed);
 		if (check_var_temp(parsed))
@@ -322,30 +190,24 @@ void	run_minishell(t_params *params)
 			ft_exit(parsed, params);
 			break ;
 		}
-		// print_argv(parsed);
-		// printf("%s\n", new_input);
+		//print_argv(parsed);
+		//printf("%s\n", new_input);
 		params->command = init_command(parsed);
 		free_array(parsed);
 		free(new_input);
 		format_cmd(params);
-		// josia
+		//josia
 		manage_less(params);
-		
-		if(ft_strcmp(params->command->cmd[0], "<<")!=0)
+		if (check_errors(params))
 		{
-			if (check_errors(params))
-			{
-				print_cmd(params);
-				free_list_cmd(params->command);
-				params->command = NULL;
-				continue ;
-			}
+			free_list_cmd(params->command);
+			params->command = NULL;
+			continue ;
 		}
+		//josia
 		manage_red(params);
-		// josia
 		//print_cmd(params);
-		if(params->command->cmd[0])
-			exec_cmd(params);
+		exec_cmd(params);
 		free_list_cmd(params->command);
 	}
 }

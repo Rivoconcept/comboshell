@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l_del_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:57:15 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/24 16:50:46 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/21 11:57:15 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

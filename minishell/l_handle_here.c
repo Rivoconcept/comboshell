@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l_handle_here.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 08:00:05 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/24 14:53:11 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/22 08:00:05 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

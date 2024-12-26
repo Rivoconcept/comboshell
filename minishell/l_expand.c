@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l_expand.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 07:33:05 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/24 14:52:48 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/22 07:33:05 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

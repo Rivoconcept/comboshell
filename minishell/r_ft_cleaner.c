@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:40:14 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 17:11:11 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 11:50:09 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,15 @@ void	free_list_cmd(t_cmd *command)
 	while (command != NULL)
 	{
 		temp = command->next;
-		if (command->less)
-			free(command->less);
-		command->less = NULL;
-		if (command->dgreat)
-			free(command->dgreat);
-		command->dgreat = NULL;
-		if (command->great)
-			free(command->great);
-		command->great = NULL;
+		// if (command->less)
+		// 	free(command->less);
+		// command->less = NULL;
+		// if (command->dgreat)
+		// 	free(command->dgreat);
+		// command->dgreat = NULL;
+		// if (command->great)
+		// 	free(command->great);
+		// command->great = NULL;
 		free_array(command->cmd);
 		command->cmd = NULL;
 		if (command)

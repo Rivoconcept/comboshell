@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 08:20:34 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/24 17:19:24 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:01:48 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	del_in(t_cmd *input, int here)
 	i = 0;
 	j = 0;
 	in_rank = 0;
-	while (!input->cmd[i])
+	while (input->cmd[i] != NULL)
 	{
 		if (ft_strcmp(input->cmd[i], "<<") == 0)
 		{
@@ -38,9 +38,6 @@ static void	del_in(t_cmd *input, int here)
 		i++;
 	}
 	input->cmd[j] = NULL;
-	printf("\n =======%s", input->cmd[0]);
-	if(!input->cmd[0])
-		free_array(input->cmd);
 }
 
 static void	del_out(t_cmd *out)

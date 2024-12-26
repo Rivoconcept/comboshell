@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 15:09:37 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 13:03:54 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,10 +161,10 @@ char							*get_next_line(int fd);
 void							print_cmd(t_params *params);
 
 // ft_r_check_behavior.c
-int								check_error_newline(char *s);
-int								pass_error_test_1(char *s);
-int								pass_error_test_2(char *s);
-int								pass_errors_test(char *input);
+int								check_error_newline(char *s, t_params *params);
+int								pass_error_test_1(char *s, t_params *params);
+int								pass_error_test_2(char *s, t_params *params);
+int								pass_errors_test(char *input, t_params *params);
 
 // r_exec
 void							clean_pipe_fd(int ***fd, int pipe_count);
