@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 16:13:57 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 22:19:33 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-# include <signal.h>
 # include <signal.h>
 # include <stddef.h>
 # include <stdint.h>
@@ -39,7 +38,7 @@
 # define HISTORY_FILE ".old_history"
 # define READLINE_IGN ".readline.ign"
 
-extern volatile sig_atomic_t	g_sig_num;
+extern pid_t	g_sig_num;
 
 typedef struct s_env
 {
@@ -93,59 +92,76 @@ typedef struct s_here_data
 	int							quote;
 }								t_here_data;
 
-// l_del_utils.c
-void							handle_out_redirection(t_cmd *out,
-									int *out_rank, int *i, const char *type);
-void							del_here(t_cmd *input, int *in_rank, int here,
-									int *i);
-void							del_less(t_cmd *input, int *in_rank, int *i);
-
-/// l_expand.c
-char							*expand_variable_in_input(char *line,
-									t_params *params);
-// l_ft_check.c
-int								check_less(t_params *params);
-int								check_infile(t_cmd *current);
-void							manage_less(t_params *params);
-void							reset_cmd_flags(t_cmd *cmd);
-
-// l_ft_utils_6.c
-void							*ft_realloc(void *ptr, size_t old_size,
-									size_t new_size);
-char							*ft_strcat(char *dest, char *src);
-char							*ft_strcpy(char *s1, char *s2);
-char							*ft_strndup(const char *s, size_t size);
-
-// l_ft_utils_7.c
-char							*ft_subfirst(char *s, unsigned int start,
-									size_t len);
-char							*ft_substrj(char *s, unsigned int start,
-									size_t len);
-char							*join_argv(char **argv);
-
 // l_handle_here.c
-void							handle_here(char *delimiter,
-									char **here_content, t_here_data *here_data,
-									t_params *params);
+int handle_here(char *delimiter, char **here_content, t_here_data *here_data, t_params *params);
+//l_expand.c
+char *expand_variable_in_input(char *line, t_params *params);
+//l_del_utils.c
+void handle_out_redirection(t_cmd *out, int *out_rank, int *i, const char *type);
+void del_here(t_cmd *input, int *in_rank, int here, int *i);
+void del_less(t_cmd *input, int *in_rank, int *i);
+void free_cmd_fields(t_cmd *cmd);
 
-// l_here_doc_utils.c
-void							manage_here(t_params *params);
+//l_ft_utils_5.c
+void reset_cmd_flags(t_cmd *cmd);
 
-// l_here_doc.c
-void							process_here(char **keys, int j,
-									t_params *params);
+//l_ft_utils_6.c
+//void process_command(t_params *params, char **parsed);
 
-// l_inout_utils.c
-int								open_file(char *filename, int flags);
-void							dup2_stdout(int fd_out, char *filename);
-int								open_input_file(char *filename, int flags);
-void							dup2_stdin(int fd_in, char *filename);
-char							*prepare_temp_file(int num_cmd);
+//l_inout_utils.c
+int open_file(char *filename, t_params *params, int flags);
+void dup2_stdout(int fd_out, char *filename);
+int open_input_file(char *filename, t_params *params, int flags, int child);
+int open_input_here(char *filename, t_params *params, int flags, int child);
+void dup2_stdin(int fd_in, char *filename);
+char *prepare_temp_file(int num_cmd);
 
-// l_redirection.c
-void							manage_red(t_params *params);
-void							input_r(t_cmd *current, int num_cmd);
-void							output(t_cmd *current);
+// clean_arg.c
+char *join_argv(char **argv);
+
+// ft_check.c
+int check_less(t_params *params);
+int check_infile(t_cmd *current);
+void manage_less(t_params *params);
+
+// ft_strcat.c
+char *ft_strcat(char *dest, char *src);
+
+// ft_strcmp.c
+//int	ft_strcmp(const char *first, const char *second);
+
+// ft_strcpy.c 
+char    *ft_strcpy(char *s1, char *s2);
+
+// ft_strndup.c
+char	*ft_strndup(const char *s, size_t size);
+
+// ft_realloc.c
+//void *ft_realloc(void *ptr, size_t new_size);
+void *ft_realloc(void *ptr, size_t old_size, size_t new_size);
+
+// ft_subfirst.c
+char	*ft_subfirst(char *s, unsigned int start, size_t len);
+char	*ft_substrj(char *s, unsigned int start, size_t len);
+
+// here_doc_utils.c
+//char **here_key(char *input);
+//char **here_key(char **input);
+int is_char_valid(const char *input);
+int manage_here(t_params *params);
+
+// here_doc.c
+//void process_here(char **input, char **keys, int j);
+int process_here(char **keys, int j, t_params *params);
+
+
+// redirection.c
+//t_element *redirect_io(t_element **elements, t_redirections *redirs);
+//t_redirection *add_red(e_tokentype type, char *value, int rank);
+//void free_redirections(t_redirections *redirs);
+void manage_red(t_params *params);
+void input_r(t_cmd *current, int num_cmd, t_params *params, int child);
+void output(t_cmd *current, t_params *params);
 
 /**********************GET_NEXT_LINE ****************************************************************/
 
@@ -164,8 +180,8 @@ void							print_cmd(t_params *params);
 
 // ft_r_check_behavior.c
 int								check_error_newline(char *s, t_params *params);
-int								pass_error_test_1(char *s, t_params *params);
-int								pass_error_test_2(char *s, t_params *params);
+int								pass_error_test_1(char *s);
+int								pass_error_test_2(char *s);
 int								pass_errors_test(char *input, t_params *params);
 
 // r_exec
@@ -176,7 +192,6 @@ int								setup_pipe(int **fd, t_cmd *current, int i);
 void							exec_cmd(t_params *params);
 
 // r_format_argv_1.c
-int								check_variable(char *arg);
 char							*put_other_val(char *str, int *index,
 									t_params *params);
 char							*check_val_env(char *str, int *index,
@@ -233,23 +248,21 @@ int								in_single_quote(char *str);
 int								in_double_quote(char *str);
 
 // r_ft_builtins.c
+int								isbuiltins(char *command);
 int								cmd_not_found(t_params *params);
 int								run_builtins(char **cmd, t_params *params);
 
 // r_ft_cd_1.c
-char							*get_home(t_params *params);
-char							*return_pdir(const char *cwd);
-char							*join_paths(const char *path1,
-									const char *path2);
-int								standard_path(char **dirs, int *i,
-									char **temp_path, t_params *params);
-
-// r_ft_cd_2.c
-char							*split_path(char **dirs, char *temp_path,
-									t_params *params);
-char							*format_tilde(t_params *params, char **dirs);
+char							*format_tilde(t_params *params, char **dirs,
+									char *cwd);
 char							*return_new_path(const char *arg,
 									t_params *params);
+void							handle_cd(int *i, char *arg, char *new_path,
+									t_params *params);
+
+// r_ft_cd_2.c
+void							return_oldpwd(t_params *params);
+void							return_pwd(t_params *params);
 int								ft_cd(const char *arg, t_params *params);
 
 // r_ft_cleaner.c
@@ -332,7 +345,7 @@ char							*split_word(char *str, int index);
 char							**parse_command(char const *input);
 
 // r_ft_pwd.c
-int								ft_pwd(void);
+int								ft_pwd(t_params *params);
 
 // r_ft_unset.c
 int								ft_unset(char **cmd, t_params *params);
@@ -352,7 +365,6 @@ char							*format_str_without_quote(char *input);
 void							close_pipe(int fd[2]);
 
 // r_ft_utils_3.c
-int								isbuiltins(char *command);
 int								count_cmd(t_params *params);
 int								ft_strcmp(const char *s1, const char *s2);
 int								putchar_count(const char *src, char c);
@@ -360,7 +372,7 @@ void							exit_error(const char *error);
 
 // r_ft_utils_4.c
 int								isoperator(char *input);
-int								check_path(const char *path);
+int								check_path(const char *path, t_params *params);
 int								pre_test(char *arg, t_params *params);
 int								check_errors(t_params *params);
 void							*safe_malloc(size_t bytes, char *errors);
@@ -374,5 +386,7 @@ int								is_command(t_params *params, char *command);
 // r_signal.c
 void							sig_handler(int signal);
 void							signal_handlers(int sign);
+
+t_cmd *remove_element_cmd(t_cmd *head, t_cmd *to_remove);
 
 #endif

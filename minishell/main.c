@@ -6,13 +6,11 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 17:29:50 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 23:55:30 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-volatile sig_atomic_t	g_sig_num = 0;
 
 int	put_size(char **argv, int i)
 {
@@ -27,48 +25,49 @@ int	put_size(char **argv, int i)
 	}
 	return (count);
 }
-int add_separator(int var[3], char ***temp, t_cmd *cmd, char **argv)
+
+int	add_separator(int var[3], char ***temp, t_cmd *cmd, char **argv)
 {
-    if (*temp && var[1] > 0)
-    {
-        (*temp)[var[1]] = NULL;
-        cmd = add_command(cmd, *temp);
-        *temp = NULL;
-        var[2] = 0;
-    }
-    *temp = malloc(sizeof(char *) * 2);
-    if (!*temp)
-        return (free_list_cmd(cmd), perror("malloc"), 1);
-    (*temp)[0] = ft_strdup(argv[var[0]]);
-    if (!(*temp)[0])
-        return (free_list_cmd(cmd), free(*temp), perror("strdup"), 1);
-    (*temp)[1] = NULL;
-    cmd = add_command(cmd, *temp);
-    *temp = NULL;
-    return (0);
+	if (*temp && var[1] > 0)
+	{
+		(*temp)[var[1]] = NULL;
+		cmd = add_command(cmd, *temp);
+		*temp = NULL;
+		var[2] = 0;
+	}
+	*temp = malloc(sizeof(char *) * 2);
+	if (!*temp)
+		return (free_list_cmd(cmd), perror("malloc"), 1);
+	(*temp)[0] = ft_strdup(argv[var[0]]);
+	if (!(*temp)[0])
+		return (free_list_cmd(cmd), free(*temp), perror("strdup"), 1);
+	(*temp)[1] = NULL;
+	cmd = add_command(cmd, *temp);
+	*temp = NULL;
+	return (0);
 }
 
-int initialize_cmd(int var[3], char ***temp, t_cmd *cmd, char **argv)
+int	initialize_cmd(int var[3], char ***temp, t_cmd *cmd, char **argv)
 {
-    if (!var[2])
-    {
-        var[2] = put_size(argv, var[0]);
-        *temp = malloc(sizeof(char *) * (var[2] + 1));
-        if (!*temp)
-            return (free_list_cmd(cmd), perror("malloc"), 1);
-        var[1] = 0;
-    }
-    if (argv[var[0]][0] != '\0')
-    {
-        (*temp)[var[1]] = ft_strdup(argv[var[0]]);
-        if (!(*temp)[var[1]])
-            return (free_list_cmd(cmd), free(temp), perror("strdup"), 1);
-        var[1]++;
-    }
-    return (0);
+	if (!var[2])
+	{
+		var[2] = put_size(argv, var[0]);
+		*temp = malloc(sizeof(char *) * (var[2] + 1));
+		if (!*temp)
+			return (free_list_cmd(cmd), perror("malloc"), 1);
+		var[1] = 0;
+	}
+	if (argv[var[0]][0] != '\0')
+	{
+		(*temp)[var[1]] = ft_strdup(argv[var[0]]);
+		if (!(*temp)[var[1]])
+			return (free_list_cmd(cmd), free(temp), perror("strdup"), 1);
+		var[1]++;
+	}
+	return (0);
 }
 
-void check_end_cmd(int var[3], char ***temp, t_cmd **cmd, char **argv)
+void	check_end_cmd(int var[3], char ***temp, t_cmd **cmd, char **argv)
 {
 	if (!argv[var[0] + 1] || ft_strncmp(argv[var[0] + 1], "|", 1) == 0)
 	{
@@ -81,44 +80,53 @@ void check_end_cmd(int var[3], char ***temp, t_cmd **cmd, char **argv)
 		}
 	}
 }
-void clean_cmd(t_cmd **cmd, char ***temp)
+void	clean_cmd(t_cmd **cmd, char ***temp)
 {
 	reset_cmd_flags(*cmd);
-    if (*temp)
-        free(*temp);
+	if (*temp)
+		free(*temp);
 }
 
-t_cmd *init_command(char **argv)
+t_cmd	*init_command(char **argv)
 {
-    t_cmd *cmd = NULL;
-    char **temp = NULL;
-    int var[3];
+	t_cmd	*cmd;
+	char	**temp;
+	int		var[3];
 
-    var[0] = 0;
-    var[1] = 0;
-    var[2] = 0;
-    while (argv[var[0]] != NULL)
-    {
-        if (ft_strcmp(argv[var[0]], "|") == 0)
+	cmd = NULL;
+	temp = NULL;
+	var[0] = 0;
+	var[1] = 0;
+	var[2] = 0;
+	while (argv[var[0]] != NULL)
+	{
+		if (!argv[var[0]] || argv[var[0]][0] == '\0')
         {
-            if (add_separator(var, &temp, cmd, argv))
-                return (NULL);
+            var[0]++;
+            continue;
         }
-        else
-        {
-            if (initialize_cmd(var, &temp, cmd, argv))
-                return (NULL);
+		if (ft_strcmp(argv[var[0]], "|") == 0)
+		{
+			if (add_separator(var, &temp, cmd, argv))
+				return (NULL);
+		}
+		else
+		{
+			if (initialize_cmd(var, &temp, cmd, argv))
+				return (NULL);
 			check_end_cmd(var, &temp, &cmd, argv);
-        }
-        var[0]++;
-    }
-    return (clean_cmd(&cmd, &temp), cmd);
+		}
+		var[0]++;
+	}
+	return (clean_cmd(&cmd, &temp), cmd);
 }
 
 void	print_list(t_cmd *command)
 {
-	int i;
-    int list_num = 1;
+	int	i;
+	int	list_num;
+
+	list_num = 1;
 	while (command)
 	{
 		printf("Liste%d: ", list_num++);
@@ -133,93 +141,176 @@ void	print_list(t_cmd *command)
 	}
 }
 
-void print_argv(char **argv)
+void	print_argv(char **argv)
 {
-    int i = 0;
-    while (argv[i] != NULL)
-    {
-        printf("%s\n", argv[i]);
-        // ft_putstr_fd(argv[i], 2);
-        // ft_putstr_fd("\n", 2);
-        i++;
-    }
+	int	i;
 
+	i = 0;
+	while (argv[i] != NULL)
+	{
+		printf("%s\n", argv[i]);
+		// ft_putstr_fd(argv[i], 2);
+		// ft_putstr_fd("\n", 2);
+		i++;
+	}
 }
-void print_cmd(t_params *params)
+void	print_cmd(t_params *params)
 {
-    t_cmd *current = params->command;
+	t_cmd	*current;
 
-    while (current != NULL)
-    {
-        print_argv(current->cmd);
-        current = current->next;
-    }
+	current = params->command;
+	while (current != NULL)
+	{
+		print_argv(current->cmd);
+		current = current->next;
+	}
 }
+void	clean_ctrl_d(char *input, t_params *params)
+{
+	int	last_exit_status;
+
+	last_exit_status = 0;
+	if (!input)
+	{
+		last_exit_status = params->last_exit_code;
+		close(params->fd_in);
+		close(params->fd_out);
+		printf("exit\n");
+		free(input);
+		free_list_env(params->myenvp);
+		free_list_export(params->myexport);
+		free_array(params->envp);
+		free(params);
+		exit(last_exit_status);
+	}
+}
+
+int	handle_signal_and_history(char *input, t_params *params)
+{
+	if (pass_errors_test(input, params))
+	{
+		free(input);
+		return (1);
+	}
+	if (input)
+	{
+		add_history(input);
+		push_history(input);
+	}
+	return (0);
+}
+
+/*int	add_cmd_in_params(char *input, t_params *params)
+{
+	params->new_input = format_input(input);
+	free(input);
+	input = NULL;
+	if (!params->new_input)
+		exit(EXIT_FAILURE);
+	params->parsed = parse_command(params->new_input);
+	format_variable(params->parsed, params);
+	// josia modification init_commad
+	//print_argv(params->parsed);
+	del_quotes(params->parsed);
+	params->command = init_command(params->parsed);
+	print_cmd(params->command);
+	format_cmd(params);
+	
+	// josia
+	if(manage_here(params))
+	{
+		free(params->new_input);
+		free_array(params->parsed);
+		free_list_cmd(params->command);
+		return (1);
+	}
+	// josia mod free_list_cmd
+
+	if (check_var_temp(params->parsed))
+	{
+		free(params->new_input);
+		free_array(params->parsed);
+		return (1);
+	}
+	// print_argv(parsed);
+
+	free_array(params->parsed);
+	free(params->new_input);
+	//format_cmd(params);
+	manage_less(params);
+	manage_red(params);
+	format_cmd(params);
+	return (0);
+}*/
+
 void	run_minishell(t_params *params)
 {
 	char	*input;
 
 	input = NULL;
 	signal(SIGQUIT, SIG_IGN);
+	params->fd_in = dup(STDIN_FILENO);
+	params->fd_out = dup(STDOUT_FILENO);
 	while (1)
 	{
+		signal_handlers(SIGINT);
 		g_sig_num = 0;
 		input = readline("$> ");
-		if (!input)
-		{
-			printf("exit\n");
-			cleanup_and_exit(params, params->last_exit_code);
-		}
-		if (pass_errors_test(input, params))
-		{
-			free(input);
-			continue ;	
-		}
-		if (input)
-		{
-			add_history(input);
-			push_history(input);
-		}
 		if (g_sig_num == SIGINT)
+		{
+			dup2(params->fd_in, STDIN_FILENO);
+			free(input);
+			g_sig_num = 0;
 			params->last_exit_code = 130;
+			continue;
+		}
+		clean_ctrl_d(input, params);
+		if (handle_signal_and_history(input, params))
+			continue ;
+		// if (add_cmd_in_params(input, params))
+		// 	continue ;
 		params->new_input = format_input(input);
 		free(input);
 		input = NULL;
 		if (!params->new_input)
 			exit(EXIT_FAILURE);
 		params->parsed = parse_command(params->new_input);
+		free(params->new_input);
 		format_variable(params->parsed, params);
 		// josia modification init_commad
+		//print_argv(params->parsed);
+		del_quotes(params->parsed);
 		params->command = init_command(params->parsed);
 		format_cmd(params);
-		//josia
-		manage_here(params);
-		//josia mod free_list_cmd
-		free_list_cmd(params->command);
-		del_quotes(params->parsed);
-		if (check_var_temp(params->parsed))
+		print_cmd(params);
+		// josia
+		if(manage_here(params))
 		{
-			free(params->new_input);
 			free_array(params->parsed);
+			free_list_cmd(params->command);
 			continue ;
 		}
-		//print_argv(parsed);
-		params->command = init_command(params->parsed);
+		// josia mod free_list_cmd
+
+		if (check_var_temp(params->parsed))
+		{
+			free_array(params->parsed);
+			free_list_cmd(params->command);
+			continue ;
+		}
 		free_array(params->parsed);
-		free(params->new_input);
-		format_cmd(params);
-		//josia
+		//format_cmd(params);
 		manage_less(params);
-		if (check_errors(params))
+		manage_red(params);
+		format_cmd(params);
+		if ((params->command && check_errors(params)) || !params->command)
 		{
 			free_list_cmd(params->command);
 			params->command = NULL;
 			continue ;
 		}
-		//josia
-		manage_red(params);
-		print_cmd(params);
 		exec_cmd(params);
+		params->rank_cmd = 0;
 		free_list_cmd(params->command);
 	}
 }
@@ -231,7 +322,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	// signal_handlers(SIGCHLD);
-	signal_handlers(SIGINT);
 	params = create_list_params(envp);
 	if (!params)
 		return (1);

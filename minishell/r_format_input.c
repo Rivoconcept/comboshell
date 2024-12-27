@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   r_format_input.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 11:04:32 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 15:26:29 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 18:00:18 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

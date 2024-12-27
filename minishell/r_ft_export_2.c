@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:40:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 13:48:59 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 09:36:35 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,8 @@ t_export	*create_new_list_export(char *arg)
 	new_exp->name = put_name_export(arg);
 	if (!new_exp->name)
 	{
-		return (free(new_exp), NULL);
+		free(new_exp);
+		return (NULL);
 	}
 	if (find_char(arg, '='))
 	{

@@ -6,35 +6,11 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 15:26:13 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 09:39:47 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	isbuiltins(char *command)
-{
-	int		i;
-	char	*builtins[8];
-
-	builtins[0] = "echo";
-	builtins[1] = "cd";
-	builtins[2] = "pwd";
-	builtins[3] = "export";
-	builtins[4] = "unset";
-	builtins[5] = "env";
-	builtins[6] = "exit";
-	builtins[7] = NULL;
-	i = 0;
-	while (builtins[i] != NULL)
-	{
-		if (!ft_strcmp(command, builtins[i])
-			&& ft_strlen(command) == ft_strlen(builtins[i]))
-			return (1);
-		i++;
-	}
-	return (0);
-}
 
 int	count_cmd(t_params *params)
 {

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:16:23 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 16:12:29 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 23:49:54 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,16 @@ t_cmd	*create_new_list_cmd(char **argv)
 	if (!new_cmd)
 		return (perror("malloc"), NULL);
 	new_cmd->cmd = argv;
+	new_cmd->dgreat = NULL;
+	new_cmd->flag_less = 0;
+	new_cmd->great = NULL;
+	new_cmd->flag_less = 0;
+	new_cmd->here = 0;
+	new_cmd->less = NULL;
+	new_cmd->rank_dgreat = 0;
+	new_cmd->rank_great = 0;
+	new_cmd->rank_here = 0;
+	new_cmd->rank_less = 0;
 	new_cmd->next = NULL;
 	new_cmd->previous = NULL;
 	return (new_cmd);
@@ -42,7 +52,20 @@ t_cmd	*add_command(t_cmd *command, char **argv)
 	new_cmd->previous = current;
 	return (command);
 }
-
+int create_env_and_export(char *input, t_params *params)
+{
+	if (!create_env(&params->myenvp, input))
+	{
+		cleanup_and_exit(params, 1);
+		return (1);
+	}
+	if (!create_export(&params->myexport, input))
+	{
+		cleanup_and_exit(params, 1);
+		return (1);
+	}
+	return (0);
+}
 t_params	*create_list_params(char **envp)
 {
 	int			i;
@@ -64,10 +87,8 @@ t_params	*create_list_params(char **envp)
 	params->parsed = NULL;
 	while (envp[i])
 	{
-		if (!create_env(&params->myenvp, envp[i]))
-			return (cleanup_and_exit(params, 1), NULL);
-		if (!create_export(&params->myexport, envp[i]))
-			return (cleanup_and_exit(params, 1), NULL);
+		if (create_env_and_export(envp[i], params))
+			return (NULL);
 		i++;
 	}
 	return (params);

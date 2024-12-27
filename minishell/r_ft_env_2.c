@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:40:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 13:48:38 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 09:35:03 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,30 +38,47 @@ int	count_list_env(t_params *params)
 	}
 	return (i);
 }
+int	join_var_env(t_env **current, char ***myenvp, int *i)
+{
+	char	*temp;
 
+	temp = ft_strjoin((*current)->name, "=");
+	if (!temp)
+	{
+		free_array(*myenvp);
+		return (1);
+	}
+	(*myenvp)[*i] = ft_strjoin(temp, (*current)->value);
+	free(temp);
+	if (!(*myenvp)[*i])
+	{
+		free_array(*myenvp);
+		return (1);
+	}
+	(*i)++;
+	return (0);
+}
 char	**put_envp(t_params *params)
 {
 	int		i;
 	t_env	*current;
 	char	**myenvp;
-	char	*temp;
+	int		count;
 
 	i = 0;
-	myenvp = (char **)malloc(sizeof(char *) * (count_list_env(params) + 1));
+	count = count_list_env(params);
+	myenvp = (char **)malloc(sizeof(char *) * (count + 1));
 	if (!myenvp)
 		return (NULL);
 	current = params->myenvp;
 	while (current != NULL)
 	{
-		temp = ft_strjoin(current->name, "=");
-		if (!temp)
-			return (free_array(myenvp), NULL);
-		myenvp[i] = ft_strjoin(temp, current->value);
-		free(temp);
-		if (!myenvp[i])
-			return (free_array(myenvp), NULL);
+		if (join_var_env(&current, &myenvp, &i))
+		{
+			free_array(myenvp);
+			return (NULL);
+		}
 		current = current->next;
-		i++;
 	}
 	myenvp[i] = NULL;
 	return (myenvp);

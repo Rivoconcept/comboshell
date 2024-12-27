@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l_here_doc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:41:20 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/23 15:01:48 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 15:14:52 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	process_quotes(char **key)
 	return (quote);
 }
 
-void	process_here(char **keys, int j, t_params *params)
+int	process_here(char **keys, int j, t_params *params)
 {
 	int			i;
 	char		*here_content;
@@ -43,7 +43,14 @@ void	process_here(char **keys, int j, t_params *params)
 	while (keys[i])
 	{
 		here_data.quote = process_quotes(&keys[i]);
-		handle_here(keys[i], &here_content, &here_data, params);
+		if(handle_here(keys[i], &here_content, &here_data, params)){
+			if (here_content)
+			{
+				free(here_content);
+				here_content = NULL;
+			}
+			return (1);
+		}
 		if (here_content)
 		{
 			free(here_content);
@@ -51,4 +58,5 @@ void	process_here(char **keys, int j, t_params *params)
 		}
 		i++;
 	}
+	return (0);
 }

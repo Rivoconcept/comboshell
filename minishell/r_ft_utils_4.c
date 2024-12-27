@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 15:26:02 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 23:24:35 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,36 +39,57 @@ int	isoperator(char *input)
 	}
 	return (0);
 }
-
-int	check_path(const char *path)
+int	check_errors_path(char *path, char *parent_path, struct stat *statbuf,
+		char *last_slash)
+{
+	if (path[0] != '/' && access(path, X_OK) != 0)
+	{
+		printf("minishell: %s: command not found\n", path);
+		return (127);
+	}
+	if (last_slash && last_slash != parent_path)
+	{
+		*last_slash = '\0';
+		if (stat(parent_path, statbuf) != 0)
+		{
+			perror(path);
+			return (127);
+		}
+		if (!S_ISDIR(statbuf->st_mode))
+		{
+			printf("minishell: %s: Not a directory\n", path);
+			return (126);
+		}
+	}
+	return (0);
+}
+int	check_path(const char *path, t_params *params)
 {
 	struct stat	statbuf;
 	char		*last_slash;
 	char		parent_path[1024];
 
-	if (path[0] == '\0' || !path || path == NULL)
+	if (!path || path[0] == '\0')
 		return (0);
 	ft_strlcpy(parent_path, path, sizeof(parent_path) - 1);
 	parent_path[sizeof(parent_path) - 1] = '\0';
 	last_slash = ft_strrchr(parent_path, '/');
-	if (path[0] != '/' && access(path, X_OK) != 0)
-		return (printf("minishell: %s: command not found\n", path), 127);
-	if (last_slash && last_slash != parent_path)
-	{
-		*last_slash = '\0';
-		if (stat(parent_path, &statbuf) != 0)
-			return (perror(path), 127);
-		if (!S_ISDIR(statbuf.st_mode))
-			return (printf("minishell: %s: Not a directory\n", path), 126);
-	}
+	params->last_exit_code = check_errors_path((char *)path, parent_path,
+			&statbuf, last_slash);
+	if (params->last_exit_code != 0)
+		return (params->last_exit_code);
 	if (stat(path, &statbuf) != 0)
-		return (printf("minishell: %s: No such file or directory\n", path),
-			127);
+	{
+		printf("minishell: %s: No such file or directory\n", path);
+		return (127);
+	}
 	if (S_ISDIR(statbuf.st_mode))
-		return (printf("%s: is a directory\n", path), 126);
+	{
+		printf("%s: is a directory\n", path);
+		return (126);
+	}
 	return (0);
 }
-
 int	pre_test(char *arg, t_params *params)
 {
 	if (arg && ft_strncmp(arg, "|", 2) == 0)
@@ -86,45 +107,44 @@ int	pre_test(char *arg, t_params *params)
 	return (0);
 }
 
-void check_cmd_not_found(t_params *params, char *cmd, int *i)
+void	check_cmd_not_found(t_params *params, char *cmd, int *i)
 {
 	int	status;
 
 	status = 0;
 	if (!isbuiltins(cmd))
 	{
-		status = check_path(cmd);
+		status = check_path(cmd, params);
 		if (status)
 		{
 			params->last_exit_code = status;
 			(*i)++;
 		}
 	}
-
 }
 
-int check_errors(t_params *params)
+int	check_errors(t_params *params)
 {
-    int		i;
+	int		i;
 	t_cmd	*current;
 
-    i = 0;
+	i = 0;
 	current = params->command;
-    while(current != NULL)
-    {
+	while (current != NULL)
+	{
 		if (ft_strncmp(current->cmd[0], "|", 1) == 0 && current->previous->cmd
 			&& is_command(params, current->previous->cmd[0]))
-        {
-            if (current->next == NULL)
+		{
+			if (current->next == NULL)
 				return (printf("minishell: command after pipe not found\n"),
 					params->last_exit_code = 127, 1);
 			current = current->next;
-            continue ;
-        }
+			continue ;
+		}
 		if (pass_errors_test(current->cmd[0], params))
 			return (1);
 		check_cmd_not_found(params, current->cmd[0], &i);
-        current = current->next;
-    }
+		current = current->next;
+	}
 	return (i);
 }

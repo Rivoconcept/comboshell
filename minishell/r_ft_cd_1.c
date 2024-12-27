@@ -6,84 +6,82 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 15:11:07 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 13:48:05 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 12:06:07 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_home(t_params *params)
+char	*format_tilde(t_params *params, char **dirs, char *cwd)
 {
+	int		i;
 	char	*home;
-
-	home = ft_getenv(params, "HOME");
-	if (!home || home == NULL)
-	{
-		printf("minishell: cd: HOME not set\n");
-		return (NULL);
-	}
-	return (home);
-}
-
-char	*return_pdir(const char *cwd)
-{
-	size_t	len;
-	char	*path;
-	char	*last_slash;
-
-	last_slash = ft_strrchr(cwd, '/');
-	if (!last_slash || last_slash == cwd)
-		return (ft_strdup("/"));
-	len = last_slash - cwd;
-	path = malloc(sizeof(char) * (len + 1));
-	if (path)
-	{
-		ft_strlcpy(path, cwd, len + 1);
-		path[len] = '\0';
-	}
-	return (path);
-}
-
-char	*join_paths(const char *path1, const char *path2)
-{
-	int		len1;
-	int		len2;
+	char	*temp;
 	char	*new_path;
 
-	len1 = ft_strlen(path1);
-	len2 = ft_strlen(path2);
-	new_path = malloc(sizeof(char) * (len1 + len2 + 2));
-	if (!new_path)
+	i = 0;
+	temp = NULL;
+	free(cwd);
+	home = ft_getenv(params, "HOME");
+	if (!home && printf("minishell: cd: HOME not set\n"))
 		return (NULL);
-	ft_strlcpy(new_path, (char *)path1, len1 + 1);
-	if (path1[len1 - 1] != '/')
-		ft_strlcat(new_path, "/", len1 + len2 + 2);
-	ft_strlcat(new_path, path2, len1 + len2 + 2);
+	new_path = ft_strdup(home);
+	while (dirs[++i] != NULL)
+	{
+		temp = ft_strjoin(new_path, "/");
+		free(new_path);
+		new_path = temp;
+		temp = ft_strjoin(new_path, dirs[i]);
+		free(new_path);
+		new_path = temp;
+	}
+	free(home);
+	free_array(dirs);
 	return (new_path);
 }
 
-int	standard_path(char **dirs, int *i, char **temp_path, t_params *params)
+char	*return_new_path(const char *arg, t_params *params)
+{
+	char	*cwd;
+	char	**dirs;
+	char	*new_path;
+
+	new_path = NULL;
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		perror("Error on getcwd");
+		return (ft_strdup(""));
+	}
+	dirs = ft_split(arg, '/');
+	if (arg[0] == '~')
+		return (format_tilde(params, dirs, cwd));
+	free(cwd);
+	return (new_path);
+}
+void	handle_cd(int *i, char *arg, char *new_path, t_params *params)
 {
 	char	*temp;
 
 	temp = NULL;
-	if (!ft_strcmp(dirs[*i], "~"))
+	if (*i == 1)
 	{
-		(*i)++;
-		temp = join_paths(*temp_path, get_home(params));
-		free(*temp_path);
-		*temp_path = temp;
-		return (1);
+		temp = ft_getenv(params, "HOME");
+		ft_strlcpy(new_path, temp, 256);
+		free(temp);
 	}
-	if (ft_strcmp(dirs[*i], ".") == 0 && ft_strlen(dirs[*i]) == 1)
-		return ((*i)++, 1);
-	if (ft_strcmp(dirs[*i], "..") == 0 && ft_strlen(dirs[*i]) == 2)
+	else if (arg)
 	{
-		(*i)++;
-		temp = return_pdir(*temp_path);
-		free(*temp_path);
-		*temp_path = temp;
-		return (1);
+		temp = ft_strdup(arg);
+		ft_strlcpy(new_path, temp, 256);
+		free(temp);
 	}
-	return (0);
+	if (arg && arg[0] == '~')
+	{
+		temp = return_new_path(arg, params);
+		ft_strlcpy(new_path, temp, 256);
+		free(temp);
+	}
+	if (arg && !ft_strncmp(arg, "/", ft_strlen(arg)))
+		ft_strlcpy(new_path, "/", 256);
 }
