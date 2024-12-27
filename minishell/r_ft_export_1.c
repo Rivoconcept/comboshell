@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:27:25 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 13:48:54 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 22:13:54 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	check_var_temp(char **cmd)
 		i++;
 	if (i > 1 || check_error_var_temp(cmd[0]))
 		return (0);
-	return (1);
+	return (0);
 }
 
 void	clean_export(char *exist_value, char *enter_value, char *name)

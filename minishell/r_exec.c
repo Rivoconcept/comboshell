@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 18:20:42 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 22:17:45 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ void	exec_child_builtins(t_params *params, t_cmd *current)
 
 void	exec_child(t_params *params, t_cmd *current, int fd[2])
 {
-	free(params->pid_tab);
+	// free(params->pid_tab);
 	close(params->fd_in);
 	close(params->fd_out);
 	if (params->prev_pipe_read != -1)

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 15:11:07 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 18:11:31 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/26 22:53:08 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,28 +86,33 @@ char	*return_new_path(const char *arg, t_params *params)
 int	ft_cd(const char *arg, t_params *params)
 {
 	int		i;
-	char	*new_path;
+	char	*temp;
+	char	new_path[256];
 
 	i = 0;
 	(void)arg;
 	while (params->command->cmd[i] != NULL)
 		i++;
 	if (i > 2)
-		return (printf("minishell: cd: too many arguments\n"), 1);
+	{
+		params->last_exit_code = 1;
+		printf("minishell: cd: too many arguments\n");
+		return (1);
+	}
 	if (i == 1)
 		new_path = get_home(params);
+	else if (arg)
+		new_path = ft_strdup(arg);
 	// if (arg[0] == '~')
 
 
 	// new_path = return_new_path(arg, params);
-	if (new_path && access(new_path, F_OK) == 0)
+
+	if (chdir(new_path) != 0)
 	{
-		if (chdir(new_path) != 0)
-			return (perror("Error on cd"), free(new_path), 1);
 		free(new_path);
+		perror("cd");
+		return (params->last_exit_code = 127);
 	}
-	else
-		return (printf("minishell: cd: %s: is not a directory\n", new_path),
-			free(new_path), 1);
 	return (0);
 }
