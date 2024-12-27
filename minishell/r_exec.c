@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 22:17:45 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 08:17:36 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,8 +163,7 @@ void	exec_child_builtins(t_params *params, t_cmd *current)
 {
 	if (isbuiltins(current->cmd[0]))
 	{
-		params->last_exit_code = run_builtins(current->cmd, params);
-		free_list_cmd(params->command);
+		run_builtins(current->cmd, params);
 		cleanup_and_exit(params, params->last_exit_code);
 	}
 }

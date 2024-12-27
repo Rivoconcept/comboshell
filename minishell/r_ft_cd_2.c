@@ -6,91 +6,74 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 15:11:07 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 22:53:08 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 08:55:23 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*split_path(char **dirs, char *temp_path, t_params *params)
-{
-	int		i;
-	char	*temp;
-
-	i = 0;
-	temp = NULL;
-	while (dirs[i] != NULL)
-	{
-		if (standard_path(dirs, &i, &temp_path, params))
-			continue ;
-		temp = join_paths(temp_path, dirs[i]);
-		free(temp_path);
-		temp_path = temp;
-		i++;
-	}
-	return (free_array(dirs), temp_path);
-}
-
-char	*format_tilde(t_params *params, char **dirs)
-{
-	int		i;
-	char	*home;
-	char	*temp;
-	char	*new_path;
-
-	i = 1;
-	temp = NULL;
-	home = ft_getenv(params, "HOME");
-	if (!home)
-		return (printf("minishell: cd: HOME not set\n"), NULL);
-	new_path = ft_strdup(home);
-	while (dirs[i] != NULL)
-	{
-		temp = ft_strjoin(new_path, "/");
-		free(new_path);
-		new_path = temp;
-		temp = ft_strjoin(new_path, dirs[i]);
-		free(new_path);
-		new_path = temp;
-		i++;
-	}
-	return (free_array(dirs), new_path);
-}
-
-char	*return_new_path(const char *arg, t_params *params)
+void	return_oldpwd(t_params *params)
 {
 	char	*cwd;
-	char	**dirs;
-	char	*new_path;
-	char	*temp_path;
+	char	*export_arg;
+	char	*arg_export[3];
 
-	new_path = NULL;
-	temp_path = NULL;
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		return (perror("Error on getcwd"), ft_strdup(""));
-	if (arg == NULL || (!ft_strcmp(arg, "~") && ft_strlen(arg) == 1))
-		return (free(cwd), ft_strdup(get_home(params)));
-	if (!ft_strcmp(arg, "/") && ft_strlen(arg) == 1)
-		return (free(cwd), ft_strdup("/"));
-	dirs = ft_split(arg, '/');
-	if (arg[0] == '~')
-		return (free(cwd), format_tilde(params, dirs));
-	temp_path = ft_strdup(cwd);
-	if (dirs == NULL)
-		return (free(cwd), temp_path);
-	new_path = split_path(dirs, temp_path, params);
-	return (free(cwd), new_path);
+	{
+		perror("Error on getcwd");
+		params->last_exit_code = 1;
+		return ;
+	}
+	export_arg = ft_strjoin("OLDPWD=", cwd);
+	if (!export_arg)
+	{
+		free(cwd);
+		params->last_exit_code = 1;
+		return ;
+	}
+	arg_export[0] = "export";
+	arg_export[1] = export_arg;
+	arg_export[2] = NULL;
+	if (ft_export(arg_export, params) != 0)
+		params->last_exit_code = 1;
+	free(cwd);
+	free(export_arg);
 }
+void	return_pwd(t_params *params)
+{
+	char	*cwd;
+	char	*export_arg;
+	char	*arg_export[3];
 
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		perror("Error on getcwd");
+		params->last_exit_code = 1;
+		return ;
+	}
+	export_arg = ft_strjoin("PWD=", cwd);
+	if (!export_arg)
+	{
+		free(cwd);
+		params->last_exit_code = 1;
+		return ;
+	}
+	arg_export[0] = "export";
+	arg_export[1] = export_arg;
+	arg_export[2] = NULL;
+	if (ft_export(arg_export, params) != 0)
+		params->last_exit_code = 1;
+	free(cwd);
+	free(export_arg);
+}
 int	ft_cd(const char *arg, t_params *params)
 {
 	int		i;
-	char	*temp;
 	char	new_path[256];
 
 	i = 0;
-	(void)arg;
 	while (params->command->cmd[i] != NULL)
 		i++;
 	if (i > 2)
@@ -99,20 +82,14 @@ int	ft_cd(const char *arg, t_params *params)
 		printf("minishell: cd: too many arguments\n");
 		return (1);
 	}
-	if (i == 1)
-		new_path = get_home(params);
-	else if (arg)
-		new_path = ft_strdup(arg);
-	// if (arg[0] == '~')
-
-
-	// new_path = return_new_path(arg, params);
-
+	handle_cd(&i, (char *)arg, new_path, params);
+	return_oldpwd(params);
 	if (chdir(new_path) != 0)
 	{
-		free(new_path);
 		perror("cd");
-		return (params->last_exit_code = 127);
+		params->last_exit_code = 127;
+		return (1);
 	}
+	return_pwd(params);
 	return (0);
 }

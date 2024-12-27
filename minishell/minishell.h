@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 16:13:57 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 10:59:51 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-# include <signal.h>
 # include <signal.h>
 # include <stddef.h>
 # include <stdint.h>
@@ -164,8 +163,8 @@ void							print_cmd(t_params *params);
 
 // ft_r_check_behavior.c
 int								check_error_newline(char *s, t_params *params);
-int								pass_error_test_1(char *s, t_params *params);
-int								pass_error_test_2(char *s, t_params *params);
+int								pass_error_test_1(char *s);
+int								pass_error_test_2(char *s);
 int								pass_errors_test(char *input, t_params *params);
 
 // r_exec
@@ -176,7 +175,6 @@ int								setup_pipe(int **fd, t_cmd *current, int i);
 void							exec_cmd(t_params *params);
 
 // r_format_argv_1.c
-int								check_variable(char *arg);
 char							*put_other_val(char *str, int *index,
 									t_params *params);
 char							*check_val_env(char *str, int *index,
@@ -233,23 +231,21 @@ int								in_single_quote(char *str);
 int								in_double_quote(char *str);
 
 // r_ft_builtins.c
+int								isbuiltins(char *command);
 int								cmd_not_found(t_params *params);
 int								run_builtins(char **cmd, t_params *params);
 
 // r_ft_cd_1.c
-char							*get_home(t_params *params);
-char							*return_pdir(const char *cwd);
-char							*join_paths(const char *path1,
-									const char *path2);
-int								standard_path(char **dirs, int *i,
-									char **temp_path, t_params *params);
-
-// r_ft_cd_2.c
-char							*split_path(char **dirs, char *temp_path,
-									t_params *params);
-char							*format_tilde(t_params *params, char **dirs);
+char							*format_tilde(t_params *params, char **dirs,
+									char *cwd);
 char							*return_new_path(const char *arg,
 									t_params *params);
+void							handle_cd(int *i, char *arg, char *new_path,
+									t_params *params);
+
+// r_ft_cd_2.c
+void							return_oldpwd(t_params *params);
+void							return_pwd(t_params *params);
 int								ft_cd(const char *arg, t_params *params);
 
 // r_ft_cleaner.c
@@ -332,7 +328,7 @@ char							*split_word(char *str, int index);
 char							**parse_command(char const *input);
 
 // r_ft_pwd.c
-int								ft_pwd(void);
+int								ft_pwd(t_params *params);
 
 // r_ft_unset.c
 int								ft_unset(char **cmd, t_params *params);
@@ -352,7 +348,6 @@ char							*format_str_without_quote(char *input);
 void							close_pipe(int fd[2]);
 
 // r_ft_utils_3.c
-int								isbuiltins(char *command);
 int								count_cmd(t_params *params);
 int								ft_strcmp(const char *s1, const char *s2);
 int								putchar_count(const char *src, char c);
@@ -360,7 +355,7 @@ void							exit_error(const char *error);
 
 // r_ft_utils_4.c
 int								isoperator(char *input);
-int								check_path(const char *path);
+int								check_path(const char *path, t_params *params);
 int								pre_test(char *arg, t_params *params);
 int								check_errors(t_params *params);
 void							*safe_malloc(size_t bytes, char *errors);

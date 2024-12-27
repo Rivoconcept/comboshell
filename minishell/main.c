@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 17:29:50 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 11:09:03 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,6 @@ void	run_minishell(t_params *params)
 		}
 		//josia
 		manage_red(params);
-		print_cmd(params);
 		exec_cmd(params);
 		free_list_cmd(params->command);
 	}

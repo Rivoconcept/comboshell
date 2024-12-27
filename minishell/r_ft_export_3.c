@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:40:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 13:49:04 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 09:37:49 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,10 @@ int	del_export_element(t_export **myexport, char *envp)
 				*myexport = current->next;
 			else
 				previous->next = current->next;
-			return (free(current->name), free(current->value), free(current),
-				1);
+			free(current->name);
+			free(current->value);
+			free(current);
+			return (1);
 		}
 		previous = current;
 		current = current->next;

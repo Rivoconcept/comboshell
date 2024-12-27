@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:16:23 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 16:12:29 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 10:22:07 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,20 @@ t_cmd	*add_command(t_cmd *command, char **argv)
 	new_cmd->previous = current;
 	return (command);
 }
-
+int create_env_and_export(char *input, t_params *params)
+{
+	if (!create_env(&params->myenvp, input))
+	{
+		cleanup_and_exit(params, 1);
+		return (1);
+	}
+	if (!create_export(&params->myexport, input))
+	{
+		cleanup_and_exit(params, 1);
+		return (1);
+	}
+	return (0);
+}
 t_params	*create_list_params(char **envp)
 {
 	int			i;
@@ -64,10 +77,8 @@ t_params	*create_list_params(char **envp)
 	params->parsed = NULL;
 	while (envp[i])
 	{
-		if (!create_env(&params->myenvp, envp[i]))
-			return (cleanup_and_exit(params, 1), NULL);
-		if (!create_export(&params->myexport, envp[i]))
-			return (cleanup_and_exit(params, 1), NULL);
+		if (create_env_and_export(envp[i], params))
+			return (NULL);
 		i++;
 	}
 	return (params);
