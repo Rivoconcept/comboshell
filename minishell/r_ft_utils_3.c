@@ -6,19 +6,19 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 09:39:47 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/28 17:06:22 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	count_cmd(t_params *params)
+int	count_cmd(t_cmd *command)
 {
 	int		count;
 	t_cmd	*current;
 
 	count = 0;
-	current = params->command;
+	current = command;
 	while (current != NULL)
 	{
 		count++;

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/28 14:41:52 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/28 17:03:54 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,9 +210,9 @@ void							format_variable(char **argv, t_params *params);
 void 							format_all_variable(t_params *params);
 
 // r_format_cmd_1.c
-char *check_access(char *full_path, char *command, char *path);
+char	*check_access(char *command, char *path);
 char							*put_path(char **dirs, char *command);
-char							*check_cmd_standard(char *command);
+char	*check_cmd_standard(t_params *params, char *command);
 void							format_cmd(t_params *params);
 
 // r_format_cmd_2.c
@@ -300,9 +300,9 @@ int								ft_env(t_params *params);
 int								is_numeric(const char *str);
 long long int					ft_atoi_lld(const char *str);
 unsigned long long				ft_atoi_ull(const char *str);
-void							check_errors_exit(char **parsed,
+int							check_errors_exit(char **parsed,
 									t_params *params);
-void							ft_exit(char **parsed, t_params *params);
+int							ft_exit(char **parsed, t_params *params);
 
 // r_ft_export_1.c
 int								print_export(t_params *params);
@@ -367,7 +367,7 @@ char							*format_str_without_quote(char *input);
 void							close_pipe(int fd[2]);
 
 // r_ft_utils_3.c
-int								count_cmd(t_params *params);
+int								count_cmd(t_cmd *command);
 int								ft_strcmp(const char *s1, const char *s2);
 int								putchar_count(const char *src, char c);
 
@@ -390,5 +390,5 @@ void							signal_handlers(int sign);
 t_cmd *remove_element_cmd(t_cmd *head, t_cmd *to_remove);
 void format_keys(char *str);
 int	delete_cmd_null(t_params *params);
-
+void delete_null_in_argv(t_params *params);
 #endif

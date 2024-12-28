@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 10:48:59 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 16:43:46 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/28 16:27:09 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ unsigned long long	ft_atoi_ull(const char *str)
 	return (res);
 }
 
-void	check_errors_exit(char **parsed, t_params *params)
+int	check_errors_exit(char **parsed, t_params *params)
 {
 	if (!parsed[1])
 	{
@@ -88,7 +88,8 @@ void	check_errors_exit(char **parsed, t_params *params)
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
 		write(STDERR_FILENO, "minishell: exit: too many arguments\n",
 			ft_strlen("minishell: exit: too many arguments\n"));
-		cleanup_and_exit(params, 1);
+		params->last_exit_code = 1;
+		return (1);
 	}
 	if (!is_numeric(parsed[1]))
 	{
@@ -99,15 +100,17 @@ void	check_errors_exit(char **parsed, t_params *params)
 			ft_strlen(": numeric argument required\n"));
 		cleanup_and_exit(params, 2);
 	}
+	return (0);
 }
 
-void	ft_exit(char **parsed, t_params *params)
+int	ft_exit(char **parsed, t_params *params)
 {
 	unsigned long long	value;
 	unsigned long long	res;
 	long long			exit_code;
 
-	check_errors_exit(parsed, params);
+	if (check_errors_exit(parsed, params))
+		return (1);
 	value = (unsigned long long)INT64_MAX;
 	if (parsed[1][0] == '-')
 		value = ((unsigned long long)INT64_MAX) + 1;
@@ -124,4 +127,5 @@ void	ft_exit(char **parsed, t_params *params)
 	exit_code = ft_atoi_lld(parsed[1]);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	cleanup_and_exit(params, (unsigned char)exit_code);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/28 15:04:24 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/28 19:37:53 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,9 +273,14 @@ void	run_minishell(t_params *params)
 		input = NULL;
 		if (!params->new_input)
 			exit(EXIT_FAILURE);
+		printf("%s\n", params->new_input);
+		free(params->new_input);		
+		continue;
 		params->parsed = parse_command(params->new_input);
 		free(params->new_input);
 		// josia modification init_commad
+		// format_variable(params->parsed, params);
+		// del_quotes(params->parsed);
 		// print_argv(params->parsed);
 		// free_array(params->parsed);
 		// continue ;
@@ -288,7 +293,7 @@ void	run_minishell(t_params *params)
 		}
 		free_array(params->parsed);
 
-			// delete_cmd_null(params);
+		// delete_cmd_null(params);
 		//print_cmd(params);
 
 		// print_cmd(params);
@@ -305,7 +310,7 @@ void	run_minishell(t_params *params)
 		manage_less(params);
 		manage_red(params);
 		format_cmd(params);
-		print_cmd(params);
+		//print_cmd(params);
 
 		//print_cmd(params);
 		// if ((params->command && check_errors(params)) || !params->command)
@@ -319,8 +324,11 @@ void	run_minishell(t_params *params)
 		// continue ;
 		format_all_variable(params);
 		delete_quotes(params);
-		print_cmd(params);
-		// exec_cmd(params);
+		format_cmd(params);
+		// print_list(params->command);
+		delete_cmd_null(params);
+		delete_null_in_argv(params);
+		exec_cmd(params);
 		params->rank_cmd = 0;
 		free_list_cmd(params->command);
 	}

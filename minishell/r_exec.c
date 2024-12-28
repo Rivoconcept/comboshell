@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   r_exec.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 18:42:23 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/28 18:12:03 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,10 +224,10 @@ void	ft_handle_child(t_params *params)
 
 	current = params->command;
 	tab = 0;
-	if (isbuiltins((current)->cmd[0]) && (current)->next == NULL)
+	if (current->cmd[0] && isbuiltins(current->cmd[0]) && current->next == NULL)
 	{
-		exec_builtins(params, (current));
-		(current) = (current)->next;
+		exec_builtins(params, current);
+		current = current->next;
 	}
 	else
 	{
