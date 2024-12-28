@@ -3,22 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   r_format_input.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 11:04:32 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 18:00:18 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/28 15:21:34 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_operator(char c)
+int	is_operator(char c, char *operators)
 {
 	int		j;
-	char	*operators;
 
 	j = 0;
-	operators = "|<>";
 	while (operators[j])
 	{
 		if (c == operators[j])
@@ -28,7 +26,7 @@ int	is_operator(char c)
 	return (0);
 }
 
-int	put_new_size(char *input)
+int	put_new_size(char *input, char *operators)
 {
 	int	i;
 	int	new_size;
@@ -41,7 +39,7 @@ int	put_new_size(char *input)
 	new_size = 0;
 	while (input[++i])
 	{
-		if (is_operator(input[i]))
+		if (is_operator(input[i], operators))
 		{
 			if (i > 0 && input[i - 1] != ' ')
 				new_size++;
@@ -68,7 +66,7 @@ void	add_spaces(char *new_str, char *input, int *i, int *j)
 		new_str[(*j)++] = ' ';
 }
 
-char	*format_input(char *input)
+char	*format_input(char *input, char *operators)
 {
 	int		i;
 	int		j;
@@ -78,12 +76,14 @@ char	*format_input(char *input)
 	j = 0;
 	if (!input)
 		return (NULL);
-	new_str = malloc(sizeof(char) * (put_new_size(input) + 1));
+	new_str = malloc(sizeof(char) * (put_new_size(input, operators) + 1));
 	if (!new_str)
 		return (NULL);
 	while (input[++i])
 	{
-		if (is_operator(input[i]))
+		if (input[i] == '\"')
+			add_spaces(new_str, input, &i, &j);
+		if (is_operator(input[i], operators))
 			add_spaces(new_str, input, &i, &j);
 		else
 			new_str[j++] = input[i];

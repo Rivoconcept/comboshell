@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 18:26:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 13:47:15 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/28 14:44:36 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,15 @@ void	format_variable(char **argv, t_params *params)
 		argv[i] = tmp;
 		i++;
 	}
+}
+void format_all_variable(t_params *params)
+{
+    t_cmd *current;
+
+    current = params->command;
+    while (current != NULL)
+    {
+		format_variable(current->cmd, params);
+        current = current->next;
+    }
 }

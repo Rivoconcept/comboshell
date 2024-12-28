@@ -6,14 +6,13 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 14:23:32 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 14:25:03 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/28 10:44:23 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-int	put_size(char **argv, int i)
+/*int	put_size(char **argv, int i)
 {
 	int	count;
 
@@ -79,4 +78,4 @@ void	check_end_cmd(int var[3], char ***temp, t_cmd **cmd, char **argv)
 			var[2] = 0;
 		}
 	}
-}
+}*/

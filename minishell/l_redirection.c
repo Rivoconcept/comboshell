@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l_redirection.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 08:20:34 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/27 13:02:06 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/28 10:08:04 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

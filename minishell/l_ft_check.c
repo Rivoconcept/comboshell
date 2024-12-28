@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l_ft_check.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 13:38:41 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/27 18:19:57 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/28 10:07:37 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

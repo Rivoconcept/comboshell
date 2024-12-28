@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 17:49:55 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/28 15:04:24 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 int	put_size(char **argv, int i)
 {
 	int	count;
@@ -25,6 +24,7 @@ int	put_size(char **argv, int i)
 	}
 	return (count);
 }
+
 int	add_separator(int var[3], char ***temp, t_cmd *cmd, char **argv)
 {
 	if (*temp && var[1] > 0)
@@ -99,6 +99,11 @@ t_cmd	*init_command(char **argv)
 	var[2] = 0;
 	while (argv[var[0]] != NULL)
 	{
+		if (!argv[var[0]] || argv[var[0]][0] == '\0')
+        {
+            var[0]++;
+            continue;
+        }
 		if (ft_strcmp(argv[var[0]], "|") == 0)
 		{
 			if (add_separator(var, &temp, cmd, argv))
@@ -158,6 +163,7 @@ void	print_cmd(t_params *params)
 		print_argv(current->cmd);
 		current = current->next;
 	}
+	printf("*********************************************\n");
 }
 void	clean_ctrl_d(char *input, t_params *params)
 {
@@ -178,13 +184,9 @@ void	clean_ctrl_d(char *input, t_params *params)
 		exit(last_exit_status);
 	}
 }
-int	handle_signal_and_history(char *input, t_params *params)
+
+int	handle_history(char *input)
 {
-	if (pass_errors_test(input, params))
-	{
-		free(input);
-		return (1);
-	}
 	if (input)
 	{
 		add_history(input);
@@ -192,7 +194,8 @@ int	handle_signal_and_history(char *input, t_params *params)
 	}
 	return (0);
 }
-int	add_cmd_in_params(char *input, t_params *params)
+
+/*int	add_cmd_in_params(char *input, t_params *params)
 {
 	params->new_input = format_input(input);
 	free(input);
@@ -202,8 +205,12 @@ int	add_cmd_in_params(char *input, t_params *params)
 	params->parsed = parse_command(params->new_input);
 	format_variable(params->parsed, params);
 	// josia modification init_commad
+	//print_argv(params->parsed);
+	del_quotes(params->parsed);
 	params->command = init_command(params->parsed);
+	print_cmd(params->command);
 	format_cmd(params);
+	
 	// josia
 	if(manage_here(params))
 	{
@@ -213,8 +220,7 @@ int	add_cmd_in_params(char *input, t_params *params)
 		return (1);
 	}
 	// josia mod free_list_cmd
-	free_list_cmd(params->command);
-	del_quotes(params->parsed);
+
 	if (check_var_temp(params->parsed))
 	{
 		free(params->new_input);
@@ -222,7 +228,7 @@ int	add_cmd_in_params(char *input, t_params *params)
 		return (1);
 	}
 	// print_argv(parsed);
-	params->command = init_command(params->parsed);
+
 	free_array(params->parsed);
 	free(params->new_input);
 	//format_cmd(params);
@@ -230,7 +236,8 @@ int	add_cmd_in_params(char *input, t_params *params)
 	manage_red(params);
 	format_cmd(params);
 	return (0);
-}
+}*/
+
 void	run_minishell(t_params *params)
 {
 	char	*input;
@@ -253,17 +260,67 @@ void	run_minishell(t_params *params)
 			continue;
 		}
 		clean_ctrl_d(input, params);
-		if (handle_signal_and_history(input, params))
-			continue ;
-		if (add_cmd_in_params(input, params))
-			continue ;
-		if ((params->command && check_errors(params)) || !params->command)
+		handle_history(input);
+		if (check_general_errors(input, params))
 		{
-			free_list_cmd(params->command);
-			params->command = NULL;
+			free(input);
 			continue ;
 		}
-		exec_cmd(params);
+		// if (add_cmd_in_params(input, params))
+		// 	continue ;
+		params->new_input = format_input(input, "|");
+		free(input);
+		input = NULL;
+		if (!params->new_input)
+			exit(EXIT_FAILURE);
+		params->parsed = parse_command(params->new_input);
+		free(params->new_input);
+		// josia modification init_commad
+		// print_argv(params->parsed);
+		// free_array(params->parsed);
+		// continue ;
+		//del_quotes(params->parsed);
+		params->command = init_command(params->parsed);
+		if (check_error_var_temp(params->parsed[0]) && !params->parsed[1])
+		{
+			free_list_cmd(params->command);
+			continue ;
+		}
+		free_array(params->parsed);
+
+			// delete_cmd_null(params);
+		//print_cmd(params);
+
+		// print_cmd(params);
+		// josia
+		
+		// josia mod free_list_cmd
+
+		if(manage_here(params)) 
+		{
+			free_list_cmd(params->command);
+			continue ;
+		}
+
+		manage_less(params);
+		manage_red(params);
+		format_cmd(params);
+		print_cmd(params);
+
+		//print_cmd(params);
+		// if ((params->command && check_errors(params)) || !params->command)
+		// {
+		// 	free_list_cmd(params->command);
+		// 	params->command = NULL;
+		// 	continue ;
+		// }
+		// print_cmd(params);
+		// 		free_list_cmd(params->command);
+		// continue ;
+		format_all_variable(params);
+		delete_quotes(params);
+		print_cmd(params);
+		// exec_cmd(params);
 		params->rank_cmd = 0;
 		free_list_cmd(params->command);
 	}

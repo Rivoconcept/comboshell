@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 11:09:25 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/28 10:36:22 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,8 @@ int	check_errors(t_params *params)
 	current = params->command;
 	while (current != NULL)
 	{
-		if (ft_strncmp(current->cmd[0], "|", 1) == 0 && current->previous->cmd
-			&& is_command(params, current->previous->cmd[0]))
+		if ((ft_strncmp(current->cmd[0], "|", 1) == 0 && current->previous->cmd
+			&& is_command(params, current->previous->cmd[0])))
 		{
 			if (current->next == NULL)
 				return (printf("minishell: command after pipe not found\n"),
@@ -141,8 +141,6 @@ int	check_errors(t_params *params)
 			current = current->next;
 			continue ;
 		}
-		if (pass_errors_test(current->cmd[0], params))
-			return (1);
 		check_cmd_not_found(params, current->cmd[0], &i);
 		current = current->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:27:25 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 22:13:54 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/28 07:38:01 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ int	check_error_var_temp(char *cmd)
 	char	**argv;
 
 	i = 0;
-	if (cmd[0] == '\0')
-		return (1);
+	if (!cmd || cmd[0] == '\0' || cmd == NULL)
+		return (0);
 	if (!cmd || !find_char(cmd, '=') || (ft_isdigit(cmd[0]) && find_char(cmd,
 				'=')))
-		return (1);
+		return (0);
 	argv = ft_split(cmd, '=');
 	if (!argv)
-		return (1);
+		return (0);
 	while (argv[0][i] && (ft_isalnum(argv[0][i]) || argv[0][i] == '_'
 			|| argv[0][i] == '+'))
 		i++;
@@ -51,26 +51,11 @@ int	check_error_var_temp(char *cmd)
 	{
 		free_array(argv);
 		argv = NULL;
-		return (1);
+		return (0);
 	}
 	free_array(argv);
-	return (0);
+	return (1);
 }
-
-int	check_var_temp(char **cmd)
-{
-	int	i;
-
-	i = 0;
-	if (!cmd || cmd[0][0] == '\0')
-		return (1);
-	while (cmd[i] != NULL)
-		i++;
-	if (i > 1 || check_error_var_temp(cmd[0]))
-		return (0);
-	return (0);
-}
-
 void	clean_export(char *exist_value, char *enter_value, char *name)
 {
 	if (enter_value || enter_value != NULL)

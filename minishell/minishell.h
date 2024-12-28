@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 17:08:31 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/28 14:41:52 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,10 +179,11 @@ char							*get_next_line(int fd);
 void							print_cmd(t_params *params);
 
 // ft_r_check_behavior.c
-int								check_error_newline(char *s, t_params *params);
+int								check_error_newline(char *s);
 int								pass_error_test_1(char *s);
 int								pass_error_test_2(char *s);
 int								pass_errors_test(char *input, t_params *params);
+int 							check_general_errors(char *s, t_params *params);
 
 // r_exec
 void							clean_pipe_fd(int ***fd, int pipe_count);
@@ -206,12 +207,12 @@ void							copy_env(size_t i[2], char *arg, char **new_str,
 									t_params *params);
 char							*format_var_env(char *arg, t_params *params);
 void							format_variable(char **argv, t_params *params);
+void 							format_all_variable(t_params *params);
 
 // r_format_cmd_1.c
-char							*check_access(char *command, char *path);
+char *check_access(char *full_path, char *command, char *path);
 char							*put_path(char **dirs, char *command);
-char							*check_cmd_standard(t_params *params,
-									char *command);
+char							*check_cmd_standard(char *command);
 void							format_cmd(t_params *params);
 
 // r_format_cmd_2.c
@@ -220,11 +221,11 @@ t_cmd							*add_command(t_cmd *command, char **argv);
 t_params						*create_list_params(char **envp);
 
 // r_format_input.c
-int								is_operator(char c);
-int								put_new_size(char *input);
+int								is_operator(char c, char *operators);
+int								put_new_size(char *input, char *operators);
 void							add_spaces(char *new_str, char *input, int *i,
 									int *j);
-char							*format_input(char *input);
+char							*format_input(char *input, char *operators);
 
 // r_format_quotes_1.c
 int								echap_quote(char c, int *in_single_quote,
@@ -246,6 +247,7 @@ int								pure_apostrophe(char *str);
 int								pure_quote(char *str);
 int								in_single_quote(char *str);
 int								in_double_quote(char *str);
+void 							delete_quotes(t_params *params);
 
 // r_ft_builtins.c
 int								isbuiltins(char *command);
@@ -368,17 +370,15 @@ void							close_pipe(int fd[2]);
 int								count_cmd(t_params *params);
 int								ft_strcmp(const char *s1, const char *s2);
 int								putchar_count(const char *src, char c);
-void							exit_error(const char *error);
 
 // r_ft_utils_4.c
 int								isoperator(char *input);
 int								check_path(const char *path, t_params *params);
 int								pre_test(char *arg, t_params *params);
 int								check_errors(t_params *params);
-void							*safe_malloc(size_t bytes, char *errors);
 
 // r_ft_utils_5.c
-int								check_input_is_all_space(char *input);
+int								check_is_all_space(char *input);
 char							*check_is_path(char *command, char *path);
 char							*check_access_path(char **dirs, char *command);
 int								is_command(t_params *params, char *command);
@@ -386,5 +386,9 @@ int								is_command(t_params *params, char *command);
 // r_signal.c
 void							sig_handler(int signal);
 void							signal_handlers(int sign);
+
+t_cmd *remove_element_cmd(t_cmd *head, t_cmd *to_remove);
+void format_keys(char *str);
+int	delete_cmd_null(t_params *params);
 
 #endif

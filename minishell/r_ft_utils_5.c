@@ -6,13 +6,13 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 15:01:14 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/28 09:19:22 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_input_is_all_space(char *input)
+int	check_is_all_space(char *input)
 {
 	int	i;
 

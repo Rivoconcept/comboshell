@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   r_format_quotes_1.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 19:02:23 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 17:04:38 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/28 14:39:09 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	del_quotes(char **argv)
 	i = 0;
 	while (argv[i] != NULL)
 	{
-		if (!argv[i] || ((argv[i] && !ft_strcmp(argv[i], "\"\"")) && (argv[i - 1] && !ft_strcmp(argv[i - 1], "<<"))))
+		if (!argv[i])
 		{
 			i++;
 			continue ;
