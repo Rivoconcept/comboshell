@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 15:11:07 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 08:55:23 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 12:04:13 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	ft_cd(const char *arg, t_params *params)
 	if (chdir(new_path) != 0)
 	{
 		perror("cd");
-		params->last_exit_code = 127;
+		params->last_exit_code = 1;
 		return (1);
 	}
 	return_pwd(params);

@@ -6,61 +6,86 @@
 /*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:40:36 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/21 11:12:55 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/27 15:17:51 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	count_heredoc(char **input)
-{
-	int	i;
-	int	nbr;
+int is_char_valid(const char *input) {
+    size_t len;
+    size_t i;
 
-	i = 0;
-	nbr = 0;
-	while (input[i + 1])
-	{
-		if (ft_strcmp(input[i], "<<") == 0)
-			nbr++;
-		i++;
-	}
-	return (nbr);
+    i = 0;
+    if (input == NULL || ft_strlen(input) == 0)
+        return 0;
+    len = ft_strlen(input);
+    if ((input[0] == '"' && input[len - 1] == '"') || (input[0] == '\'' && input[len - 1] == '\''))
+        return 1;
+    while(i < ft_strlen(input))
+    {
+        if(!ft_isalnum(input[i]) && input[i]!= '"' && input[i] != '\'' && input[i] != '_')
+        {
+            return (0);
+        }
+        i++;
+    }
+    return 1;
 }
 
-static char	**here_key(char **input)
+static int count_heredoc(char **input)
 {
-	int		i;
-	int		j;
-	char	**keys;
+    int i;
+    int nbr;
 
-	i = 0;
-	j = 0;
-	keys = (char **)malloc(sizeof(char *) * (count_heredoc(input) + 1));
-	while (input[i + 1])
-	{
-		if (ft_strcmp(input[i], "<<") == 0)
-			keys[j++] = ft_strdup(input[i + 1]);
-		i++;
-	}
-	keys[j] = NULL;
-	return (keys);
+    i = 0;
+    nbr = 0;
+    while(input[i+1])
+    {
+        if (ft_strcmp(input[i], "<<") == 0 && is_char_valid(input[i+1]))
+            nbr++;
+        i++;
+    }
+    return (nbr);
 }
 
-void	manage_here(t_params *params)
+static char **here_key(char **input)
 {
-	char	**keys;
-	t_cmd	*current;
-	int		j;
+    int i;
+    int j;
+    char **keys;
 
-	j = 0;
-	current = params->command;
-	while (current != NULL)
-	{
-		keys = here_key(current->cmd);
-		process_here(keys, j, params);
-		free_array(keys);
-		current = current->next;
-		j++;
-	}
+    i = 0;
+    j = 0;
+    keys = (char **)malloc(sizeof(char *) * (count_heredoc(input) + 1));
+    while (input[i + 1])
+    {
+        if (ft_strcmp(input[i], "<<") == 0 && is_char_valid(input[i+1]))
+            keys[j++] = ft_strdup(input[i + 1]);
+        i++;
+    }
+    keys[j] = NULL;
+    return (keys);
+}
+
+int manage_here(t_params *params)
+{
+    char	**keys;
+    int j;
+
+    j = 0;
+    t_cmd *current = params->command;
+    while (current != NULL)
+    {
+        keys = here_key(current->cmd);
+        if(process_here(keys, j, params))
+        {
+            free_array(keys);
+            return (1);
+        }
+        free_array(keys);
+        current = current->next;
+        j++;
+    }
+    return (0);
 }

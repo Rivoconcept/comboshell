@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   r_exec.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 08:17:36 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 18:42:23 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,11 @@ int	put_nbr_pipes(t_cmd *command)
 	}
 	return (count);
 }
-
+void cleanup_error_malloc_fd(t_params *params)
+{
+	perror("malloc");
+	cleanup_and_exit(params, EXIT_FAILURE);
+}
 void	init_pipe_fd(int ***fd, t_params *params)
 {
 	int	i;
@@ -54,10 +58,7 @@ void	init_pipe_fd(int ***fd, t_params *params)
 	pipe_count = put_nbr_pipes(params->command);
 	*fd = malloc(sizeof(int *) * pipe_count);
 	if (!*fd)
-	{
-		perror("malloc");
-		cleanup_and_exit(params, EXIT_FAILURE);
-	}
+		cleanup_error_malloc_fd(params);
 	while (++i < pipe_count)
 	{
 		(*fd)[i] = malloc(sizeof(int) * 2);
@@ -115,8 +116,8 @@ int	ft_get_pid_nbr(t_params *params)
 
 void	exec_builtins(t_params *params, t_cmd *current)
 {
-	input_r(current, params->rank_cmd);
-	output(current);
+	input_r(current, params->rank_cmd, params, 0);
+	output(current, params);
 	params->last_exit_code = run_builtins(current->cmd, params);
 	dup2(params->fd_in, STDIN_FILENO);
 	dup2(params->fd_out, STDOUT_FILENO);
@@ -130,15 +131,6 @@ int	ft_check_continue(t_params *params, t_cmd **current)
 		params->rank_cmd++;
 		return (1);
 	}
-	
-	// if (isbuiltins((*current)->cmd[0]) && (!(*current)->next
-	// 		|| ft_strcmp((*current)->next->cmd[0], "|") != 0))
-	// {
-	// 	if (params->prev_pipe_read != -1)
-	// 		close(params->prev_pipe_read);
-	// 	exec_builtins(params, (*current));
-	// 	return (1);
-	// }
 	return (0);
 }
 
@@ -154,7 +146,6 @@ void	check_fork_error(t_params *params, t_cmd *current, int tab, int fd[2])
 			close(fd[0]);
 			close(fd[1]);
 		}
-		free(params->pid_tab);
 		cleanup_and_exit(params, EXIT_FAILURE);
 	}
 }
@@ -167,10 +158,8 @@ void	exec_child_builtins(t_params *params, t_cmd *current)
 		cleanup_and_exit(params, params->last_exit_code);
 	}
 }
-
 void	exec_child(t_params *params, t_cmd *current, int fd[2])
 {
-	// free(params->pid_tab);
 	close(params->fd_in);
 	close(params->fd_out);
 	if (params->prev_pipe_read != -1)
@@ -185,8 +174,8 @@ void	exec_child(t_params *params, t_cmd *current, int fd[2])
 		close(fd[0]);
 	}
 	signal(SIGQUIT, SIG_DFL);
-	input_r(current, params->rank_cmd);
-	output(current);
+	input_r(current, params->rank_cmd, params, 1);
+	output(current, params);
 	exec_child_builtins(params, current);
 	if (execve(current->cmd[0], current->cmd, params->envp) == -1)
 	{
@@ -239,11 +228,9 @@ void	ft_handle_child(t_params *params)
 	{
 		exec_builtins(params, (current));
 		(current) = (current)->next;
-		// return (1);
 	}
 	else
 	{
-
 		while (current != NULL)
 		{
 			if (ft_check_continue(params, &current) == 1)
@@ -260,7 +247,10 @@ void	ft_handle_child(t_params *params)
 			params->rank_cmd++;
 			current = current->next;
 			if (current && !ft_strcmp(current->cmd[0], "|"))
+			{
+				params->rank_cmd++;
 				current = current->next;
+			}
 		}
 	}
 }
@@ -296,12 +286,9 @@ void	wait_pid(t_params *params, t_cmd *current, int status)
 
 void	exec_cmd(t_params *params)
 {
-	t_cmd	*current;
 	int		status;
 
-	current = params->command;
-	params->fd_in = dup(STDIN_FILENO);
-	params->fd_out = dup(STDOUT_FILENO);
+	status = 0;
 	if (params->envp)
 		free_array(params->envp);
 	params->envp = put_envp(params);
@@ -312,13 +299,10 @@ void	exec_cmd(t_params *params)
 		cleanup_and_exit(params, EXIT_FAILURE);
 	}
 	ft_memset(params->pid_tab, 0, sizeof(pid_t) * ft_get_pid_nbr(params));
-	status = 0;
 	ft_handle_child(params);
-	current = params->command;
-	wait_pid(params, current, status);
+	if (!(isbuiltins(params->command->cmd[0]) && params->command->next == NULL))
+		wait_pid(params, params->command, status);
 	free(params->pid_tab);
 	dup2(params->fd_in, STDIN_FILENO);
 	dup2(params->fd_out, STDOUT_FILENO);
-	close(params->fd_in);
-	close(params->fd_out);
 }

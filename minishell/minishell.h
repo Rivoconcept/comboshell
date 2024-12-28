@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 10:59:51 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 17:08:31 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # define HISTORY_FILE ".old_history"
 # define READLINE_IGN ".readline.ign"
 
-extern volatile sig_atomic_t	g_sig_num;
+extern pid_t	g_sig_num;
 
 typedef struct s_env
 {
@@ -92,59 +92,76 @@ typedef struct s_here_data
 	int							quote;
 }								t_here_data;
 
-// l_del_utils.c
-void							handle_out_redirection(t_cmd *out,
-									int *out_rank, int *i, const char *type);
-void							del_here(t_cmd *input, int *in_rank, int here,
-									int *i);
-void							del_less(t_cmd *input, int *in_rank, int *i);
-
-/// l_expand.c
-char							*expand_variable_in_input(char *line,
-									t_params *params);
-// l_ft_check.c
-int								check_less(t_params *params);
-int								check_infile(t_cmd *current);
-void							manage_less(t_params *params);
-void							reset_cmd_flags(t_cmd *cmd);
-
-// l_ft_utils_6.c
-void							*ft_realloc(void *ptr, size_t old_size,
-									size_t new_size);
-char							*ft_strcat(char *dest, char *src);
-char							*ft_strcpy(char *s1, char *s2);
-char							*ft_strndup(const char *s, size_t size);
-
-// l_ft_utils_7.c
-char							*ft_subfirst(char *s, unsigned int start,
-									size_t len);
-char							*ft_substrj(char *s, unsigned int start,
-									size_t len);
-char							*join_argv(char **argv);
-
 // l_handle_here.c
-void							handle_here(char *delimiter,
-									char **here_content, t_here_data *here_data,
-									t_params *params);
+int handle_here(char *delimiter, char **here_content, t_here_data *here_data, t_params *params);
+//l_expand.c
+char *expand_variable_in_input(char *line, t_params *params);
+//l_del_utils.c
+void handle_out_redirection(t_cmd *out, int *out_rank, int *i, const char *type);
+void del_here(t_cmd *input, int *in_rank, int here, int *i);
+void del_less(t_cmd *input, int *in_rank, int *i);
+void free_cmd_fields(t_cmd *cmd);
 
-// l_here_doc_utils.c
-void							manage_here(t_params *params);
+//l_ft_utils_5.c
+void reset_cmd_flags(t_cmd *cmd);
 
-// l_here_doc.c
-void							process_here(char **keys, int j,
-									t_params *params);
+//l_ft_utils_6.c
+//void process_command(t_params *params, char **parsed);
 
-// l_inout_utils.c
-int								open_file(char *filename, int flags);
-void							dup2_stdout(int fd_out, char *filename);
-int								open_input_file(char *filename, int flags);
-void							dup2_stdin(int fd_in, char *filename);
-char							*prepare_temp_file(int num_cmd);
+//l_inout_utils.c
+int open_file(char *filename, t_params *params, int flags);
+void dup2_stdout(int fd_out, char *filename);
+int open_input_file(char *filename, t_params *params, int flags, int child);
+int open_input_here(char *filename, t_params *params, int flags, int child);
+void dup2_stdin(int fd_in, char *filename);
+char *prepare_temp_file(int num_cmd);
 
-// l_redirection.c
-void							manage_red(t_params *params);
-void							input_r(t_cmd *current, int num_cmd);
-void							output(t_cmd *current);
+// clean_arg.c
+char *join_argv(char **argv);
+
+// ft_check.c
+int check_less(t_params *params);
+int check_infile(t_cmd *current);
+void manage_less(t_params *params);
+
+// ft_strcat.c
+char *ft_strcat(char *dest, char *src);
+
+// ft_strcmp.c
+//int	ft_strcmp(const char *first, const char *second);
+
+// ft_strcpy.c 
+char    *ft_strcpy(char *s1, char *s2);
+
+// ft_strndup.c
+char	*ft_strndup(const char *s, size_t size);
+
+// ft_realloc.c
+//void *ft_realloc(void *ptr, size_t new_size);
+void *ft_realloc(void *ptr, size_t old_size, size_t new_size);
+
+// ft_subfirst.c
+char	*ft_subfirst(char *s, unsigned int start, size_t len);
+char	*ft_substrj(char *s, unsigned int start, size_t len);
+
+// here_doc_utils.c
+//char **here_key(char *input);
+//char **here_key(char **input);
+int is_char_valid(const char *input);
+int manage_here(t_params *params);
+
+// here_doc.c
+//void process_here(char **input, char **keys, int j);
+int process_here(char **keys, int j, t_params *params);
+
+
+// redirection.c
+//t_element *redirect_io(t_element **elements, t_redirections *redirs);
+//t_redirection *add_red(e_tokentype type, char *value, int rank);
+//void free_redirections(t_redirections *redirs);
+void manage_red(t_params *params);
+void input_r(t_cmd *current, int num_cmd, t_params *params, int child);
+void output(t_cmd *current, t_params *params);
 
 /**********************GET_NEXT_LINE ****************************************************************/
 

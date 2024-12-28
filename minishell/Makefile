@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+         #
+#    By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 13:00:11 by rhanitra          #+#    #+#              #
-#    Updated: 2024/12/27 09:06:36 by rhanitra         ###   ########.fr        #
+#    Updated: 2024/12/27 17:52:48 by rrakoton         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,9 +19,9 @@ MINISHELL = r_check_behavior.c r_exec.c r_format_argv_1.c \
 			r_ft_export_4.c r_ft_history.c r_ft_parser.c r_ft_pwd.c \
 			r_ft_unset.c r_ft_utils_1.c r_ft_utils_2.c r_ft_utils_3.c \
 			r_ft_utils_4.c r_ft_utils_5.c r_signal.c \
-			l_del_utils.c l_expand.c l_ft_check.c l_ft_utils_6.c \
-			l_ft_utils_7.c l_handle_here.c l_here_doc_utils.c \
-			l_here_doc.c l_inout_utils.c l_redirection.c \
+			l_here_doc.c l_here_doc_utils.c l_ft_utils_5.c l_ft_utils_6.c \
+			l_ft_check.c l_redirection.c l_inout_utils.c l_del_utils.c \
+			l_expand.c l_handle_here.c \
 			get_next_line_utils.c get_next_line.c main.c
 						   
 DIR_MINISHELL = ./

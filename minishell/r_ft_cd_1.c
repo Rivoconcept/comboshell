@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 15:11:07 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 08:53:51 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 12:06:07 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,6 @@ char	*return_new_path(const char *arg, t_params *params)
 		perror("Error on getcwd");
 		return (ft_strdup(""));
 	}
-	if (arg == NULL || (!ft_strcmp(arg, "~") && ft_strlen(arg) == 1))
-	{
-		free(cwd);
-		return (ft_getenv(params, "HOME"));
-	}
 	dirs = ft_split(arg, '/');
 	if (arg[0] == '~')
 		return (format_tilde(params, dirs, cwd));
@@ -81,12 +76,12 @@ void	handle_cd(int *i, char *arg, char *new_path, t_params *params)
 		ft_strlcpy(new_path, temp, 256);
 		free(temp);
 	}
-	if (arg[0] == '~')
+	if (arg && arg[0] == '~')
 	{
 		temp = return_new_path(arg, params);
 		ft_strlcpy(new_path, temp, 256);
 		free(temp);
 	}
-	if (!ft_strncmp(arg, "/", ft_strlen(arg)))
+	if (arg && !ft_strncmp(arg, "/", ft_strlen(arg)))
 		ft_strlcpy(new_path, "/", 256);
 }

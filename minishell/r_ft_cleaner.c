@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   r_ft_cleaner.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:40:14 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 09:17:09 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 17:02:42 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,24 @@ void	free_list_cmd(t_cmd *command)
 	while (command != NULL)
 	{
 		temp = command->next;
-		// if (command->less)
-		// 	free(command->less);
-		// command->less = NULL;
-		// if (command->dgreat)
-		// 	free(command->dgreat);
-		// command->dgreat = NULL;
-		// if (command->great)
-		// 	free(command->great);
-		// command->great = NULL;
+		if (command->less) {
+        	free(command->less);
+        	command->less = NULL;
+		}
+		if (command->great) {
+			free(command->great);
+			command->great = NULL;
+		}
+		if (command->dgreat) {
+			free(command->dgreat);
+			command->dgreat = NULL;
+		}
+		command->here = 0;
+		command->rank_here = 0;
+		command->flag_less = 0;
+		command->rank_less = 0;
+		command->rank_great = 0;
+		command->rank_dgreat = 0;
 		free_array(command->cmd);
 		command->cmd = NULL;
 		if (command)
@@ -95,10 +104,6 @@ void	cleanup_and_exit(t_params *params, int status)
 {
 	if (params)
 	{
-		// if (params->new_input)
-		// 	free(params->new_input);
-		// if (params->parsed)
-		// 	free_array(params->parsed);
 		if (params->myenvp)
 			free_list_env(params->myenvp);
 		if (params->myexport)

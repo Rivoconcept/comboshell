@@ -3,24 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   r_signal.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:11:18 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/24 14:21:16 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:57:57 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+pid_t	g_sig_num = 0;
 void	sig_handler(int signal)
 {
+	int fd[2];
+	
+	pipe(fd);
 	if (signal == SIGINT)
 	{
-		g_sig_num = SIGINT;
-		write(1, "\n", 1);
+		write(fd[1], "\n", 1);
+		close(fd[1]);
+		dup2(fd[0], STDIN_FILENO);
 		rl_replace_line("", 0);
+		close(fd[0]);
+		g_sig_num = SIGINT;
+		/*write(1, "\n", 1);
 		rl_on_new_line();
-		rl_redisplay();
+		rl_redisplay();*/
 	}
 }
 
