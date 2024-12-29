@@ -6,13 +6,13 @@
 #    By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 13:00:11 by rhanitra          #+#    #+#              #
-#    Updated: 2024/12/28 10:45:00 by rhanitra         ###   ########.fr        #
+#    Updated: 2024/12/29 07:33:28 by rhanitra         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-MINISHELL = r_check_behavior.c r_exec.c r_format_argv_1.c \
-			r_format_argv_2.c r_format_cmd_1.c r_format_cmd_2.c \
-			r_format_input.c r_format_quotes_1.c r_format_quotes_2.c \
+MINISHELL = r_check_behavior.c r_exec.c r_format_argv_1.c r_format_argv_2.c \
+			r_format_cmd_1.c r_format_cmd_2.c r_format_input_1.c  \
+			r_format_input_2.c r_format_quotes_1.c r_format_quotes_2.c \
 			r_format_quotes_3.c r_ft_builtins.c r_ft_cd_1.c r_ft_cd_2.c \
 			r_ft_cleaner.c r_ft_echo.c r_ft_env_1.c r_ft_env_2.c r_ft_env_3.c \
 			r_ft_exit.c r_ft_export_1.c r_ft_export_2.c r_ft_export_3.c \

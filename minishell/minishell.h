@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/28 17:03:54 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/29 08:32:02 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,12 +220,18 @@ t_cmd							*create_new_list_cmd(char **argv);
 t_cmd							*add_command(t_cmd *command, char **argv);
 t_params						*create_list_params(char **envp);
 
-// r_format_input.c
-int								is_operator(char c, char *operators);
-int								put_new_size(char *input, char *operators);
+// r_format_input_1.c
+int								is_operator(char c);
+int								put_new_size(char *input);
 void							add_spaces(char *new_str, char *input, int *i,
 									int *j);
-char							*format_input(char *input, char *operators);
+void							check_left_quote(char *input, int *j, int *lquote);
+void							check_right_quote(char *input, int *k, int *rquote);
+
+// r_format_input_2.c
+int 							check_pipe_out_quote(char *input, int i, char c);
+int 							check_echo(char *s, int *i, char *new_str, int *j);
+char							*format_input(char *input);
 
 // r_format_quotes_1.c
 int								echap_quote(char c, int *in_single_quote,

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/28 19:37:53 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/29 07:51:07 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,14 +261,14 @@ void	run_minishell(t_params *params)
 		}
 		clean_ctrl_d(input, params);
 		handle_history(input);
-		if (check_general_errors(input, params))
+		/*if (check_general_errors(input, params))
 		{
 			free(input);
 			continue ;
-		}
+		}*/
 		// if (add_cmd_in_params(input, params))
 		// 	continue ;
-		params->new_input = format_input(input, "|");
+		params->new_input = format_input(input);
 		free(input);
 		input = NULL;
 		if (!params->new_input)
