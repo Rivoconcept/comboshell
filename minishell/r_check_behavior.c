@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:03:19 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/28 15:46:06 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/29 09:37:32 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,26 +46,32 @@ int	pass_error_test_1(char *s)
 		return (printf("minishell: syntax error near unexpected \
 		token '<>'\n"));
 	if ((check_str(s, "><<<", "<> ") || check_str(s, " <<<", "<> ")
-		|| !ft_strncmp(s, "<<<<<<", ft_strlen("<<<<<<"))) && find_char(s, '<'))
+		|| !ft_strncmp(s, "<<<<<<", 6)) && find_char(s, '<'))
 		return (printf("minishell: syntax error near unexpected \
 		token '<<<'\n"));
 	if ((check_str(s, " <<", "<> ") || check_str(s, "><<", "<> ")
-		|| !ft_strncmp(s, "<<<<<", ft_strlen("<<<<<"))) && find_char(s, '<'))
+		|| !ft_strncmp(s, "<<<<<", 5)) && find_char(s, '<'))
 		return (printf("minishell: syntax error near unexpected \
 		token '<<'\n"));
-	if ((check_str(s, " <", "<> ") || check_str(s, "><", "<> ") || !ft_strncmp(s,
-			"<<<<", ft_strlen("<<<<"))) && find_char(s, '<'))
+	if ((check_str(s, " <", "<> ") || check_str(s, "><", "<> ") 
+		|| !ft_strncmp(s, "<<<<", 4)) && find_char(s, '<'))
 		return (printf("minishell: syntax error near unexpected \
 		token '<'\n"));
-	if (check_str(s, " >>", "<> ") || !ft_strncmp(s, "<>>>", ft_strlen("<>>>"))
-		|| !ft_strncmp(s, ">>>>", ft_strlen(">>>>")))
+	if (check_str(s, " >>", "<> ") || !ft_strncmp(s, "<>>>", 4)
+		|| !ft_strncmp(s, ">>>>", 4))
 		return (printf("minishell: syntax error near unexpected \
 		token '>>'\n"));
 	return (0);
 }
 
-int	pass_error_test_2(char *s)
+int	pass_error_test_2(char *s, t_params *params)
 {
+	if (!ft_strncmp(s, "\0", INT_MAX) || !ft_strcmp(s, ":")
+		|| (check_is_all_space(s) && !find_char(s, '\'') && !find_char(s, '"')))
+	{
+		params->last_exit_code = 0;
+		return (1);
+	}
 	if ((ft_strncmp(s, "<>>", ft_strlen(s)) == 0 || check_str(s, " >", "<> ")
 		|| !ft_strncmp(s, ">>>", ft_strlen(">>>"))) && find_char(s, '>'))
 		return (printf("minishell: syntax error near unexpected token '>'\n"));
@@ -86,12 +92,6 @@ int	pass_errors_test_3(char *s, t_params *params)
 	char	*temp;
 
 	temp = NULL;
-	if (!ft_strncmp(s, "\n", INT_MAX) || !ft_strcmp(s, ":")
-		|| (check_is_all_space(s) && !find_char(s, '\'') && !find_char(s, '"')))
-	{
-		params->last_exit_code = 0;
-		return (1);
-	}
 	if (check_is_all_space(s) && (find_char(s, '\'') || find_char(s, '"')))
 	{
 		temp = format_quotes(s);
@@ -116,7 +116,7 @@ int	check_general_errors(char *s, t_params *params)
 	i = 0;
 	if (pass_error_test_1(s))
 		return (params->last_exit_code = 2);
-	if (pass_error_test_2(s))
+	if (pass_error_test_2(s, params))
 		return (params->last_exit_code = 2);
 	cmd = ft_split(s, '|');
 	if (!cmd || !cmd[0])

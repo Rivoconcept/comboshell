@@ -6,13 +6,13 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 14:23:32 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/28 10:44:23 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/29 09:15:17 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*int	put_size(char **argv, int i)
+int	put_size(char **argv, int i)
 {
 	int	count;
 
@@ -45,7 +45,6 @@ int	add_separator(int var[3], char ***temp, t_cmd *cmd, char **argv)
 	*temp = NULL;
 	return (0);
 }
-
 int	initialize_cmd(int var[3], char ***temp, t_cmd *cmd, char **argv)
 {
 	if (!var[2])
@@ -65,7 +64,6 @@ int	initialize_cmd(int var[3], char ***temp, t_cmd *cmd, char **argv)
 	}
 	return (0);
 }
-
 void	check_end_cmd(int var[3], char ***temp, t_cmd **cmd, char **argv)
 {
 	if (!argv[var[0] + 1] || ft_strncmp(argv[var[0] + 1], "|", 1) == 0)
@@ -78,4 +76,4 @@ void	check_end_cmd(int var[3], char ***temp, t_cmd **cmd, char **argv)
 			var[2] = 0;
 		}
 	}
-}*/
+}

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/28 18:12:03 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/29 08:54:31 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,6 @@ void	exec_child(t_params *params, t_cmd *current, int fd[2])
 	if (execve(current->cmd[0], current->cmd, params->envp) == -1)
 	{
 		perror("execve");
-		free_list_cmd(params->command);
 		cleanup_and_exit(params, 127);
 	}
 }
