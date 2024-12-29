@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/29 09:29:36 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/29 18:07:28 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,7 @@ int	handle_history(char *input)
 	}
 	return (0);
 }
-
-int	add_cmd_in_params(char *input, t_params *params)
+void	handle_command(char *input, t_params *params)
 {
 	params->new_input = format_input(input);
 	free(input);
@@ -52,18 +51,31 @@ int	add_cmd_in_params(char *input, t_params *params)
 	params->parsed = parse_command(params->new_input);
 	free(params->new_input);
 	params->command = init_command(params->parsed);
+}
+
+int	add_cmd_in_params(char *input, t_params *params)
+{
+	handle_command(input, params);
 	if (check_error_var_temp(params->parsed[0]) && !params->parsed[1])
+	{
+		free_array(params->parsed);
 		return (1);
+	}
 	free_array(params->parsed);
+	params->parsed = NULL;
 	if(manage_here(params)) 
 		return (1);
 	manage_less(params);
 	manage_red(params);
+	if (!params->command)
+		return (1);
 	format_all_variable(params);
-	delete_quotes(params);
-	format_cmd(params);
 	delete_cmd_null(params);
 	delete_null_in_argv(params);
+	delete_quotes(params);
+	format_cmd(params);
+	if (check_errors(params))
+		return (1);
 	exec_cmd(params);
 	params->rank_cmd = 0;
 	free_list_cmd(params->command);
@@ -77,11 +89,6 @@ int handle_ctrl_c(t_params *params, char *input)
 		free(input);
 		g_sig_num = 0;
 		params->last_exit_code = 130;
-		return (1);
-	}
-	if (check_general_errors(input, params))
-	{
-		free(input);
 		return (1);
 	}
 	return (0);
@@ -103,14 +110,11 @@ void	run_minishell(t_params *params)
 			continue ;
 		clean_ctrl_d(input, params);
 		handle_history(input);
-		if (check_general_errors(input, params))
+		if (check_general_errors(input, params) 
+			|| add_cmd_in_params(input, params))
 		{
-			free(input);
-			continue ;
-		}
-		if (add_cmd_in_params(input, params))
-		{
-			free_list_cmd(params->command);
+			if (params->command)
+				free_list_cmd(params->command);
 			continue ;
 		}
 	}

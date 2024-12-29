@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l_here_doc_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:40:36 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/28 09:58:26 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/29 14:39:21 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@ int is_char_valid(const char *input) {
         return 1;
     while(i < ft_strlen(input))
     {
-        if(!ft_isalnum(input[i]) && input[i]!= '"' && input[i] != '\'' && input[i] != '_')
+        if(!ft_isalnum(input[i]) && input[i]!= '"' 
+            && input[i] != '\'' && input[i] != '_' 
+            && input[i] != '$' && input[i] != '.' && input[i] != '-')
         {
             return (0);
         }

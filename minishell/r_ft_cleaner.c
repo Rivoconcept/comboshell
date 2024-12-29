@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:40:14 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/28 17:30:41 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/29 15:02:41 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,11 @@ void	cleanup_and_exit(t_params *params, int status)
 			free_array(params->envp);
 		if (params->pid_tab)
 			free(params->pid_tab);
+		if (params->parsed)
+		{
+			free_array(params->parsed);
+			params->parsed = NULL;
+		}
 		if (params->command)
 			free_list_cmd(params->command);
 		free(params);

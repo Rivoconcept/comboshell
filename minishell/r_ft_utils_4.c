@@ -6,45 +6,25 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/28 10:36:22 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/29 17:58:53 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	isoperator(char *input)
+void	perror_msg(char *path, char *error)
 {
-	int		i;
-	char	*op[11];
-
-	if (!input)
-		return (0);
-	op[0] = ">";
-	op[1] = ">>";
-	op[2] = "<";
-	op[3] = "<<";
-	op[4] = "&";
-	op[5] = "&&";
-	op[6] = "|";
-	op[7] = "||";
-	op[8] = ";";
-	op[9] = ";;";
-	op[10] = NULL;
-	i = 0;
-	while (op[i] != NULL)
-	{
-		if (!ft_strncmp(input, op[i], ft_strlen(op[i])))
-			return (1);
-		i++;
-	}
-	return (0);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(path, 2);
+	ft_putstr_fd(error, 2);
 }
+
 int	check_errors_path(char *path, char *parent_path, struct stat *statbuf,
 		char *last_slash)
 {
 	if (path[0] != '/' && access(path, X_OK) != 0)
 	{
-		printf("minishell: %s: command not found\n", path);
+		perror_msg((char *)path, ": command not found\n");
 		return (127);
 	}
 	if (last_slash && last_slash != parent_path)
@@ -57,7 +37,7 @@ int	check_errors_path(char *path, char *parent_path, struct stat *statbuf,
 		}
 		if (!S_ISDIR(statbuf->st_mode))
 		{
-			printf("minishell: %s: Not a directory\n", path);
+			perror_msg((char *)path, ": Not a directory\n");
 			return (126);
 		}
 	}
@@ -80,69 +60,13 @@ int	check_path(const char *path, t_params *params)
 		return (params->last_exit_code);
 	if (stat(path, &statbuf) != 0)
 	{
-		printf("minishell: %s: No such file or directory\n", path);
+		perror_msg((char *)path, ": No such file or directory\n");
 		return (127);
 	}
 	if (S_ISDIR(statbuf.st_mode))
 	{
-		printf("%s: is a directory\n", path);
+		perror_msg((char *)path, ": is a directory\n");
 		return (126);
 	}
 	return (0);
-}
-int	pre_test(char *arg, t_params *params)
-{
-	if (arg && ft_strncmp(arg, "|", 2) == 0)
-	{
-		printf("minishell: syntax error near unexpected token `%s'\n", arg);
-		params->last_exit_code = 2;
-		return (1);
-	}
-	if (arg && ft_strncmp(arg, "||", 3) == 0)
-	{
-		printf("minishell: syntax error near unexpected token `%s'\n", arg);
-		params->last_exit_code = 2;
-		return (1);
-	}
-	return (0);
-}
-
-void	check_cmd_not_found(t_params *params, char *cmd, int *i)
-{
-	int	status;
-
-	status = 0;
-	if (!isbuiltins(cmd))
-	{
-		status = check_path(cmd, params);
-		if (status)
-		{
-			params->last_exit_code = status;
-			(*i)++;
-		}
-	}
-}
-
-int	check_errors(t_params *params)
-{
-	int		i;
-	t_cmd	*current;
-
-	i = 0;
-	current = params->command;
-	while (current != NULL)
-	{
-		if ((ft_strncmp(current->cmd[0], "|", 1) == 0 && current->previous->cmd
-			&& is_command(params, current->previous->cmd[0])))
-		{
-			if (current->next == NULL)
-				return (printf("minishell: command after pipe not found\n"),
-					params->last_exit_code = 127, 1);
-			current = current->next;
-			continue ;
-		}
-		check_cmd_not_found(params, current->cmd[0], &i);
-		current = current->next;
-	}
-	return (i);
 }

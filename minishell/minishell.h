@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/29 09:38:02 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/29 17:34:17 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,11 +187,25 @@ int					pass_error_test_1(char *s);
 int					pass_error_test_2(char *s, t_params *params);
 int					check_general_errors(char *s, t_params *params);
 
-// r_exec
-void				clean_pipe_fd(int ***fd, int pipe_count);
-int					put_nbr_pipes(t_cmd *command);
-void				init_pipe_fd(int ***fd, t_params *params);
-int					setup_pipe(int **fd, t_cmd *current, int i);
+// r_exec_1.c
+int					ft_get_pid_nbr(t_params *params);
+void				exec_builtins(t_params *params, t_cmd *current);
+int					ft_check_continue(t_params *params, t_cmd **current);
+void				check_fork_error(t_params *params, t_cmd *current, int tab,
+						int fd[2]);
+void				exec_child_builtins(t_params *params, t_cmd *current);
+
+// r_exec_2.c
+void				exec_child(t_params *params, t_cmd *current, int fd[2]);
+void				exec_child_process(t_params *params, t_cmd *current,
+						int tab, int fd[2]);
+int					call_exec_builtins(t_params *params);
+void				check_pipe_error(t_cmd *current, int fd[2],
+						t_params *params);
+void				ft_handle_child(t_params *params);
+
+// r_exec_3.c
+void				wait_pid(t_params *params, t_cmd *current, int status);
 void				exec_cmd(t_params *params);
 
 // r_format_argv_1.c
@@ -215,6 +229,7 @@ char				*check_access(char *command, char *path);
 char				*put_path(char **dirs, char *command);
 char				*check_cmd_standard(t_params *params, char *command);
 void				format_cmd(t_params *params);
+void				delete_null_in_argv(t_params *params);
 
 // r_format_cmd_2.c
 t_cmd				*create_new_list_cmd(char **argv);
@@ -399,9 +414,8 @@ int					delete_cmd_null(t_params *params);
 void				sig_handler(int signal);
 void				signal_handlers(int sign);
 
-t_cmd				*remove_element_cmd(t_cmd *head, t_cmd *to_remove);
-void				format_keys(char *str);
-int					delete_cmd_null(t_params *params);
-void				delete_null_in_argv(t_params *params);
+void				print_list(t_cmd *command);
+void				print_argv(char **argv);
+void				print_cmd(t_params *params);
 
 #endif

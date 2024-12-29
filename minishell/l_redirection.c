@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l_redirection.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 08:20:34 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/28 10:08:04 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/29 14:41:29 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,6 @@ void input_r(t_cmd *current, int num_cmd, t_params *params, int child) {
             }
         } else if (current->here >= 0) {
             file = prepare_temp_file(num_cmd);
-            printf("\n%s", file);
             fd_in = open_input_here(file, params, O_RDONLY, child);
             if (fd_in >= 0)
             {

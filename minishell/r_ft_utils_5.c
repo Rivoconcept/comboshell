@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/28 09:19:22 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/29 17:59:04 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,27 @@ int	is_command(t_params *params, char *command)
 		return (0);
 	free(full_path);
 	return (1);
+}
+
+int	check_errors(t_params *params)
+{
+	int		i;
+	t_cmd	*current;
+
+	i = 0;
+	current = params->command;
+	while (current != NULL)
+	{
+		if ((ft_strncmp(current->cmd[0], "|", 1) == 0 && current->previous->cmd
+			&& is_command(params, current->previous->cmd[0])))
+		{
+			if (current->next == NULL)
+				return (printf("minishell: command after pipe not found\n"),
+					params->last_exit_code = 127, 1);
+			current = current->next;
+			continue ;
+		}
+		current = current->next;
+	}
+	return (i);
 }

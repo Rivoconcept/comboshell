@@ -43,4 +43,5 @@ void	print_list(t_cmd *command)
 		printf("\n");
 		command = command->next;
 	}
+	printf("*********************************************\n");
 }
