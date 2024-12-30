@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_exec_2.c                                         :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/29 17:37:15 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/30 14:01:25 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 int	check_cmd_not_found(t_params *params, char *cmd)
@@ -17,6 +17,14 @@ int	check_cmd_not_found(t_params *params, char *cmd)
 	status = 0;
 	if (!isbuiltins(cmd))
 	{
+		if (cmd == NULL)
+			return (1);
+		if (is_operator(cmd[0]))
+		{
+			perror_msg(cmd, ": syntax error near unexpected symbol or newline\n");
+			params->last_exit_code = 2;
+			return (1);
+		}
 		status = check_path(cmd, params);
 		if (status)
 		{
@@ -26,6 +34,7 @@ int	check_cmd_not_found(t_params *params, char *cmd)
 	}
 	return (0);
 }
+
 void	exec_child(t_params *params, t_cmd *current, int fd[2])
 {
 	close(params->fd_in);
@@ -90,6 +99,7 @@ int	call_exec_builtins(t_params *params)
 	}
 	return (0);
 }
+
 void	check_pipe_error(t_cmd *current, int fd[2], t_params *params)
 {
 	if (current->next && !ft_strcmp(current->next->cmd[0], "|"))

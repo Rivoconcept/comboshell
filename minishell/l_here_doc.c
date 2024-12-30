@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   l_here_doc.c                                       :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:41:20 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/28 11:56:43 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/30 13:52:19 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -30,16 +30,6 @@ static int	process_quotes(char **key)
 	}
 	return (quote);
 }
-/*void format_keys(char *str)
-{
-	char    *temp;
-
-	if (!str)
-		return ;
-	temp = format_input(str, "<> ");
-	free(str);
-	str = temp;
-}*/
 
 int	process_here(char **keys, int j, t_params *params)
 {

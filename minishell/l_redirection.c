@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   l_redirection.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 08:20:34 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/29 14:41:29 by rrakoton         ###   ########.fr       */
+/*   Updated: 2024/12/30 14:32:14 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -212,29 +212,42 @@ void manage_red(t_params *params) {
     free_commands_and_nodes_if_empty(params);
 }
 
+void clean_temp_file(int fd_in, char *file)
+{
+    dup2_stdin(fd_in, file);
+    unlink(file);
+    free(file);
+    close(fd_in);
+}
 
-void input_r(t_cmd *current, int num_cmd, t_params *params, int child) {
+void input_r(t_cmd *current, int num_cmd, t_params *params, int child)
+{
     int fd_in;
     char *file;
 
-    if (current->here >= 0 || current->less) {
-        if (current->less && (current->here < 0 || current->rank_here < current->rank_less)) {
+    if (current->here >= 0 || current->less)
+    {
+        if (current->less && (current->here < 0 || current->rank_here < current->rank_less))
+        {
             fd_in = open_input_file(current->less, params, O_RDONLY, child);
             if (fd_in >= 0)
             {
                 dup2_stdin(fd_in, current->less);
                 close(fd_in);
             }
-        } else if (current->here >= 0) {
+        } else if (current->here >= 0)
+        {
             file = prepare_temp_file(num_cmd);
             fd_in = open_input_here(file, params, O_RDONLY, child);
             if (fd_in >= 0)
             {
+                // clean_temp_file(fd_in, file);
                 dup2_stdin(fd_in, file);
                 unlink(file);
                 free(file);
                 close(fd_in);
             }
+            free(file);
         }
     }
 }

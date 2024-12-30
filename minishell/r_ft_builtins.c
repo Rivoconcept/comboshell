@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_ft_builtins.c                                    :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 20:57:46 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 09:40:02 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/30 14:48:36 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -17,6 +17,8 @@ int	isbuiltins(char *command)
 	int		i;
 	char	*builtins[8];
 
+	if (!command || command == NULL)
+		return (0);
 	builtins[0] = "echo";
 	builtins[1] = "cd";
 	builtins[2] = "pwd";
@@ -28,13 +30,14 @@ int	isbuiltins(char *command)
 	i = 0;
 	while (builtins[i] != NULL)
 	{
-		if (!ft_strcmp(command, builtins[i])
+		if (!ft_strncmp(command, builtins[i], ft_strlen(builtins[i]))
 			&& ft_strlen(command) == ft_strlen(builtins[i]))
 			return (1);
 		i++;
 	}
 	return (0);
 }
+
 int	cmd_not_found(t_params *params)
 {
 	t_cmd	*current;

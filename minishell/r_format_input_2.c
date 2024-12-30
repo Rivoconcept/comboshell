@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_format_input_2.c                                 :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 11:04:32 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/29 14:46:49 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/30 13:43:35 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -32,13 +32,14 @@ int check_pipe_out_quote(char *input, int i, char c)
     }
     return (0);
 }
+
 int check_echo(char *s, int *i, char *new_str, int *j)
 {
     if (!s || *i < 0)
         return (0);
 
-    if (s[*i] == 'e' && s[*i + 1] == 'c' 
-        && s[*i + 2] == 'h' && s[*i + 3] == 'o')
+    if ((s[*i] == 'e' && s[*i + 1] == 'c'  
+        && s[*i + 2] == 'h' && s[*i + 3] == 'o'))
     {
         new_str[(*j)++] = s[(*i)++];
         new_str[(*j)++] = s[(*i)++];
@@ -46,7 +47,9 @@ int check_echo(char *s, int *i, char *new_str, int *j)
         new_str[(*j)++] = s[(*i)++];
         while (s[*i] != '\0')
         {
-			if (s[*i] ==  '|' && check_pipe_out_quote(s, *i, '|'))
+			if ((s[*i] ==  '|' && check_pipe_out_quote(s, *i, '|'))
+                || (s[*i] ==  '<' && check_pipe_out_quote(s, *i, '<'))
+                || (s[*i] ==  '>' && check_pipe_out_quote(s, *i, '>')))
 					break;
             new_str[(*j)++] = s[(*i)++];
         }
@@ -54,6 +57,7 @@ int check_echo(char *s, int *i, char *new_str, int *j)
     }
     return (0);
 }
+
 char *format_input(char *input)
 {
     int i;

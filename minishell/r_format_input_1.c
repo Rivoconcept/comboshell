@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_format_input_1.c                                 :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 11:04:32 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/29 08:38:19 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/30 10:53:58 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -58,10 +58,10 @@ int	put_new_size(char *input)
 
 void add_spaces(char *new_str, char *input, int *i, int *j)
 {
-    if (*i > 0 && !is_operator(input[*i - 1]) && input[*i - 1] != ' ')
+    if (*i > 0 && input[*i - 1] != input[*i] && input[*i - 1] != ' ')
         new_str[(*j)++] = ' ';
     new_str[(*j)++] = input[*i];
-    if (input[*i + 1] != '\0' && !is_operator(input[*i + 1]) 
+    if (input[*i + 1] != '\0' && input[*i + 1] != input[*i] 
         && input[*i + 1] != ' ')
     {
         if (input[*i + 1] == input[*i])

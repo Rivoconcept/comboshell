@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/29 17:34:17 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/30 14:40:05 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -125,8 +125,8 @@ char				*join_argv(char **argv);
 
 // ft_check.c
 int					check_less(t_params *params);
-int					check_infile(t_cmd *current);
-void				manage_less(t_params *params);
+int					check_infile(t_cmd *current, t_params *params);
+int					manage_less(t_params *params);
 
 // ft_strcat.c
 char				*ft_strcat(char *dest, char *src);
@@ -383,16 +383,18 @@ int					ft_strcmp(const char *s1, const char *s2);
 int					putchar_count(const char *src, char c);
 
 // r_ft_utils_4.c
-int					isoperator(char *input);
-int					check_path(const char *path, t_params *params);
-int					pre_test(char *arg, t_params *params);
-int					check_errors(t_params *params);
+void	perror_msg(char *path, char *error);
+int	check_errors_path(char *path, char *parent_path, struct stat *statbuf,
+		char *last_slash);
+int	check_path(const char *path, t_params *params);
+
 
 // r_ft_utils_5.c
 int					check_is_all_space(char *input);
 char				*check_is_path(char *command, char *path);
 char				*check_access_path(char **dirs, char *command);
 int					is_command(t_params *params, char *command);
+int					check_errors(t_params *params);
 
 // r_init_cmd_1.c
 int					put_size(char **argv, int i);

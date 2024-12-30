@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/30 08:24:58 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/30 15:05:47 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -59,35 +59,42 @@ int	add_cmd_in_params(char *input, t_params *params)
 	if (check_error_var_temp(params->parsed[0]) && !params->parsed[1])
 	{
 		free_array(params->parsed);
+		if (params->command)
+			free_list_cmd(params->command);
 		return (1);
 	}
 	free_array(params->parsed);
 	params->parsed = NULL;
 	if(manage_here(params))
 	{
-		free_list_cmd(params->command);
+		if (params->command)
+			free_list_cmd(params->command);
 		return (1);
 	}
-	manage_less(params);
+	if (manage_less(params))
+	{
+		if (params->command)
+			free_list_cmd(params->command);
+		return (1);
+	}
 	manage_red(params);
 	if (!params->command)
-	{
-		free_list_cmd(params->command);
 		return (1);
-	}
 	format_all_variable(params);
 	delete_cmd_null(params);
 	delete_null_in_argv(params);
 	delete_quotes(params);
 	format_cmd(params);
-	if (check_errors(params))
+	/*if (check_errors(params))
 	{
-		free_list_cmd(params->command);
+		if (params->command)
+			free_list_cmd(params->command);
 		return (1);
-	}
+	}*/
 	exec_cmd(params);
 	params->rank_cmd = 0;
-	free_list_cmd(params->command);
+	if (params->command)
+		free_list_cmd(params->command);
 	return (0);
 }
 int handle_ctrl_c(t_params *params, char *input)
