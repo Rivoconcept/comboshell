@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:03:19 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/30 18:22:05 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/30 22:07:41 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,61 @@ int	check_error_newline(char *s)
 	return (0);
 }
 
+int check_first_pipe(char *input)
+{
+    int i;
+
+    if (!input)
+        return (0);
+    i = 0;
+    while (input[i] && ft_is_space(input[i]))
+        i++;
+    if (input[i] == '|')
+        return (1);
+    return (0);
+}
+
+int check_return_zero(char *input)
+{
+    int i;
+
+    if (!input)
+        return (0);
+	if (check_is_all_space(input) && !find_char(input, '\'') && !find_char(input, '"'))
+        return (1);
+ 	if (input[i] == '\0' || input[i] == ':')
+        return (1);
+    i = 0;
+    while (input[i] && ft_is_space(input[i]))
+        i++;
+    return (0);
+}
+
+
 int	pass_error_test_1(char *s)
+{
+	char	*temp;
+
+	temp = NULL;
+	if (check_first_pipe(s))
+		return (printf("minishell: syntax error near unexpected token\n") + 1);
+	if (check_is_all_space(s) && (find_char(s, '\'') || find_char(s, '"')))
+	{
+		temp = format_quotes(s);
+		free(temp);
+		return (printf("minishell: %s: command not found\n", temp) + 126);
+	}
+	if (!ft_strcmp(s, "!"))
+		return (1);
+	/*if (check_error_newline(s))
+	{
+		printf("minishell: syntax error near unexpected token 'newline'\n");
+		return (2);
+	}*/
+	return (0);
+}
+
+int	pass_error_test_2(char *s)
 {
 	if (check_str(s, "<>", "<> ") && find_char(s, '<'))
 		return (printf("minishell: syntax error near unexpected \
@@ -62,17 +116,7 @@ int	pass_error_test_1(char *s)
 		|| !ft_strncmp(s, ">>>>", 4))
 		return (printf("minishell: syntax error near unexpected \
 		token '>>'\n"));
-	return (0);
-}
 
-int	pass_error_test_2(char *s, t_params *params)
-{
-	if (!ft_strncmp(s, "\0", INT_MAX) || !ft_strcmp(s, ":")
-		|| (check_is_all_space(s) && !find_char(s, '\'') && !find_char(s, '"')))
-	{
-		params->last_exit_code = 0;
-		return (1);
-	}
 	if ((ft_strncmp(s, "<>>", ft_strlen(s)) == 0 || check_str(s, " >", "<> ")
 		|| !ft_strncmp(s, ">>>", ft_strlen(">>>"))) && find_char(s, '>'))
 		return (printf("minishell: syntax error near unexpected token '>'\n"));
@@ -88,37 +132,29 @@ int	pass_error_test_2(char *s, t_params *params)
 		return (printf("minishell: syntax error near unexpected token ';;'\n"));
 	return (0);
 }
-int	pass_errors_test_3(char *s, t_params *params)
+/*int	pass_errors_test_3(char *s, t_params *params)
 {
-	char	*temp;
 
-	temp = NULL;
-	if (check_is_all_space(s) && (find_char(s, '\'') || find_char(s, '"')))
-	{
-		temp = format_quotes(s);
-		printf("minishell: %s: command not found\n", temp);
-		free(temp);
-		return (params->last_exit_code = 127);
-	}
-	if (!ft_strcmp(s, "!"))
-		return (params->last_exit_code = 1);
-	if (check_error_newline(s))
-	{
-		printf("minishell: syntax error near unexpected token 'newline'\n");
-		return (params->last_exit_code = 2);
-	}
+
 	return (0);
-}
+}*/
+
 int	check_general_errors(char *s, t_params *params)
 {
 	int		i;
 	char	**cmd;
 
 	i = 0;
-	if (pass_error_test_1(s))
-		return (params->last_exit_code = 2);
-	if (pass_error_test_2(s, params))
-		return (params->last_exit_code = 2);
+	if (check_return_zero(s))
+	{
+		params->last_exit_code = 0;
+		return (1);
+	}
+	params->last_exit_code = pass_error_test_1(s);
+	if (params->last_exit_code != 0)
+		return (params->last_exit_code);
+	/*if (pass_error_test_2(s, params))
+		return (params->last_exit_code = 2);*/
 	cmd = ft_split(s, '|');
 	if (!cmd || !cmd[0])
 	{
@@ -127,11 +163,11 @@ int	check_general_errors(char *s, t_params *params)
 	}
 	while (cmd[i] != NULL)
 	{
-		if (pass_errors_test_3(cmd[i], params))
+		/*if (pass_errors_test_3(cmd[i], params))
 		{
 			free_array(cmd);
 			return (1);
-		}
+		}*/
 		i++;
 	}
 	free_array(cmd);

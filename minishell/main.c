@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/30 19:10:30 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/30 20:13:27 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,12 @@ int	add_cmd_in_params(char *input, t_params *params)
 		return (1);
 	delete_quotes(params);
 	format_cmd(params);
-	/*if (check_errors(params))
+	if (check_errors(params))
 	{
 		if (params->command)
 			free_list_cmd(params->command);
 		return (1);
-	}*/
+	}
 	exec_cmd(params);
 	params->rank_cmd = 0;
 	if (params->command)
