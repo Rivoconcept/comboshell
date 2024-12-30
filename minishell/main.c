@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/30 15:05:47 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/30 19:10:30 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -82,7 +82,11 @@ int	add_cmd_in_params(char *input, t_params *params)
 		return (1);
 	format_all_variable(params);
 	delete_cmd_null(params);
+	if (!params->command)
+		return (1);
 	delete_null_in_argv(params);
+	if (!params->command)
+		return (1);
 	delete_quotes(params);
 	format_cmd(params);
 	/*if (check_errors(params))
@@ -126,9 +130,24 @@ void	run_minishell(t_params *params)
 			continue ;
 		clean_ctrl_d(input, params);
 		handle_history(input);
-		if (check_general_errors(input, params) 
-			|| add_cmd_in_params(input, params))
-			continue ;
+		/*if (check_general_errors(input, params))
+		{
+			if (params->command)
+			{
+				free_list_cmd(params->command);
+				params->command = NULL;
+			}
+			continue;
+		}*/
+		if (add_cmd_in_params(input, params))
+		{
+			if (params->command)
+			{
+				free_list_cmd(params->command);
+				params->command = NULL;
+			}
+			continue;
+		}
 	}
 }
 

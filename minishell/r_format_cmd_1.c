@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 15:13:30 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/29 16:59:17 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/30 16:25:10 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,12 @@ void	format_cmd(t_params *params)
 	current = params->command;
 	while (current != NULL)
 	{
-		if (ft_strncmp(current->cmd[0], "|", 1) == 0)
+		if (current->cmd[0] && ft_strncmp(current->cmd[0], "|", 1) == 0)
 		{
 			current = current->next;
 			continue ;
 		}
-		if (!isbuiltins(current->cmd[0]))
+		if (current->cmd[0] && !isbuiltins(current->cmd[0]))
 		{
 			cmd = check_cmd_standard(params, current->cmd[0]);
 			free(current->cmd[0]);

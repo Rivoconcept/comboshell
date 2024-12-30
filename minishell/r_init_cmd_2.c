@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 14:23:32 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/29 09:01:15 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/30 19:19:01 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ t_cmd	*init_command(char **argv)
 	var[0] = 0;
 	var[1] = 0;
 	var[2] = 0;
+	if (argv[var[0]] && ft_strncmp(argv[var[0]], "|", 1) == 0)
+	{
+		printf("minishell: syntax error near unexpected token `|'\n");
+		return (NULL);
+	}
 	while (argv[var[0]] != NULL)
 	{
 		if (ft_strcmp(argv[var[0]], "|") == 0)

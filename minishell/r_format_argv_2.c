@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 18:26:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/28 14:44:36 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/30 19:05:23 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,11 @@ void	format_variable(char **argv, t_params *params)
 	i = 0;
 	while (argv[i] != NULL)
 	{
+		if (argv[i][0] == '$' && (argv[i][1] == '\0' || argv[i][1]  == ' '))
+		{
+			i++;
+			continue;
+		}
 		tmp = format_var_env(argv[i], params);
 		if (!tmp)
 		{

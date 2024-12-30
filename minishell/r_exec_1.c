@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_exec_1.c                                         :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/30 11:37:59 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/30 15:51:13 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -21,7 +21,7 @@ int	ft_get_pid_nbr(t_params *params)
 	nbr = 0;
 	while (current != NULL)
 	{
-		if (ft_strncmp(current->cmd[0], "|", 1) == 0)
+		if (current->cmd[0] && ft_strncmp(current->cmd[0], "|", 1) == 0)
 		{
 			current = current->next;
 			continue ;
@@ -43,7 +43,7 @@ void	exec_builtins(t_params *params, t_cmd *current)
 
 int	ft_check_continue(t_params *params, t_cmd **current)
 {
-	if (!ft_strcmp((*current)->cmd[0], "|"))
+	if ((*current)->cmd[0] && !ft_strcmp((*current)->cmd[0], "|"))
 	{
 		(*current) = (*current)->next;
 		params->rank_cmd++;
