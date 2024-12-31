@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 09:43:01 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/31 17:51:32 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 19:29:59 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int	open_file(char *filename, t_params *params, int flags)
 	if (fd == -1)
 	{
 		perror("open failed");
-		free_list_cmd(params->command);
 		cleanup_and_exit(params, 1);
 		exit(1);
 	}
