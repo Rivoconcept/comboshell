@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/11 08:23:25 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/03/11 08:27:01 by rhanitra         ###   ########.fr       */
+/*   Created: 2024/12/31 18:42:14 by rhanitra          #+#    #+#             */
+/*   Updated: 2024/12/31 18:42:15 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
 
 void	ft_putnbr_fd(int n, int fd)
 {

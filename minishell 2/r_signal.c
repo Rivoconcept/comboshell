@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 11:11:18 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/31 13:08:10 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 21:37:03 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,6 @@ void	sig_handler(int signal)
 		rl_replace_line("", 0);
 		close(fd[0]);
 		g_sig_num = SIGINT;
-		/*write(1, "\n", 1);
-		rl_on_new_line();
-		rl_redisplay();*/
 	}
 }
 

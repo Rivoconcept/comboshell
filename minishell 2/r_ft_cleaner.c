@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_ft_cleaner.c                                     :+:      :+:    :+:   */
@@ -6,32 +6,11 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:40:14 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/31 09:36:31 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 21:47:00 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_array(char **arr)
-{
-	int	i;
-
-	i = 0;
-	if (!arr || arr == NULL)
-		return ;
-	while (arr[i] != NULL)
-	{
-		if (arr[i])
-		{
-			free(arr[i]);
-			arr[i] = NULL;
-		}
-		i++;
-	}
-	if (arr)
-		free(arr);
-	arr = NULL;
-}
 
 void	free_list_env(t_env *myenv)
 {
@@ -65,6 +44,31 @@ void	free_list_export(t_export *myexp)
 	}
 }
 
+void	clean_less_and_great(t_cmd *command)
+{
+	if (command->less)
+	{
+		free(command->less);
+		command->less = NULL;
+	}
+	if (command->great)
+	{
+		free(command->great);
+		command->great = NULL;
+	}
+	if (command->dgreat)
+	{
+		free(command->dgreat);
+		command->dgreat = NULL;
+	}
+	command->here = 0;
+	command->rank_here = 0;
+	command->flag_less = 0;
+	command->rank_less = 0;
+	command->rank_great = 0;
+	command->rank_dgreat = 0;
+}
+
 void	free_list_cmd(t_cmd *command)
 {
 	t_cmd	*temp;
@@ -74,24 +78,7 @@ void	free_list_cmd(t_cmd *command)
 	while (command != NULL)
 	{
 		temp = command->next;
-		if (command->less) {
-        	free(command->less);
-        	command->less = NULL;
-		}
-		if (command->great) {
-			free(command->great);
-			command->great = NULL;
-		}
-		if (command->dgreat) {
-			free(command->dgreat);
-			command->dgreat = NULL;
-		}
-		command->here = 0;
-		command->rank_here = 0;
-		command->flag_less = 0;
-		command->rank_less = 0;
-		command->rank_great = 0;
-		command->rank_dgreat = 0;
+		clean_less_and_great(command);
 		free_array(command->cmd);
 		command->cmd = NULL;
 		if (command)

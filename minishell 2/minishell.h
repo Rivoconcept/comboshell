@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/31 14:38:04 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 21:38:36 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,12 +192,10 @@ char				*read_line(int fd, int *check, char *buffer,
 char				*get_next_line(int fd);
 
 /***********************FT_RIVO************************************************************** */
-void				print_cmd(t_params *params);
-
 // ft_r_check_behavior.c
 int					pass_error_test_1(char *s);
 int					pass_error_test_2(char *s);
-int 				check_general_errors(char *s, char **cmd, t_params *params);
+int					check_general_errors(char *s, char **cmd, t_params *params);
 
 // r_exec_1.c
 int					ft_get_pid_nbr(t_params *params);
@@ -217,6 +215,7 @@ void				check_pipe_error(t_cmd *current, int fd[2],
 void				ft_handle_child(t_params *params);
 
 // r_exec_3.c
+int					check_cmd_not_found(t_params *params, char *cmd);
 void				wait_pid(t_params *params, t_cmd *current, int status);
 void				exec_cmd(t_params *params);
 
@@ -298,7 +297,6 @@ void				return_pwd(t_params *params);
 int					ft_cd(const char *arg, t_params *params);
 
 // r_ft_cleaner.c
-void				free_array(char **arr);
 void				free_list_env(t_env *myenv);
 void				free_list_export(t_export *myexp);
 void				free_list_cmd(t_cmd *command);
@@ -325,17 +323,19 @@ void				del_env_element(t_env **myenv, const char *name);
 char				*ft_getenv(t_params *params, char *name);
 int					ft_env(t_params *params);
 
-// r_ft_exit.c
+// r_ft_exit_1.c
 int					is_numeric(const char *str);
 long long int		ft_atoi_lld(const char *str);
 unsigned long long	ft_atoi_ull(const char *str);
 int					check_errors_exit(char **parsed, t_params *params);
+
+// r_ft_exit_2.c
+int					clean_arg(char *arg);
 int					ft_exit(char **parsed, t_params *params);
 
 // r_ft_export_1.c
 int					print_export(t_params *params);
 int					check_error_var_temp(char *cmd);
-int					check_var_temp(char **cmd);
 void				clean_export(char *exist_value, char *enter_value,
 						char *name);
 
@@ -395,11 +395,11 @@ int					ft_strcmp(const char *s1, const char *s2);
 int					putchar_count(const char *src, char c);
 
 // r_ft_utils_4.c
-void	perror_msg(char *path, char *error);
-int	check_errors_path(char *path, char *parent_path, struct stat *statbuf,
-		char *last_slash);
-int	check_path(const char *path, t_params *params);
-
+void				free_array(char **arr);
+void				perror_msg(char *path, char *error);
+int					check_errors_path(char *path, char *parent_path,
+						struct stat *statbuf, char *last_slash);
+int					check_path(const char *path, t_params *params);
 
 // r_ft_utils_5.c
 int					check_is_all_space(char *input);
@@ -421,6 +421,10 @@ void				check_end_cmd(int var[3], char ***temp, t_cmd **cmd,
 void				clean_cmd(t_cmd **cmd, char ***temp);
 t_cmd				*init_command(char **argv);
 void				free_command(t_cmd *command);
+
+// r_init_cmd_3.c
+void				loop_list_cmd(t_cmd **current, t_cmd *to_remove,
+						t_cmd **prev);
 t_cmd				*remove_element_cmd(t_cmd *head, t_cmd *to_remove);
 int					delete_cmd_null(t_params *params);
 
@@ -428,9 +432,5 @@ int					delete_cmd_null(t_params *params);
 int					handle_sigint(t_params *params);
 void				sig_handler(int signal);
 void				signal_handlers(int sign);
-
-void				print_list(t_cmd *command);
-void				print_argv(char **argv);
-void				print_cmd(t_params *params);
 
 #endif

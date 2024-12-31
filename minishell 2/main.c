@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/31 15:41:49 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 21:33:57 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	handle_command_1(char *input, t_params *params)
 	if (!params->new_input)
 		exit(EXIT_FAILURE);
 	params->parsed = parse_command(params->new_input);
-	print_argv(params->parsed);
 	if (check_general_errors(params->new_input, params->parsed, params))
 	{
 		free(params->new_input);

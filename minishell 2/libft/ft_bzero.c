@@ -3,18 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 09:50:18 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/03/23 08:39:42 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 18:37:02 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-// #include <unistd.h>
-#include <sys/types.h>
-// #include <stdio.h>
-// #include <string.h>
 
 void	ft_bzero(void *s, size_t n)
 {

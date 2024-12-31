@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 15:13:30 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/30 16:25:10 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 21:26:40 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ void	format_cmd(t_params *params)
 		{
 			cmd = check_cmd_standard(params, current->cmd[0]);
 			free(current->cmd[0]);
+			current->cmd[0] = NULL;
 			current->cmd[0] = cmd;
 		}
 		current = current->next;
