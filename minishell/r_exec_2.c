@@ -6,15 +6,13 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/30 14:01:25 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 09:36:02 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "minishell.h"
 int	check_cmd_not_found(t_params *params, char *cmd)
 {
-	int	status;
-	status = 0;
 	if (!isbuiltins(cmd))
 	{
 		if (cmd == NULL)
@@ -25,12 +23,9 @@ int	check_cmd_not_found(t_params *params, char *cmd)
 			params->last_exit_code = 2;
 			return (1);
 		}
-		status = check_path(cmd, params);
-		if (status)
-		{
-			params->last_exit_code = status;
-			return (1);
-		}
+		params->last_exit_code = check_path(cmd, params);
+		if (params->last_exit_code != 0)
+			return (params->last_exit_code);
 	}
 	return (0);
 }

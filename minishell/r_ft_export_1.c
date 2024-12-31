@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_ft_export_1.c                                    :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:27:25 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/28 07:38:01 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 09:12:53 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -30,20 +30,45 @@ int	print_export(t_params *params)
 	return (0);
 }
 
+int check_errors_exp(char *cmd)
+{
+	int		i;
+	int		quote;
+
+	i = 0;
+	quote = 0;
+	if (!cmd || cmd[0] == '\0' || cmd[0] == '+' || !find_char(cmd, '=')
+		||  cmd == NULL || ft_isdigit(cmd[0]))
+		return (1);
+	if (cmd[0] == '\'' || cmd[0] == '"')
+	{
+		i++;
+		quote = 1;
+	}
+	if (quote && (ft_isdigit(cmd[i]) || (!ft_isalpha(cmd[i]) && cmd[i] != '_')))
+		return (1);
+	i++;
+	while(quote && cmd[i] != '=' && (cmd[i] != '\'' || cmd[i] != '"') 
+		&& (ft_isalnum(cmd[i]) || cmd[i] == '_' 
+		|| cmd[i] == '+') && cmd[i] != ' ' )
+		i++;
+	if (cmd[i] != '=')
+		return (1);
+	return (0);
+}
+
 int	check_error_var_temp(char *cmd)
 {
 	int		i;
 	char	**argv;
 
 	i = 0;
-	if (!cmd || cmd[0] == '\0' || cmd == NULL)
-		return (0);
-	if (!cmd || !find_char(cmd, '=') || (ft_isdigit(cmd[0]) && find_char(cmd,
-				'=')))
+	if (check_errors_exp(cmd))
 		return (0);
 	argv = ft_split(cmd, '=');
 	if (!argv)
 		return (0);
+	i++;
 	while (argv[0][i] && (ft_isalnum(argv[0][i]) || argv[0][i] == '_'
 			|| argv[0][i] == '+'))
 		i++;
@@ -56,6 +81,7 @@ int	check_error_var_temp(char *cmd)
 	free_array(argv);
 	return (1);
 }
+
 void	clean_export(char *exist_value, char *enter_value, char *name)
 {
 	if (enter_value || enter_value != NULL)

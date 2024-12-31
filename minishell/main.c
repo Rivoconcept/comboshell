@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/30 20:13:27 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 11:44:43 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -41,7 +41,7 @@ int	handle_history(char *input)
 	}
 	return (0);
 }
-void	handle_command(char *input, t_params *params)
+int	handle_command_1(char *input, t_params *params)
 {
 	params->new_input = format_input(input);
 	free(input);
@@ -49,13 +49,21 @@ void	handle_command(char *input, t_params *params)
 	if (!params->new_input)
 		exit(EXIT_FAILURE);
 	params->parsed = parse_command(params->new_input);
+	print_argv(params->parsed);
+	if (check_general_errors(params->new_input, params->parsed, params))
+	{
+		free(params->new_input);
+		free_array(params->parsed);
+		return (1);
+	}
+	print_argv(params->parsed);
 	free(params->new_input);
 	params->command = init_command(params->parsed);
+	return (0);
 }
 
-int	add_cmd_in_params(char *input, t_params *params)
+int	handle_command_2(t_params *params)
 {
-	handle_command(input, params);
 	if (check_error_var_temp(params->parsed[0]) && !params->parsed[1])
 	{
 		free_array(params->parsed);
@@ -130,16 +138,9 @@ void	run_minishell(t_params *params)
 			continue ;
 		clean_ctrl_d(input, params);
 		handle_history(input);
-		/*if (check_general_errors(input, params))
-		{
-			if (params->command)
-			{
-				free_list_cmd(params->command);
-				params->command = NULL;
-			}
-			continue;
-		}*/
-		if (add_cmd_in_params(input, params))
+		if (handle_command_1(input, params))
+			continue ;
+		if (handle_command_2(params))
 		{
 			if (params->command)
 			{

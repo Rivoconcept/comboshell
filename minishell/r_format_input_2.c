@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 11:04:32 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/30 13:43:35 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 12:04:48 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -73,6 +73,13 @@ char *format_input(char *input)
         return (NULL);
     while (input[i])
     {
+        if (input[i] == '!' && 
+            (i == 0 || input[i - 1] == ' ') && 
+            (input[i + 1] == '\0' || input[i + 1] == ' '))
+        {
+            i++;
+            continue ; 
+        }
         if (check_echo(input, &i, new_str, &j))
             continue ;
         if (is_operator(input[i]))

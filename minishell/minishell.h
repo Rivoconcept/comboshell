@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/30 21:39:18 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 10:54:46 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -182,10 +182,9 @@ char				*get_next_line(int fd);
 void				print_cmd(t_params *params);
 
 // ft_r_check_behavior.c
-int					check_error_newline(char *s);
 int					pass_error_test_1(char *s);
 int					pass_error_test_2(char *s);
-int					check_general_errors(char *s, t_params *params);
+int 				check_general_errors(char *s, char **cmd, t_params *params);
 
 // r_exec_1.c
 int					ft_get_pid_nbr(t_params *params);
