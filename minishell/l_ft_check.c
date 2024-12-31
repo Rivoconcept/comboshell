@@ -6,57 +6,67 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 13:38:41 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/30 19:05:54 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:52:17 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int check_less(t_params *params)
+void	handle_head_with_next(t_params *params, t_cmd *current,
+		t_cmd *node_to_delete)
 {
-    t_cmd *current = params->command;
-
-    while (current != NULL)
-    {
-        if (current->flag_less)
-            return (1);
-        current = current->next;
-    }
-    return (0);
+	params->command = node_to_delete->next;
+	params->command->next = NULL;
+	free_cmd_fields(current);
+	free(current);
+	free_cmd_fields(node_to_delete);
+	free(node_to_delete);
 }
 
-int check_infile(t_cmd *current, t_params *params)
+int	check_less(t_params *params)
 {
-    struct stat	statbuf;
-    int i;
+	t_cmd	*current;
 
-    i = 0;
-    while (current->cmd[i] != NULL)
-    {
-        if (ft_strncmp(current->cmd[i], "<", 1) == 0 )
-        {
-            i++;
-            if (stat(current->cmd[i], &statbuf) != 0)
-            {
-                printf("minishell: %s: No such file or directory\n", current->cmd[i]);
-                current->flag_less = 1;
-                return (params->last_exit_code = 127);
-            }
-        }
-        i++;
-    }
-    return (0);
+	current = params->command;
+	while (current != NULL)
+	{
+		if (current->flag_less)
+			return (1);
+		current = current->next;
+	}
+	return (0);
 }
 
-
-int manage_less(t_params *params)
+int	check_infile(t_cmd *current)
 {
-    t_cmd *current = params->command;
-    while (current != NULL)
-    {
-        if (params && current && check_infile(current, params))
-            return (1);
-        current = current->next;
-    }
-    return (0);
+	struct stat	statbuf;
+	int			i;
+
+	i = 0;
+	while (current->cmd[i] != NULL)
+	{
+		if (ft_strcmp(current->cmd[i], "<") == 0)
+		{
+			if (stat(current->cmd[++i], &statbuf) != 0)
+			{
+				current->flag_less = 1;
+				perror_msg(": No such file or directory\n", current->cmd[i]);
+				return (127);
+			}
+		}
+		i++;
+	}
+	return (0);
+}
+
+void	manage_less(t_params *params)
+{
+	t_cmd	*current;
+
+	current = params->command;
+	while (current != NULL)
+	{
+		check_infile(current);
+		current = current->next;
+	}
 }

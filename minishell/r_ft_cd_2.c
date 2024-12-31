@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 15:11:07 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 12:04:13 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:54:38 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	return_oldpwd(t_params *params)
 	free(cwd);
 	free(export_arg);
 }
+
 void	return_pwd(t_params *params)
 {
 	char	*cwd;
@@ -68,6 +69,7 @@ void	return_pwd(t_params *params)
 	free(cwd);
 	free(export_arg);
 }
+
 int	ft_cd(const char *arg, t_params *params)
 {
 	int		i;
@@ -79,7 +81,7 @@ int	ft_cd(const char *arg, t_params *params)
 	if (i > 2)
 	{
 		params->last_exit_code = 1;
-		printf("minishell: cd: too many arguments\n");
+		perror_msg(": cd: too many arguments\n", NULL);
 		return (1);
 	}
 	handle_cd(&i, (char *)arg, new_path, params);

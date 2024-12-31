@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 15:11:07 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 12:06:07 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:54:20 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ char	*return_new_path(const char *arg, t_params *params)
 	free(cwd);
 	return (new_path);
 }
+
 void	handle_cd(int *i, char *arg, char *new_path, t_params *params)
 {
 	char	*temp;

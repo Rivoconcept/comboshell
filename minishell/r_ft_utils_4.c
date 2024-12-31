@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_ft_utils_4.c                                     :+:      :+:    :+:   */
@@ -6,17 +6,39 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/31 09:39:18 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 18:19:32 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_array(char **arr)
+{
+	int	i;
+
+	i = 0;
+	if (!arr || arr == NULL)
+		return ;
+	while (arr[i] != NULL)
+	{
+		if (arr[i])
+		{
+			free(arr[i]);
+			arr[i] = NULL;
+		}
+		i++;
+	}
+	if (arr)
+		free(arr);
+	arr = NULL;
+}
 
 void	perror_msg(char *path, char *error)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(path, 2);
-	ft_putstr_fd(error, 2);
+	if (error != NULL)
+		ft_putstr_fd(error, 2);
 }
 
 int	check_errors_path(char *path, char *parent_path, struct stat *statbuf,

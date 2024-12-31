@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/11 08:22:28 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/03/11 08:22:33 by rhanitra         ###   ########.fr       */
+/*   Created: 2024/12/31 18:42:02 by rhanitra          #+#    #+#             */
+/*   Updated: 2024/12/31 18:42:03 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
 
 void	ft_putendl_fd(char *s, int fd)
 {

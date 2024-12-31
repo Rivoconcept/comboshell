@@ -5,13 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/27 09:58:33 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/09/17 20:43:11 by rhanitra         ###   ########.fr       */
+/*   Created: 2024/12/31 18:45:08 by rhanitra          #+#    #+#             */
+/*   Updated: 2024/12/31 18:45:10 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
 char	*ft_strnstr(const char *big, const char *little, size_t len)
 {

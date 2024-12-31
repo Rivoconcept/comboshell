@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_exec_2.c                                         :+:      :+:    :+:   */
@@ -6,29 +6,11 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/31 09:36:02 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 18:07:46 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "minishell.h"
-int	check_cmd_not_found(t_params *params, char *cmd)
-{
-	if (!isbuiltins(cmd))
-	{
-		if (cmd == NULL)
-			return (1);
-		if (is_operator(cmd[0]))
-		{
-			perror_msg(cmd, ": syntax error near unexpected symbol or newline\n");
-			params->last_exit_code = 2;
-			return (1);
-		}
-		params->last_exit_code = check_path(cmd, params);
-		if (params->last_exit_code != 0)
-			return (params->last_exit_code);
-	}
-	return (0);
-}
 
 void	exec_child(t_params *params, t_cmd *current, int fd[2])
 {
@@ -109,6 +91,7 @@ void	check_pipe_error(t_cmd *current, int fd[2], t_params *params)
 		}
 	}
 }
+
 void	ft_handle_child(t_params *params)
 {
 	int		fd[2];

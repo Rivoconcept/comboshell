@@ -5,14 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/11 08:29:35 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/26 13:57:18 by rhanitra         ###   ########.fr       */
+/*   Created: 2024/12/31 18:42:37 by rhanitra          #+#    #+#             */
+/*   Updated: 2024/12/31 18:42:38 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 static size_t	count_word(const char *str, char c)
 {

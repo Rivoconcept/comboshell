@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/31 11:44:43 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:54:38 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -41,6 +41,7 @@ int	handle_history(char *input)
 	}
 	return (0);
 }
+
 int	handle_command_1(char *input, t_params *params)
 {
 	params->new_input = format_input(input);
@@ -49,14 +50,12 @@ int	handle_command_1(char *input, t_params *params)
 	if (!params->new_input)
 		exit(EXIT_FAILURE);
 	params->parsed = parse_command(params->new_input);
-	print_argv(params->parsed);
 	if (check_general_errors(params->new_input, params->parsed, params))
 	{
 		free(params->new_input);
 		free_array(params->parsed);
 		return (1);
 	}
-	print_argv(params->parsed);
 	free(params->new_input);
 	params->command = init_command(params->parsed);
 	return (0);
@@ -73,18 +72,13 @@ int	handle_command_2(t_params *params)
 	}
 	free_array(params->parsed);
 	params->parsed = NULL;
-	if(manage_here(params))
+	if (manage_here(params))
 	{
 		if (params->command)
 			free_list_cmd(params->command);
 		return (1);
 	}
-	if (manage_less(params))
-	{
-		if (params->command)
-			free_list_cmd(params->command);
-		return (1);
-	}
+	manage_less(params);
 	manage_red(params);
 	if (!params->command)
 		return (1);
@@ -109,7 +103,8 @@ int	handle_command_2(t_params *params)
 		free_list_cmd(params->command);
 	return (0);
 }
-int handle_ctrl_c(t_params *params, char *input)
+
+int	handle_ctrl_c(t_params *params, char *input)
 {
 	if (g_sig_num == SIGINT)
 	{
@@ -121,6 +116,7 @@ int handle_ctrl_c(t_params *params, char *input)
 	}
 	return (0);
 }
+
 void	run_minishell(t_params *params)
 {
 	char	*input;
@@ -141,20 +137,13 @@ void	run_minishell(t_params *params)
 		if (handle_command_1(input, params))
 			continue ;
 		if (handle_command_2(params))
-		{
-			if (params->command)
-			{
-				free_list_cmd(params->command);
-				params->command = NULL;
-			}
-			continue;
-		}
+			continue ;
 	}
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_params	*params;
+	t_params *params;
 
 	(void)argc;
 	(void)argv;

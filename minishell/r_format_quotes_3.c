@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 15:33:35 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/28 14:29:27 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:54:20 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,9 @@ int	in_single_quote(char *str)
 
 int	in_double_quote(char *str)
 {
-	int		i;
-	int		apostrophe;
-	int		quote;
+	int	i;
+	int	apostrophe;
+	int	quote;
 
 	i = 0;
 	apostrophe = 0;
@@ -89,14 +89,15 @@ int	in_double_quote(char *str)
 	}
 	return (0);
 }
-void delete_quotes(t_params *params)
-{
-    t_cmd *current;
 
-    current = params->command;
-    while (current != NULL)
-    {
+void	delete_quotes(t_params *params)
+{
+	t_cmd	*current;
+
+	current = params->command;
+	while (current != NULL)
+	{
 		del_quotes(current->cmd);
-        current = current->next;
-    }
+		current = current->next;
+	}
 }

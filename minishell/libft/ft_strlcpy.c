@@ -5,13 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/27 09:56:43 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/02 10:59:40 by rhanitra         ###   ########.fr       */
+/*   Created: 2024/12/31 18:44:22 by rhanitra          #+#    #+#             */
+/*   Updated: 2024/12/31 18:44:24 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <sys/types.h>
 
 size_t	ft_strlcpy(char	*dest, const char *src, size_t size)
 {

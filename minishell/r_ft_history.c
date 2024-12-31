@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 17:50:43 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/24 15:05:15 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 18:22:42 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,18 @@ int	ignore_leaks_readline(void)
 	int			fd;
 	const char	*content;
 
-	content = "{\n""    leak readline\n""    Memcheck:Leak\n"
-		"    ...\n""    fun:readline\n""}\n""{\n""    leak add_history\n"
-		"    Memcheck:Leak\n""    ...\n""    fun:add_history\n""}\n";
+	content = "{\n"
+		"    leak readline\n"
+		"    Memcheck:Leak\n"
+		"    ...\n"
+		"    fun:readline\n"
+		"}\n"
+		"{\n"
+		"    leak add_history\n"
+		"    Memcheck:Leak\n"
+		"    ...\n"
+		"    fun:add_history\n"
+		"}\n";
 	fd = open(READLINE_IGN, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		return (perror("Error opening .readline.ign file"), 1);

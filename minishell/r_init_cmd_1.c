@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 14:23:32 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/29 09:15:17 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 18:29:49 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	put_size(char **argv, int i)
 	}
 	return (count);
 }
+
 int	add_separator(int var[3], char ***temp, t_cmd *cmd, char **argv)
 {
 	if (*temp && var[1] > 0)
@@ -45,6 +46,7 @@ int	add_separator(int var[3], char ***temp, t_cmd *cmd, char **argv)
 	*temp = NULL;
 	return (0);
 }
+
 int	initialize_cmd(int var[3], char ***temp, t_cmd *cmd, char **argv)
 {
 	if (!var[2])
@@ -64,6 +66,7 @@ int	initialize_cmd(int var[3], char ***temp, t_cmd *cmd, char **argv)
 	}
 	return (0);
 }
+
 void	check_end_cmd(int var[3], char ***temp, t_cmd **cmd, char **argv)
 {
 	if (!argv[var[0] + 1] || ft_strncmp(argv[var[0] + 1], "|", 1) == 0)

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/30 18:12:50 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:48:26 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	is_command(t_params *params, char *command)
 	free(path_env);
 	if (!dirs)
 	{
-		printf("Debug: PATH directories could not be split.\n");
+		perror_msg(": Debug: PATH directories could not be split.\n", NULL);
 		return (0);
 	}
 	full_path = put_path(dirs, command);
@@ -115,8 +115,9 @@ int	check_errors(t_params *params)
 	current = params->command;
 	while (current != NULL)
 	{
-		if ((ft_strncmp(current->cmd[0], "|", 1) == 0 && current->previous->cmd
-			&& is_command(params, current->previous->cmd[0])))
+		if (current->cmd[0] && (ft_strncmp(current->cmd[0], "|", 1) == 0
+				&& current->previous->cmd && is_command(params,
+					current->previous->cmd[0])))
 		{
 			if (current->next == NULL)
 				return (printf("minishell: command after pipe not found\n"),

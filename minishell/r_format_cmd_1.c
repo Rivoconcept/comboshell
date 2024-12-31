@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 15:13:30 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/30 16:25:10 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:50:52 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,13 @@ char	*check_cmd_standard(t_params *params, char *command)
 	free(path_env);
 	if (!dirs)
 	{
-		printf("Debug: PATH directories could not be split.\n");
+		perror("ft_split\n");
 		return (NULL);
 	}
 	full_path = put_path(dirs, command);
 	free_array(dirs);
 	if (!full_path)
-		return (ft_strdup(command));
+		return (NULL);
 	return (full_path);
 }
 
@@ -103,8 +103,10 @@ void	format_cmd(t_params *params)
 		}
 		if (current->cmd[0] && !isbuiltins(current->cmd[0]))
 		{
+			check_cmd_not_found(params, current->cmd[0]);
 			cmd = check_cmd_standard(params, current->cmd[0]);
 			free(current->cmd[0]);
+			current->cmd[0] = NULL;
 			current->cmd[0] = cmd;
 		}
 		current = current->next;

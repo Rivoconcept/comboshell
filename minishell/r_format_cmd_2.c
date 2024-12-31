@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 14:16:23 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/28 17:29:18 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 18:11:06 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ t_cmd	*add_command(t_cmd *command, char **argv)
 	new_cmd->previous = current;
 	return (command);
 }
+
 int	create_env_and_export(char *input, t_params *params)
 {
 	if (!create_env(&params->myenvp, input))
@@ -56,6 +57,7 @@ int	create_env_and_export(char *input, t_params *params)
 	}
 	return (0);
 }
+
 t_params	*create_list_params(char **envp)
 {
 	int			i;
@@ -83,6 +85,7 @@ t_params	*create_list_params(char **envp)
 	}
 	return (params);
 }
+
 void	delete_null_in_argv(t_params *params)
 {
 	int		i;

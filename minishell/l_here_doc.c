@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   l_here_doc.c                                       :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 21:41:20 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/30 13:52:19 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:51:36 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -31,6 +31,15 @@ static int	process_quotes(char **key)
 	return (quote);
 }
 
+void	free_here_content(char **here_content)
+{
+	if (*here_content)
+	{
+		free(*here_content);
+		*here_content = NULL;
+	}
+}
+
 int	process_here(char **keys, int j, t_params *params)
 {
 	int			i;
@@ -43,19 +52,12 @@ int	process_here(char **keys, int j, t_params *params)
 	while (keys[i])
 	{
 		here_data.quote = process_quotes(&keys[i]);
-		if(handle_here(keys[i], &here_content, &here_data, params)){
-			if (here_content)
-			{
-				free(here_content);
-				here_content = NULL;
-			}
+		if (handle_here(keys[i], &here_content, &here_data, params))
+		{
+			free_here_content(&here_content);
 			return (1);
 		}
-		if (here_content)
-		{
-			free(here_content);
-			here_content = NULL;
-		}
+		free_here_content(&here_content);
 		i++;
 	}
 	return (0);

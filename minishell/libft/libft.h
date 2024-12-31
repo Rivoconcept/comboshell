@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 09:20:21 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/11/02 11:04:43 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 18:48:51 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,14 @@
 # define LIBFT_H
 
 # include <stddef.h>
+# include <sys/types.h>
+# include <limits.h>
+# include <stddef.h>
+# include <stdint.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
 
 typedef struct s_list
 {

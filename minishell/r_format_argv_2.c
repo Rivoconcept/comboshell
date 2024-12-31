@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_format_argv_2.c                                  :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 18:26:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/31 11:25:14 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:54:20 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -87,10 +87,10 @@ void	format_variable(char **argv, t_params *params)
 	i = 0;
 	while (argv[i] != NULL)
 	{
-		if (argv[i][0] == '$' && (argv[i][1] == '\0' || argv[i][1]  == ' '))
+		if (argv[i][0] == '$' && (argv[i][1] == '\0' || argv[i][1] == ' '))
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		tmp = format_var_env(argv[i], params);
 		if (!tmp)
@@ -104,14 +104,15 @@ void	format_variable(char **argv, t_params *params)
 		i++;
 	}
 }
-void format_all_variable(t_params *params)
-{
-    t_cmd *current;
 
-    current = params->command;
-    while (current != NULL)
-    {
+void	format_all_variable(t_params *params)
+{
+	t_cmd	*current;
+
+	current = params->command;
+	while (current != NULL)
+	{
 		format_variable(current->cmd, params);
-        current = current->next;
-    }
+		current = current->next;
+	}
 }

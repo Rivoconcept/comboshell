@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 09:31:53 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/30 16:06:50 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:50:02 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ void	del_env_element(t_env **myenv, const char *name)
 	previous = NULL;
 	while (current)
 	{
-		if (current && !ft_strncmp(current->name, name, ft_strlen(current->name))
-			&& current->name && ft_strlen(current->name) == ft_strlen(name))
+		if (current && !ft_strncmp(current->name, name,
+				ft_strlen(current->name)) && current->name
+			&& ft_strlen(current->name) == ft_strlen(name))
 		{
 			if (previous == NULL)
 				*myenv = current->next;

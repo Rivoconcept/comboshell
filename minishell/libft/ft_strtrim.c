@@ -3,59 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 09:00:19 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/03/24 15:46:50 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 18:47:17 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
-//#include <bsd/string.h>
-#include <string.h>
-#include "libft.h"
 
-int	check_set(char c, char const *set)
+static int	check_set(char c, const char *set)
 {
-	int	i;
-
-	i = 0;
-	while (set[i] != '\0')
+	while (*set)
 	{
-		if (c == set[i])
+		if (c == *set)
 			return (1);
-		i++;
+		set++;
 	}
 	return (0);
 }
 
-char	*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(const char *s1, const char *set)
 {
-	size_t	i;
-	char	*str;
-	size_t	stop;
 	size_t	start;
+	size_t	end;
+	size_t	i;
+	char	*trimmed_str;
 
 	if (!s1 || !set)
-		return (0);
-	i = 0;
+		return (NULL);
 	start = 0;
-	while (*(s1 + start) && check_set(s1[start], set))
+	while (s1[start] && check_set(s1[start], set))
 		start++;
-	stop = ft_strlen(s1);
-	while (stop > start && check_set(s1[stop - 1], set))
-		stop--;
-	str = (char *)malloc(sizeof(char) * ((stop - start + 1)));
-	if (!str)
-		return (0);
-	while ((start + i) < stop)
-	{
-		str[i] = s1[start + i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
+	end = strlen(s1);
+	while (end > start && check_set(s1[end - 1], set))
+		end--;
+	trimmed_str = (char *)malloc(sizeof(char) * (end - start + 1));
+	if (!trimmed_str)
+		return (NULL);
+	i = 0;
+	while (start < end)
+		trimmed_str[i++] = s1[start++];
+	trimmed_str[i] = '\0';
+	return (trimmed_str);
 }

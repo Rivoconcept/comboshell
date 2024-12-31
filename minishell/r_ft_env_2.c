@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:40:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/27 09:35:03 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 17:54:48 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	count_list_env(t_params *params)
 	}
 	return (i);
 }
+
 int	join_var_env(t_env **current, char ***myenvp, int *i)
 {
 	char	*temp;
@@ -58,6 +59,7 @@ int	join_var_env(t_env **current, char ***myenvp, int *i)
 	(*i)++;
 	return (0);
 }
+
 char	**put_envp(t_params *params)
 {
 	int		i;

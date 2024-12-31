@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/23 09:04:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/02/29 09:43:37 by rhanitra         ###   ########.fr       */
+/*   Created: 2024/12/31 18:43:23 by rhanitra          #+#    #+#             */
+/*   Updated: 2024/12/31 18:43:24 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <unistd.h>
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 
 char	*ft_strdup(const char *s)
 {

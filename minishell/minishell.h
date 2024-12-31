@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/31 10:54:46 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/12/31 18:49:25 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -92,6 +92,21 @@ typedef struct s_here_data
 	int				quote;
 }					t_here_data;
 
+// l_ft_utils_9.c
+void				del_in(t_cmd *input, int here);
+void				del_out(t_cmd *out);
+// l_ft_utils_8.c
+void				free_commands_and_nodes_if_empty(t_params *params);
+// l_ft_utils_7.c
+void				handle_head_without_next(t_params *params, t_cmd *current,
+						t_cmd *node_to_delete);
+void				handle_middle_with_next(t_cmd *current,
+						t_cmd *node_to_delete);
+void				handle_middle_without_next(t_cmd *current,
+						t_cmd *node_to_delete, t_cmd *previous);
+void				handle_end_node(t_params *params, t_cmd *current,
+						t_cmd *previous);
+
 // l_handle_here.c
 int					handle_here(char *delimiter, char **here_content,
 						t_here_data *here_data, t_params *params);
@@ -100,15 +115,11 @@ char				*expand_variable_in_input(char *line, t_params *params);
 // l_del_utils.c
 void				handle_out_redirection(t_cmd *out, int *out_rank, int *i,
 						const char *type);
-void				del_here(t_cmd *input, int *in_rank, int here, int *i);
-void				del_less(t_cmd *input, int *in_rank, int *i);
 void				free_cmd_fields(t_cmd *cmd);
+char				*prepare_temp_file(int num_cmd);
 
 // l_ft_utils_5.c
 void				reset_cmd_flags(t_cmd *cmd);
-
-// l_ft_utils_6.c
-// void process_command(t_params *params, char **parsed);
 
 // l_inout_utils.c
 int					open_file(char *filename, t_params *params, int flags);
@@ -118,15 +129,16 @@ int					open_input_file(char *filename, t_params *params, int flags,
 int					open_input_here(char *filename, t_params *params, int flags,
 						int child);
 void				dup2_stdin(int fd_in, char *filename);
-char				*prepare_temp_file(int num_cmd);
 
 // clean_arg.c
 char				*join_argv(char **argv);
 
 // ft_check.c
+void				handle_head_with_next(t_params *params, t_cmd *current,
+						t_cmd *node_to_delete);
 int					check_less(t_params *params);
-int					check_infile(t_cmd *current, t_params *params);
-int					manage_less(t_params *params);
+int					check_infile(t_cmd *current);
+void				manage_less(t_params *params);
 
 // ft_strcat.c
 char				*ft_strcat(char *dest, char *src);
@@ -167,7 +179,7 @@ void				input_r(t_cmd *current, int num_cmd, t_params *params,
 						int child);
 void				output(t_cmd *current, t_params *params);
 
-/**********************GET_NEXT_LINE ****************************************************************/
+/**********************GET_NEXT_LINE ****************************************/
 
 size_t				check_new_line(char *buffer);
 size_t				check_back_slash_n(const char *s, int c);
@@ -178,13 +190,13 @@ char				*read_line(int fd, int *check, char *buffer,
 						char *readed_line);
 char				*get_next_line(int fd);
 
-/***********************FT_RIVO************************************************************** */
+/***********************FT_RIVO******************************************** */
 void				print_cmd(t_params *params);
 
 // ft_r_check_behavior.c
 int					pass_error_test_1(char *s);
 int					pass_error_test_2(char *s);
-int 				check_general_errors(char *s, char **cmd, t_params *params);
+int					check_general_errors(char *s, char **cmd, t_params *params);
 
 // r_exec_1.c
 int					ft_get_pid_nbr(t_params *params);
@@ -204,6 +216,7 @@ void				check_pipe_error(t_cmd *current, int fd[2],
 void				ft_handle_child(t_params *params);
 
 // r_exec_3.c
+int					check_cmd_not_found(t_params *params, char *cmd);
 void				wait_pid(t_params *params, t_cmd *current, int status);
 void				exec_cmd(t_params *params);
 
@@ -243,7 +256,7 @@ void				check_left_quote(char *input, int *j, int *lquote);
 void				check_right_quote(char *input, int *k, int *rquote);
 
 // r_format_input_2.c
-int					check_pipe_out_quote(char *input, int i, char c);
+int					check_out_quote(char *input, int i, char c);
 int					check_echo(char *s, int *i, char *new_str, int *j);
 char				*format_input(char *input);
 
@@ -285,7 +298,6 @@ void				return_pwd(t_params *params);
 int					ft_cd(const char *arg, t_params *params);
 
 // r_ft_cleaner.c
-void				free_array(char **arr);
 void				free_list_env(t_env *myenv);
 void				free_list_export(t_export *myexp);
 void				free_list_cmd(t_cmd *command);
@@ -312,17 +324,19 @@ void				del_env_element(t_env **myenv, const char *name);
 char				*ft_getenv(t_params *params, char *name);
 int					ft_env(t_params *params);
 
-// r_ft_exit.c
+// r_ft_exit_1.c
 int					is_numeric(const char *str);
 long long int		ft_atoi_lld(const char *str);
 unsigned long long	ft_atoi_ull(const char *str);
 int					check_errors_exit(char **parsed, t_params *params);
+
+// r_ft_exit_2.c
+int					clean_arg(char *arg);
 int					ft_exit(char **parsed, t_params *params);
 
 // r_ft_export_1.c
 int					print_export(t_params *params);
 int					check_error_var_temp(char *cmd);
-int					check_var_temp(char **cmd);
 void				clean_export(char *exist_value, char *enter_value,
 						char *name);
 
@@ -382,11 +396,11 @@ int					ft_strcmp(const char *s1, const char *s2);
 int					putchar_count(const char *src, char c);
 
 // r_ft_utils_4.c
-void	perror_msg(char *path, char *error);
-int	check_errors_path(char *path, char *parent_path, struct stat *statbuf,
-		char *last_slash);
-int	check_path(const char *path, t_params *params);
-
+void				free_array(char **arr);
+void				perror_msg(char *path, char *error);
+int					check_errors_path(char *path, char *parent_path,
+						struct stat *statbuf, char *last_slash);
+int					check_path(const char *path, t_params *params);
 
 // r_ft_utils_5.c
 int					check_is_all_space(char *input);
@@ -408,10 +422,15 @@ void				check_end_cmd(int var[3], char ***temp, t_cmd **cmd,
 void				clean_cmd(t_cmd **cmd, char ***temp);
 t_cmd				*init_command(char **argv);
 void				free_command(t_cmd *command);
+
+// r_init_cmd_3.c
+void				loop_list_cmd(t_cmd **current, t_cmd *to_remove,
+						t_cmd **prev);
 t_cmd				*remove_element_cmd(t_cmd *head, t_cmd *to_remove);
 int					delete_cmd_null(t_params *params);
 
 // r_signal.c
+int					handle_sigint(t_params *params);
 void				sig_handler(int signal);
 void				signal_handlers(int sign);
 
