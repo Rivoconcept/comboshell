@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 15:22:24 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/02 19:29:33 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct s_params
 {
 	t_cmd			*command;
 	t_env			*myenvp;
+	int				flag_env;
 	int				fd_in;
 	int				fd_out;
 	t_export		*myexport;
@@ -244,6 +245,7 @@ int					format_cmd(t_params *params);
 void				delete_null_in_argv(t_params *params);
 
 // r_format_cmd_2.c
+void 				reformat_cmd(t_cmd **current);
 t_cmd				*create_new_list_cmd(char **argv);
 t_cmd				*add_command(t_cmd *command, char **argv);
 t_params			*create_list_params(char **envp);

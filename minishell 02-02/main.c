@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:21:04 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 16:30:43 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/02 19:13:29 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,15 @@ int	handle_command_1(char *input, t_params *params)
 	params->parsed = NULL;
 	if (manage_here(params))
 		return (1);
+	manage_less(params);
+	manage_red(params);
+	if (!params->command)
+		return (1);
 	return (0);
 }
 
 int	handle_command_2(t_params *params)
 {
-	manage_less(params);
-	manage_red(params);
-	if (!params->command)
-		return (1);
 	format_all_variable(params);
 	delete_cmd_null(params);
 	if (!params->command)
@@ -67,6 +67,7 @@ int	handle_command_2(t_params *params)
 			free_list_cmd(params->command);
 		return (1);
 	}
+	print_list(params->command);
 	if (check_errors(params))
 	{
 		if (params->command)

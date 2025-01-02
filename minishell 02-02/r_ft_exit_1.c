@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 10:48:59 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/31 17:49:59 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/02 17:25:46 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	check_errors_exit(char **parsed, t_params *params)
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
 		cleanup_and_exit(params, params->last_exit_code);
 	}
-	if (parsed[2])
+	if (parsed[2] && clean_arg(parsed[1]))
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
 		write(STDERR_FILENO, "minishell: exit: too many arguments\n",
