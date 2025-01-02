@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 15:13:30 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 19:44:43 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:41:33 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,21 +87,22 @@ char	*check_cmd_standard(t_params *params, char *command)
 	return (full_path);
 }
 
-void reformat_cmd(t_cmd **current)
+void	reformat_cmd(t_cmd **current)
 {
-    char    **argv;
-    if (find_char((*current)->cmd[0], ' '))
-    {
-        argv = ft_split((*current)->cmd[0], ' ');
-        if (!argv || !argv[0])
-        {
-            free_array(argv); 
-            return;
-        }
-        free_array((*current)->cmd);
-        (*current)->cmd = NULL;
-        (*current)->cmd = argv;
-    }
+	char	**argv;
+
+	if (find_char((*current)->cmd[0], ' '))
+	{
+		argv = ft_split((*current)->cmd[0], ' ');
+		if (!argv || !argv[0])
+		{
+			free_array(argv);
+			return ;
+		}
+		free_array((*current)->cmd);
+		(*current)->cmd = NULL;
+		(*current)->cmd = argv;
+	}
 }
 
 int	check_error_command(t_params *params, t_cmd **current, char *cmd)
@@ -118,30 +119,3 @@ int	check_error_command(t_params *params, t_cmd **current, char *cmd)
 	}
 	return (0);
 }
-
-int format_cmd(t_params *params)
-{
-    t_cmd   *current;
-    char    *cmd;
-
-    current = params->command;
-    while (current != NULL)
-    {
-        if (current->cmd[0] && ft_strncmp(current->cmd[0], "|", 1) == 0)
-        {
-            current = current->next;
-            continue;
-        }
-        if (current->cmd[0] && !isbuiltins(current->cmd[0]))
-        {
-            if (find_char(current->cmd[0], ' '))
-                reformat_cmd(&current);
-            cmd = check_cmd_standard(params, current->cmd[0]);
-			if (check_error_command(params, &current, cmd))
-				return (1);
-        }
-        current = current->next;
-    }
-    return (0);
-}
-

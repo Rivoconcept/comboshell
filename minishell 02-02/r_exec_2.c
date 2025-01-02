@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 19:34:18 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:26:03 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	exec_child(t_params *params, t_cmd *current, int fd[2])
 		cleanup_and_exit(params, params->last_exit_code);
 	if (execve(current->cmd[0], current->cmd, params->envp) == -1)
 	{
-		perror("execve");
+		perror_msg(": command not found\n", NULL);
 		cleanup_and_exit(params, 127);
 	}
 }

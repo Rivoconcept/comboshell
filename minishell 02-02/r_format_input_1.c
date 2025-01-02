@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:23:16 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 13:59:10 by rhanitra         ###   ########.fr       */
+/*   Updated: 2024/01/02 21:33:09 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,33 +50,39 @@ void	check_right_quote(char *input, int *k, int *rquote)
 	}
 }
 
+void	check_all_possibility(char *s, int *new_size, int i)
+{
+	while (s[i])
+	{
+		if (i > 0 && s[i - 1] != ' ' && s[i - 1] != s[i] \
+			&& s[i + 1] != ' ' && s[i + 1] != s[i] \
+			&& is_out_quote(s, i, s[i]))
+			(*new_size) += 2;
+		if (i > 0 && s[i - 1] != ' ' && s[i - 1] != s[i] \
+			&& s[i + 1] != s[i] && is_out_quote(s, i, s[i]))
+			(*new_size)++;
+		if (i > 0 && s[i - 1] != ' ' && s[i - 1] != s[i] \
+			&& s[i + 1] == s[i] && s[i + 1] != '\0')
+			(*new_size)++;
+		if (i > 0 && s[i - 1] == s[i] && s[i + 1] != ' ' \
+			&& s[i + 1] != s[i] && is_out_quote(s, i, s[i]))
+			(*new_size)++;
+		if (i > 0 && s[i + 1] != ' ' && s[i + 1] != s[i])
+			(*new_size)++;
+		if (i == 0 && s[i + 1] != ' ' && s[i + 1] != s[i] \
+			&& is_out_quote(s, i, s[i]))
+			(*new_size)++;
+		i++;
+	}
+}
+
 int	put_new_size(char *s)
 {
 	int	i;
 	int	new_size;
 
-	i = -1;
+	i = 0;
 	new_size = 0;
-	while (s[++i])
-	{
-		if (i > 0 && s[i - 1] != ' ' && s[i - 1] != s[i] \
-			&& s[i + 1] != ' ' && s[i + 1] != s[i] \
-			&& is_out_quote(s, i, s[i]))
-			new_size += 2;
-		if (i > 0 && s[i - 1] != ' ' && s[i - 1] != s[i] \
-			&& s[i + 1] != s[i] && is_out_quote(s, i, s[i]))
-			new_size++;
-		if (i > 0 && s[i - 1] != ' ' && s[i - 1] != s[i] \
-			&& s[i + 1] == s[i] && s[i + 1] != '\0')
-			new_size++;
-		if (i > 0 && s[i - 1] == s[i] && s[i + 1] != ' ' \
-			&& s[i + 1] != s[i] && is_out_quote(s, i, s[i]))
-			new_size++;
-		if (i > 0 && s[i + 1] != ' ' && s[i + 1] != s[i])
-			new_size++;
-		if (i == 0 && s[i + 1] != ' ' && s[i + 1] != s[i] \
-			&& is_out_quote(s, i, s[i]))
-			new_size++;
-	}
+	check_all_possibility(s, &new_size, i);
 	return ((int)ft_strlen(s) + new_size);
 }

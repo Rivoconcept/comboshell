@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:03:19 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 13:45:23 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:25:38 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ int	check_error_pipe(char **cmd, t_params *params)
 	i = 0;
 	while (cmd[i] != NULL)
 	{
+		if (cmd[i] == NULL || cmd[i][0] == '\0')
+		{
+			perror_msg(": command not found\n", NULL);
+			return (params->last_exit_code = 127);
+		}
 		if (check_return_zero(cmd[i], params))
 			return (1);
 		else if (isspecialc(cmd[i], params) && cmd[i + 1] == NULL \

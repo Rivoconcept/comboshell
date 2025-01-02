@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:21:04 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 19:13:29 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:13:09 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,14 @@ int	handle_command_1(char *input, t_params *params)
 	input = NULL;
 	if (!params->new_input)
 		exit(EXIT_FAILURE);
+	printf("%s\n", params->new_input);
 	params->parsed = parse_command(params->new_input);
 	if (check_general_errors(params->new_input, params->parsed, params))
 		return (1);
 	free(params->new_input);
 	params->command = init_command(params->parsed);
 	if (check_error_var_temp(params->parsed[0]) && !params->parsed[1])
-	{
-		free_array(params->parsed);
-		free_list_cmd(params->command);
-		return (1);
-	}
+		return (free_array(params->parsed), free_list_cmd(params->command), 1);
 	free_array(params->parsed);
 	params->parsed = NULL;
 	if (manage_here(params))
@@ -48,13 +45,13 @@ int	handle_command_1(char *input, t_params *params)
 	manage_red(params);
 	if (!params->command)
 		return (1);
+	format_all_variable(params);
+	delete_cmd_null(params);
 	return (0);
 }
 
 int	handle_command_2(t_params *params)
 {
-	format_all_variable(params);
-	delete_cmd_null(params);
 	if (!params->command)
 		return (1);
 	delete_null_in_argv(params);
@@ -67,7 +64,6 @@ int	handle_command_2(t_params *params)
 			free_list_cmd(params->command);
 		return (1);
 	}
-	print_list(params->command);
 	if (check_errors(params))
 	{
 		if (params->command)

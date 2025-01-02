@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 19:29:33 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:39:01 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,19 +241,20 @@ void				format_all_variable(t_params *params);
 char				*check_access(char *command, char *path);
 char				*put_path(char **dirs, char *command);
 char				*check_cmd_standard(t_params *params, char *command);
-int					format_cmd(t_params *params);
-void				delete_null_in_argv(t_params *params);
+void				reformat_cmd(t_cmd **current);
+int					check_error_command(t_params *params, t_cmd **current,
+						char *cmd);
 
 // r_format_cmd_2.c
-void 				reformat_cmd(t_cmd **current);
-t_cmd				*create_new_list_cmd(char **argv);
-t_cmd				*add_command(t_cmd *command, char **argv);
+int					format_cmd(t_params *params);
 t_params			*create_list_params(char **envp);
+void				delete_null_in_argv(t_params *params);
 
 // r_format_input_1.c
 int					is_operator(char c);
 void				check_left_quote(char *input, int *j, int *lquote);
 void				check_right_quote(char *input, int *k, int *rquote);
+void				check_all_possibility(char *s, int *new_size, int i);
 int					put_new_size(char *s);
 
 // r_format_input_2.c
@@ -298,7 +299,8 @@ int					run_builtins(char **cmd, t_params *params);
 // r_ft_cd_1.c
 char				*format_tilde(t_params *params, char **dirs, char *cwd);
 char				*return_new_path(const char *arg, t_params *params);
-int					handle_cd(int *i, char *arg, char *new_path, t_params *params);
+int					handle_cd(int *i, char *arg, char *new_path,
+						t_params *params);
 
 // r_ft_cd_2.c
 void				return_oldpwd(t_params *params);
@@ -436,6 +438,8 @@ void				loop_list_cmd(t_cmd **current, t_cmd *to_remove,
 						t_cmd **prev);
 t_cmd				*remove_element_cmd(t_cmd *head, t_cmd *to_remove);
 int					delete_cmd_null(t_params *params);
+t_cmd				*create_new_list_cmd(char **argv);
+t_cmd				*add_command(t_cmd *command, char **argv);
 
 // r_signal.c
 void				clean_ctrl_d(char *input, t_params *params);
