@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/01 22:51:31 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:08:11 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -245,14 +245,20 @@ t_params			*create_list_params(char **envp);
 
 // r_format_input_1.c
 int					is_operator(char c);
-int					put_new_size(char *input);
-int					add_spaces(char *new_str, char *input, int *i, int *j);
 void				check_left_quote(char *input, int *j, int *lquote);
 void				check_right_quote(char *input, int *k, int *rquote);
+int					put_new_size(char *s);
 
 // r_format_input_2.c
+int					handle_add_spaces_1(char *new_str, char *s, int *i, int *j);
+int					handle_add_spaces_2(char *new_str, char *s, int *i, int *j);
+int					add_spaces(char *new_str, char *s, int *i, int *j);
+
+// r_format_input_3.c
 int					is_out_quote(char *input, int i, char c);
 int					check_echo(char *s, int *i, char *new_str, int *j);
+int					escape_exclamation(char *input, int *i);
+int					escape_in_quote(char *input, int *i);
 char				*format_input(char *input);
 
 // r_format_quotes_1.c
@@ -332,9 +338,8 @@ int					ft_exit(char **parsed, t_params *params);
 
 // r_ft_export_1.c
 int					print_export(t_params *params);
-int					check_error_var_temp(char *cmd, t_params *params);
-void				clean_export(char *exist_value, char *enter_value,
-						char *name);
+int					check_error_var_temp(char *cmd);
+void				clean_export(char *exist_value, char *enter_value, char *name);
 
 // r_ft_export_2.c
 int					check_error_export(char *cmd);
@@ -426,6 +431,8 @@ t_cmd				*remove_element_cmd(t_cmd *head, t_cmd *to_remove);
 int					delete_cmd_null(t_params *params);
 
 // r_signal.c
+void	clean_ctrl_d(char *input, t_params *params);
+int	handle_ctrl_c(t_params *params, char *input);
 int					handle_sigint(t_params *params);
 void				sig_handler(int signal);
 void				signal_handlers(int sign);

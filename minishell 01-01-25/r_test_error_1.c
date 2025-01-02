@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_test_error_1.c                                   :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:03:19 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/01 22:51:02 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/02 08:25:26 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -62,6 +62,7 @@ int	first_error_checking(char *input, t_params *params)
 {
 	if (check_unmatched_quotes(input))
 	{
+		perror_msg(": error: unmatched quotes found\n", input);
 		params->last_exit_code = 1;
 		free(input);
 		return (1);

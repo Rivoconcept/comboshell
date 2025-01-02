@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_exec_3.c                                         :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:09 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/01 13:21:45 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/02 09:46:49 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -64,6 +64,16 @@ void	wait_pid(t_params *params, t_cmd *current, int status)
 		tab++;
 	}
 }
+int builtins_execution(t_params *params)
+{
+	if (call_exec_builtins(params))
+	{
+		if (params->pid_tab)
+			free(params->pid_tab);
+		return (1);
+	}
+	return (0);
+}
 
 void	exec_cmd(t_params *params)
 {
@@ -80,10 +90,8 @@ void	exec_cmd(t_params *params)
 		cleanup_and_exit(params, EXIT_FAILURE);
 	}
 	ft_memset(params->pid_tab, 0, sizeof(pid_t) * ft_get_pid_nbr(params));
-	if (call_exec_builtins(params))
-	{
+	if (builtins_execution(params))
 		return ;
-	}
 	else
 	{
 		ft_handle_child(params);

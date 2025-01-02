@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:44:10 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/01 22:57:15 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:12:20 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -29,14 +29,17 @@ int	handle_command_1(char *input, t_params *params)
 	input = NULL;
 	if (!params->new_input)
 		exit(EXIT_FAILURE);
-	printf("%s\n", params->new_input);
 	params->parsed = parse_command(params->new_input);
 	if (check_general_errors(params->new_input, params->parsed, params))
 		return (1);
 	free(params->new_input);
 	params->command = init_command(params->parsed);
-	if (check_error_var_temp(params->parsed[0], params) && !params->parsed[1])
+	if (check_error_var_temp(params->parsed[0]) && !params->parsed[1])
+	{
+		free_array(params->parsed);
+		free_list_cmd(params->command);
 		return (1);
+	}
 	free_array(params->parsed);
 	params->parsed = NULL;
 	if (manage_here(params))
