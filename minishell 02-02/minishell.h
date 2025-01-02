@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 21:39:01 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:56:47 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,7 +282,6 @@ void				handle_quotes(char c, int *in_single_quote,
 						int *in_double_quote);
 int					in_apostrophe(char *str);
 int					in_quote(char *str);
-int					check_unmatched_quotes(char *input);
 
 // r_format_quotes_3.c
 int					pure_apostrophe(char *str);

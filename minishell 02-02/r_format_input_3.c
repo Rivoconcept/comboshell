@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 11:04:32 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 12:15:11 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/02 23:20:05 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,22 @@ int	is_out_quote(char *input, int i, char c)
 
 int	check_echo(char *s, int *i, char *new_str, int *j)
 {
+	int	squote;
+	int	dquote;
+
+	squote = 0;
+	dquote = 0;
 	if (!s || *i < 0)
 		return (0);
-	if ((s[*i] == 'e' && s[*i + 1] == 'c' && s[*i + 2] == 'h' \
-		&& s[*i + 3] == 'o'))
+	if (s[*i] == 'e' && s[*i + 1] == 'c' && s[*i + 2] == 'h' && s[*i + 3] == 'o')
 	{
 		new_str[(*j)++] = s[(*i)++];
 		new_str[(*j)++] = s[(*i)++];
 		new_str[(*j)++] = s[(*i)++];
-		new_str[(*j)++] = s[(*i)++];
-		while (s[*i] != '\0')
+		new_str[(*j)++] = s[(*i)++];	
+		while (s[*i] != '\0' && (squote || dquote || !is_operator(s[*i])))
 		{
-			if (is_out_quote(s, *i, s[*i]))
-				break ;
+			handle_quote(s[*i], &squote, &dquote);
 			new_str[(*j)++] = s[(*i)++];
 		}
 		return (1);
@@ -78,7 +81,7 @@ int	escape_in_quote(char *input, int *i)
 	return (0);
 }
 
-char	*format_input(char *input)
+/*char	*format_input(char *input)
 {
 	int		i;
 	int		j;
@@ -105,4 +108,34 @@ char	*format_input(char *input)
 	}
 	new_str[j] = '\0';
 	return (new_str);
+}*/
+
+char	*format_input(char *input)
+{
+	int		i[4];
+	char	*new_str;
+
+	i[0] = 0;
+	i[1] = 0;
+	i[2] = 0;
+	i[3] = 0;
+	if (!input)
+		return (NULL);
+	new_str = malloc(sizeof(char) * (put_new_size(input) + 1));
+	if (!new_str)
+		return (NULL);
+	while (input[i[0]] != '\0')
+	{
+		handle_quote(input[i[0]], &i[2], &i[3]);
+		if (!i[2] && !i[3] && escape_exclamation(input, &i[0]))
+			continue ;
+		if (!i[2] && !i[3] && check_echo(input, &i[0], new_str, &i[1]))
+			continue ;
+		if (!i[2] && !i[3] && is_out_quote(input, i[0], input[i[0]]) \
+			&& add_spaces(new_str, input, &i[0], &i[1]))
+			continue ;
+		new_str[i[1]++] = input[i[0]++];
+	}
+	return (new_str[i[1]] = '\0', new_str);
 }
+

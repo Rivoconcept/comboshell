@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:17:00 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 16:33:07 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/02 21:56:40 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,6 @@ int	isspecialc(char *input, t_params *params)
 	if (input[i] == '!')
 	{
 		params->last_exit_code = 1;
-		return (1);
-	}
-	return (0);
-}
-
-int	first_error_checking(char *input, t_params *params)
-{
-	if (check_unmatched_quotes(input))
-	{
-		perror_msg("error: unmatched quotes found\n", NULL);
-		params->last_exit_code = 1;
-		free(input);
 		return (1);
 	}
 	return (0);
