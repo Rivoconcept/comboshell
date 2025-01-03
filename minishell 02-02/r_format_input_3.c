@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_format_input_3.c                                 :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 11:04:32 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 23:20:05 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/03 06:25:50 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -80,35 +80,6 @@ int	escape_in_quote(char *input, int *i)
 	}
 	return (0);
 }
-
-/*char	*format_input(char *input)
-{
-	int		i;
-	int		j;
-	char	*new_str;
-
-	i = 0;
-	j = 0;
-	if (!input)
-		return (NULL);
-	new_str = malloc(sizeof(char) * (put_new_size(input) + 1));
-	if (!new_str)
-		return (NULL);
-	while (input[i])
-	{
-		if (escape_exclamation(input, &i))
-			continue ;
-		if (check_echo(input, &i, new_str, &j))
-			continue ;
-		if (is_out_quote(input, i, input[i]) \
-			&& add_spaces(new_str, input, &i, &j))
-			continue ;
-		new_str[j++] = input[i];
-		i++;
-	}
-	new_str[j] = '\0';
-	return (new_str);
-}*/
 
 char	*format_input(char *input)
 {

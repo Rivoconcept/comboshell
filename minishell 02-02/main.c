@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:21:04 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 21:57:29 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/03 09:13:12 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -29,7 +29,6 @@ int	handle_command_1(char *input, t_params *params)
 	input = NULL;
 	if (!params->new_input)
 		exit(EXIT_FAILURE);
-	printf("%s\n", params->new_input);
 	params->parsed = parse_command(params->new_input);
 	if (check_general_errors(params->new_input, params->parsed, params))
 		return (1);

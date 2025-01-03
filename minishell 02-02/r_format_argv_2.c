@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_format_argv_2.c                                  :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 18:26:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/01 12:52:24 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/03 09:50:53 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 
@@ -37,11 +37,29 @@ int	realloc_new_str(size_t *size, char **new_str)
 	return (1);
 }
 
+int	is_invalid_char(char c)
+{
+	const char *invalid_chars;
+
+	invalid_chars = "@#!%^&*()-+=[]{}|;:,<.>/";
+	return (find_char((char *)invalid_chars, c));
+}
+
 void	copy_env(size_t i[2], char *arg, char **new_str, t_params *params)
 {
 	char	*temp;
 
 	temp = NULL;
+	if (arg[i[0] + 1] == '\0' || is_invalid_char(arg[i[0] + 1]))
+	{
+		(*new_str)[i[1]++] = arg[i[0]];
+		return;
+	}
+	if (!ft_isalnum(arg[i[0] + 1]) && arg[i[0] + 1] !='?')
+	{
+		(*new_str)[i[1]++] = arg[i[0]];
+		return;
+	}
 	put_var_env(arg, (int *)&i[0], &temp, params);
 	if (temp != NULL)
 	{
@@ -87,11 +105,6 @@ void	format_variable(char **argv, t_params *params)
 	i = 0;
 	while (argv[i] != NULL)
 	{
-		if (argv[i][0] == '$' && (argv[i][1] == '\0' || argv[i][1] == ' '))
-		{
-			i++;
-			continue ;
-		}
 		tmp = format_var_env(argv[i], params);
 		if (!tmp)
 		{
