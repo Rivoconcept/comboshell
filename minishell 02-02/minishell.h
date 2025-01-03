@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 21:56:47 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/03 17:37:25 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -400,6 +400,8 @@ char				*format_str_without_quote(char *input);
 void				close_pipe(int fd[2]);
 
 // r_ft_utils_3.c
+int					is_pipe(char *token);
+int 				isoperator(char *s);
 int					count_cmd(t_cmd *command);
 int					ft_strcmp(const char *s1, const char *s2);
 int					putchar_count(const char *src, char c);

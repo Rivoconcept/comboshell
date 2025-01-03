@@ -6,14 +6,18 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:03:19 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 21:25:38 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/03 22:44:16 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_error_op(char **cmd, int i)
+/*int	check_error_op(char **cmd, int i)
 {
+	if (cmd[i] && cmd[i + 1] && is_pipe(cmd[i]) && isoperator(cmd[i + 1]) && !is_pipe(cmd[i + 1]))
+	{
+		return (0);
+	}
 	if (isoperators(cmd[i]))
 	{
 		if (ft_strlen(cmd[i]) > 2 || (cmd[i][0] != '<' && cmd[i][0] != '>'
@@ -30,7 +34,54 @@ int	check_error_op(char **cmd, int i)
 			return (1);
 	}
 	return (0);
+}*/
+
+int	check_error_op(char **cmd, int i)
+{
+	if (cmd[i] && cmd[i + 1] && is_pipe(cmd[i]) \
+		&& isoperator(cmd[i + 1]) && !is_pipe(cmd[i + 1]))
+		return (0);
+	if (isoperators(cmd[i]) && ft_strlen(cmd[i]) > 2)
+		return (1);
+	if (isoperator(cmd[i]))
+	{
+		if (cmd[i + 1] == NULL)
+			return (1);
+		if (isoperator(cmd[i + 1]))
+			return (1);
+	}
+	if (is_pipe(cmd[i]))
+	{
+		if (i == 0 || cmd[i + 1] == NULL)
+			return (1);
+	}
+	return (0);
 }
+
+/*int	check_error_op(char **cmd, int i)
+{
+	if (isoperators(cmd[i]))
+	{
+		if (ft_strlen(cmd[i]) > 2 || (cmd[i][0] != '<' && cmd[i][0] != '>'
+				&& cmd[i][0] != '|'))
+			return (1);
+		if (cmd[i + 1] == NULL)
+			return (1);
+		if (isoperators(cmd[i + 1]))
+			return (1);
+		if (!is_out_quote(cmd[i], i, cmd[i][0]))
+			return (1);
+	}
+	if (ft_strcmp(cmd[i], "|") == 0)
+	{
+		if (i == 0 || cmd[i + 1] == NULL)
+			return (1);
+	}
+
+	return (0);
+}*/
+
+
 
 int	check_error_pipe(char **cmd, t_params *params)
 {
