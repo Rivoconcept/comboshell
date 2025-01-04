@@ -6,40 +6,16 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:03:19 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/03 22:44:16 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 13:59:52 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*int	check_error_op(char **cmd, int i)
-{
-	if (cmd[i] && cmd[i + 1] && is_pipe(cmd[i]) && isoperator(cmd[i + 1]) && !is_pipe(cmd[i + 1]))
-	{
-		return (0);
-	}
-	if (isoperators(cmd[i]))
-	{
-		if (ft_strlen(cmd[i]) > 2 || (cmd[i][0] != '<' && cmd[i][0] != '>'
-				&& cmd[i][0] != '|'))
-			return (1);
-		if (cmd[i + 1] == NULL)
-			return (1);
-		if (isoperators(cmd[i + 1]))
-			return (1);
-	}
-	if (ft_strcmp(cmd[i], "|") == 0)
-	{
-		if (i == 0 || cmd[i + 1] == NULL)
-			return (1);
-	}
-	return (0);
-}*/
-
 int	check_error_op(char **cmd, int i)
 {
-	if (cmd[i] && cmd[i + 1] && is_pipe(cmd[i]) \
-		&& isoperator(cmd[i + 1]) && !is_pipe(cmd[i + 1]))
+	if (cmd[i] && cmd[i + 1] && is_pipe(cmd[i]) && isoperator(cmd[i + 1])
+		&& !is_pipe(cmd[i + 1]))
 		return (0);
 	if (isoperators(cmd[i]) && ft_strlen(cmd[i]) > 2)
 		return (1);
@@ -58,31 +34,6 @@ int	check_error_op(char **cmd, int i)
 	return (0);
 }
 
-/*int	check_error_op(char **cmd, int i)
-{
-	if (isoperators(cmd[i]))
-	{
-		if (ft_strlen(cmd[i]) > 2 || (cmd[i][0] != '<' && cmd[i][0] != '>'
-				&& cmd[i][0] != '|'))
-			return (1);
-		if (cmd[i + 1] == NULL)
-			return (1);
-		if (isoperators(cmd[i + 1]))
-			return (1);
-		if (!is_out_quote(cmd[i], i, cmd[i][0]))
-			return (1);
-	}
-	if (ft_strcmp(cmd[i], "|") == 0)
-	{
-		if (i == 0 || cmd[i + 1] == NULL)
-			return (1);
-	}
-
-	return (0);
-}*/
-
-
-
 int	check_error_pipe(char **cmd, t_params *params)
 {
 	int	i;
@@ -92,7 +43,7 @@ int	check_error_pipe(char **cmd, t_params *params)
 	{
 		if (cmd[i] == NULL || cmd[i][0] == '\0')
 		{
-			perror_msg(": command not found\n", NULL);
+			perror_msg(NULL, ": command not found\n");
 			return (params->last_exit_code = 127);
 		}
 		if (check_return_zero(cmd[i], params))
@@ -102,7 +53,7 @@ int	check_error_pipe(char **cmd, t_params *params)
 			return (1);
 		else if (check_error_op(cmd, i))
 		{
-			perror_msg(": syntax error near unexpected token\n", NULL);
+			perror_msg(NULL, ": syntax error near unexpected token\n");
 			params->last_exit_code = 2;
 			return (1);
 		}

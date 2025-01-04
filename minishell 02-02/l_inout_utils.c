@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l_inout_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 09:43:01 by rrakoton          #+#    #+#             */
-/*   Updated: 2025/01/01 13:59:04 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 12:40:09 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ int	open_file(char *filename, t_params *params, int flags)
 
 	if (stat(filename, &file_stat) == 0)
 	{
-		if (!(file_stat.st_mode & S_IWUSR)
-			&& !(file_stat.st_mode & S_IWGRP)
+		if (!(file_stat.st_mode & S_IWUSR) && !(file_stat.st_mode & S_IWGRP)
 			&& !(file_stat.st_mode & S_IWOTH))
 		{
 			perror("permission denied");

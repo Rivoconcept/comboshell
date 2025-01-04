@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 10:48:59 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 17:25:46 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 14:01:29 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,18 +86,14 @@ int	check_errors_exit(char **parsed, t_params *params)
 	if (parsed[2] && clean_arg(parsed[1]))
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
-		write(STDERR_FILENO, "minishell: exit: too many arguments\n",
-			ft_strlen("minishell: exit: too many arguments\n"));
+		perror_msg(NULL, ": too many arguments\n");
 		params->last_exit_code = 1;
 		return (1);
 	}
 	if (!clean_arg(parsed[1]))
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
-		write(STDOUT_FILENO, "minishell: exit:", ft_strlen("minishell: exit:"));
-		write(STDOUT_FILENO, parsed[1], ft_strlen(parsed[1]));
-		write(STDOUT_FILENO, ": numeric argument required\n",
-			ft_strlen(": numeric argument required\n"));
+		perror_msg(parsed[1], ": numeric argument required\n");
 		cleanup_and_exit(params, 2);
 	}
 	return (0);

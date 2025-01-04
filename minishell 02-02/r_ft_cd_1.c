@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 15:11:07 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 16:18:51 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 13:56:43 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*format_tilde(t_params *params, char **dirs, char *cwd)
 	free(cwd);
 	home = ft_getenv(params, "HOME");
 	if (!home)
-		return (perror_msg(": cd: HOME not set\n", NULL), NULL);
+		return (perror_msg(NULL, ": cd: HOME not set\n"), NULL);
 	new_path = ft_strdup(home);
 	while (dirs[++i] != NULL)
 	{

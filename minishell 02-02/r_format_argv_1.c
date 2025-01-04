@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 18:26:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/12/30 16:18:58 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 13:29:37 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,4 +94,16 @@ int	is_in_myenvp(char *temp, t_env *myenvp)
 		current = current->next;
 	}
 	return (0);
+}
+
+void	format_all_variable(t_params *params)
+{
+	t_cmd	*current;
+
+	current = params->command;
+	while (current != NULL)
+	{
+		format_variable(current->cmd, params);
+		current = current->next;
+	}
 }

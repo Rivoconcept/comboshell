@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:22:44 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 16:23:52 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 13:56:16 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	wait_pid(t_params *params, t_cmd *current, int status)
 		else if (WIFSIGNALED(status))
 		{
 			if (WTERMSIG(status) == SIGQUIT)
-				perror_msg(": Quit (core dumped)\n", NULL);
+				perror_msg(NULL, ": Quit (core dumped)\n");
 			params->last_exit_code = 128 + WTERMSIG(status);
 		}
 		current = current->next;

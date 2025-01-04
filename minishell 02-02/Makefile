@@ -1,4 +1,4 @@
-#******************************************************************************#
+# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
@@ -6,9 +6,9 @@
 #    By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/11 13:00:11 by rhanitra          #+#    #+#              #
-#    Updated: 2025/01/02 11:05:42 by rhanitra         ###   ########.fr        #
+#    Updated: 2025/01/04 12:59:01 by rhanitra         ###   ########.fr        #
 #                                                                              #
-#******************************************************************************#
+# **************************************************************************** #
 
 MINISHELL = r_test_error_1.c r_test_error_2.c r_format_argv_1.c \
 			r_format_argv_2.c r_format_cmd_1.c r_format_cmd_2.c \
@@ -24,7 +24,8 @@ MINISHELL = r_test_error_1.c r_test_error_2.c r_format_argv_1.c \
 			l_here_doc.c l_here_doc_utils.c l_ft_utils_5.c l_ft_utils_6.c \
 			l_ft_check.c l_redirection.c l_inout_utils.c l_del_utils.c \
 			l_expand.c l_handle_here.c l_ft_utils_7.c l_ft_utils_8.c \
-			l_ft_utils_9.c \
+			l_ft_utils_9.c l_monitor_err.c l_manage_red.c l_del_in_utils.c \
+			l_del_out_utils.c \
 			get_next_line_utils.c get_next_line.c main.c \
 			r_utils.c
 						   

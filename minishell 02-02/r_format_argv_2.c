@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   r_format_argv_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/02 18:26:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/03 09:50:53 by rhanitra         ###   ########.fr       */
+/*   Created: 2025/01/04 13:25:55 by rhanitra          #+#    #+#             */
+/*   Updated: 2025/01/04 13:31:44 by rhanitra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -39,7 +39,7 @@ int	realloc_new_str(size_t *size, char **new_str)
 
 int	is_invalid_char(char c)
 {
-	const char *invalid_chars;
+	const char	*invalid_chars;
 
 	invalid_chars = "@#!%^&*()-+=[]{}|;:,<.>/";
 	return (find_char((char *)invalid_chars, c));
@@ -53,12 +53,12 @@ void	copy_env(size_t i[2], char *arg, char **new_str, t_params *params)
 	if (arg[i[0] + 1] == '\0' || is_invalid_char(arg[i[0] + 1]))
 	{
 		(*new_str)[i[1]++] = arg[i[0]];
-		return;
+		return ;
 	}
-	if (!ft_isalnum(arg[i[0] + 1]) && arg[i[0] + 1] !='?')
+	if (!ft_isalnum(arg[i[0] + 1]) && arg[i[0] + 1] != '?')
 	{
 		(*new_str)[i[1]++] = arg[i[0]];
-		return;
+		return ;
 	}
 	put_var_env(arg, (int *)&i[0], &temp, params);
 	if (temp != NULL)
@@ -115,17 +115,5 @@ void	format_variable(char **argv, t_params *params)
 		free(argv[i]);
 		argv[i] = tmp;
 		i++;
-	}
-}
-
-void	format_all_variable(t_params *params)
-{
-	t_cmd	*current;
-
-	current = params->command;
-	while (current != NULL)
-	{
-		format_variable(current->cmd, params);
-		current = current->next;
 	}
 }

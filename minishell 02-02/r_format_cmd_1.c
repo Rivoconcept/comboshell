@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 15:13:30 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 21:41:33 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 13:56:30 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*check_cmd_standard(t_params *params, char *command)
 	free(path_env);
 	if (!dirs)
 	{
-		perror_msg(": Debug: PATH directories could not be split.\n", NULL);
+		perror_msg(NULL, ": Debug: PATH directories could not be split.\n");
 		return (NULL);
 	}
 	full_path = put_path(dirs, command);

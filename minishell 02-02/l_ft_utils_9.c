@@ -6,31 +6,11 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:21:23 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/31 13:58:26 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:21:39 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	h_here(t_cmd *input, int *i, int *in_rank, int here)
-{
-	input->rank_here = (*in_rank)++;
-	input->here = here;
-	free(input->cmd[*i]);
-	free(input->cmd[*i + 1]);
-	(*i)++;
-}
-
-static void	h_less(t_cmd *input, int *i, int *in_rank)
-{
-	input->rank_less = (*in_rank)++;
-	if (input->less)
-		free(input->less);
-	input->less = ft_strdup(input->cmd[*i + 1]);
-	free(input->cmd[*i + 1]);
-	free(input->cmd[*i]);
-	(*i)++;
-}
 
 void	del_in(t_cmd *input, int here)
 {
@@ -43,6 +23,9 @@ void	del_in(t_cmd *input, int here)
 	in_rank = 0;
 	while (input->cmd[i] != NULL)
 	{
+		if (((ft_strcmp(input->cmd[i], ">") == 0 || ft_strcmp(input->cmd[i],
+						">>") == 0) && input->cmd[i + 1]) && !input->less_error)
+			input->rank_less_error++;
 		if (ft_strcmp(input->cmd[i], "<<") == 0 && input->cmd[i + 1])
 			h_here(input, &i, &in_rank, here);
 		else if (ft_strcmp(input->cmd[i], "<") == 0 && input->cmd[i + 1])
@@ -51,36 +34,100 @@ void	del_in(t_cmd *input, int here)
 			input->cmd[j++] = input->cmd[i];
 		i++;
 	}
-	input->cmd[j] = NULL;
-	if (j == 0)
-	{
-		free(input->cmd);
-		input->cmd = NULL;
-	}
+	cleanup_input_cmd(input, j);
 }
 
-void	del_out(t_cmd *out)
+static void	set_false_out(t_cmd *out)
 {
-	int	i;
-	int	j;
-	int	out_rank;
+	out->cmd = (char **)malloc(sizeof(char *) * 2);
+	out->cmd[0] = (char *)malloc(sizeof(char) * 6);
+	ft_strcpy(out->cmd[0], "false");
+	out->cmd[1] = NULL;
+}
 
-	i = 0;
-	j = 0;
-	out_rank = 0;
-	while (out->cmd[i] != NULL)
-	{
-		if ((ft_strcmp(out->cmd[i], ">") == 0 || ft_strcmp(out->cmd[i],
-					">>") == 0) && out->cmd[i + 1])
-			handle_out_redirection(out, &out_rank, &i, out->cmd[i]);
-		else
-			out->cmd[j++] = out->cmd[i];
-		i++;
-	}
+/*static void	cleanup_output_cmd(t_cmd *out, int j)
+{
 	out->cmd[j] = NULL;
 	if (j == 0)
 	{
 		free(out->cmd);
 		out->cmd = NULL;
 	}
+}*/
+
+/*voi del_null_in_argv(t_cmd *out)
+{
+	int	i;
+
+	i = 0;
+	while (out->cmd[i])
+	{
+		if (out->cmd[i] == NULL && out->cmd[i + 1])
+		{
+			out->cmd[i] == out->cmd[i + 1]
+		}
+	}
+}*/
+
+char	**delete_null_in_out(t_cmd **out, int size)
+{
+	int		i;
+	int		j;
+	char	**new_cmd;
+
+	new_cmd = malloc((size + 1) * sizeof(char *));
+	if (!new_cmd)
+		return (NULL);
+	i = 0;
+	j = 0;
+	new_cmd = malloc((size + 1) * sizeof(char *));
+	if (!new_cmd)
+		return (NULL);
+	while ((*out)->cmd[i])
+	{
+		while ((*out)->cmd[i] == NULL)
+		{
+			i++;
+			if (i > size)
+				break;
+		}
+		if ((*out)->cmd[i])
+		new_cmd[j] = (*out)->cmd[i];
+		i++;
+		j++;
+	}
+	new_cmd[j] = NULL;
+	return (new_cmd);
 }
+
+void	del_out(t_cmd *out)
+{
+	int	i;
+	int	out_rank;
+	int	size;
+
+	if (!out || !out->cmd)
+		return;
+
+	size = 0;
+	while (out->cmd[size] != NULL) // Calculer la taille du tableau
+		size++;
+
+	i = 0;
+	out_rank = 0;
+	while (out->cmd[i])
+	{
+		if ((ft_strcmp(out->cmd[i], ">") == 0 || ft_strcmp(out->cmd[i], ">>") == 0) && out->cmd[i + 1])
+		{
+			if (handle_out_redirection(out, &out_rank, &i, out->cmd[i]))
+			{
+				set_false_out(out);
+				return;
+			}
+		}
+		i++;
+	}
+	out->cmd = delete_null_in_out(&out, size);
+}
+
+

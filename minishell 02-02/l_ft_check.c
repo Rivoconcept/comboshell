@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 13:38:41 by rrakoton          #+#    #+#             */
-/*   Updated: 2025/01/01 13:20:58 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 13:54:28 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	check_infile(t_cmd *current, t_params *params)
 			{
 				current->flag_less = 1;
 				params->last_exit_code = 127;
-				perror_msg(": No such file or directory\n", current->cmd[i]);
+				perror_msg(current->cmd[i], ": No such file or directory\n");
 			}
 		}
 		i++;

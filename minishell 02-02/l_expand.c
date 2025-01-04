@@ -6,7 +6,7 @@
 /*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 07:33:05 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/31 16:16:40 by rrakoton         ###   ########.fr       */
+/*   Updated: 2025/01/04 12:41:00 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ static char	*extract_variable_name(char *line, int *index)
 
 	start = *index;
 	while (line[*index] != '\0' && !ft_is_space(line[*index])
-		&& line[*index] != '$'
-		&& (ft_isalpha(line[*index]) || line[*index] == '_'))
+		&& line[*index] != '$' && (ft_isalpha(line[*index])
+			|| line[*index] == '_'))
 		(*index)++;
 	var_name = ft_substr(line, start, *index - start);
 	return (var_name);

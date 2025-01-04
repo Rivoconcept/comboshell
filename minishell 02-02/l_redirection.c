@@ -6,37 +6,11 @@
 /*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 08:20:34 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/30 21:39:34 by rrakoton         ###   ########.fr       */
+/*   Updated: 2025/01/04 12:39:46 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	manage_red(t_params *params)
-{
-	int		rank_cmd;
-	t_cmd	*current;
-	t_cmd	*next;
-
-	rank_cmd = 0;
-	current = params->command;
-	while (current != NULL)
-	{
-		next = current->next;
-		del_in(current, rank_cmd);
-		rank_cmd++;
-		current = next;
-	}
-	free_commands_and_nodes_if_empty(params);
-	current = params->command;
-	while (current != NULL)
-	{
-		next = current->next;
-		del_out(current);
-		current = next;
-	}
-	free_commands_and_nodes_if_empty(params);
-}
 
 static void	handle_here_input(int num_cmd, t_params *params, int child)
 {

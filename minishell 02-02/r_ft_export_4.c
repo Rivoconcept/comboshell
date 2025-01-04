@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 13:27:25 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 12:18:20 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 13:58:34 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int	ft_export(char **cmd, t_params *params)
 	{
 		if (check_error_export(cmd[i]))
 		{
-			printf("minishell: export: `%s': not a valid identifier\n", cmd[i]);
+			perror_msg(NULL, ": not a valid identifier\n");
 			err = 1;
 		}
 		else

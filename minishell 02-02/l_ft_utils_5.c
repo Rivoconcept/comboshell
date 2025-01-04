@@ -6,7 +6,7 @@
 /*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:10:32 by rrakoton          #+#    #+#             */
-/*   Updated: 2024/12/30 21:42:20 by rrakoton         ###   ########.fr       */
+/*   Updated: 2025/01/04 12:40:50 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,9 @@ void	reset_cmd_flags(t_cmd *cmd)
 	current = cmd;
 	while (current != NULL)
 	{
+		current->rank_less_error = 0;
+		current->dgreat_error = 0;
+		current->less_error = 0;
 		current->flag_less = 0;
 		current->here = -1;
 		current->rank_here = 0;

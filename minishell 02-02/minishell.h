@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/03 17:37:25 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:01:26 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # endif
 
 # ifndef ROOT
-#  define ROOT "/home/rhanitra/here/josia"
+#  define ROOT "/home/rrakoton/here/josia"
 # endif
 
 # define HISTORY_FILE ".old_history"
@@ -61,6 +61,9 @@ typedef struct s_export
 typedef struct s_cmd
 {
 	char			**cmd;
+	int				rank_less_error;
+	int				dgreat_error;
+	int				less_error;
 	int				here;
 	int				rank_here;
 	int				flag_less;
@@ -97,6 +100,20 @@ typedef struct s_here_data
 	int				quote;
 }					t_here_data;
 
+char	**delete_null_in_out(t_cmd **out, int size);
+// l_del_out_utils.c
+void				clean_handle_out_red(t_cmd *out, char *temp, int *i);
+int					handle_dgreat_red(t_cmd *out, char *temp, int *i,
+						int *out_rank);
+int					handle_great_red(t_cmd *out, char *temp, int *i,
+						int *out_rank);
+// l_del_in_utils.c
+void				h_here(t_cmd *input, int *i, int *in_rank, int here);
+void				clean_h_less(t_cmd *input, int *i, int *in_rank);
+int					h_less(t_cmd *input, int *i, int *in_rank);
+void				cleanup_input_cmd(t_cmd *input, int j);
+// l_monitor_err.c
+void				parse_and_check_redirections(t_cmd *current);
 // l_ft_utils_9.c
 void				del_in(t_cmd *input, int here);
 void				del_out(t_cmd *out);
@@ -118,7 +135,7 @@ int					handle_here(char *delimiter, char **here_content,
 // l_expand.c
 char				*expand_variable_in_input(char *line, t_params *params);
 // l_del_utils.c
-void				handle_out_redirection(t_cmd *out, int *out_rank, int *i,
+int					handle_out_redirection(t_cmd *out, int *out_rank, int *i,
 						const char *type);
 void				free_cmd_fields(t_cmd *cmd);
 char				*prepare_temp_file(int num_cmd);
@@ -181,10 +198,11 @@ int					process_here(char **keys, int j, t_params *params);
 
 // t_redirection *add_red(e_tokentype type, char *value, int rank);
 // void free_redirections(t_redirections *redirs);
-void				manage_red(t_params *params);
 void				input_r(t_cmd *current, int num_cmd, t_params *params,
 						int child);
 void				output(t_cmd *current, t_params *params);
+// l_manage_red.c
+void				manage_red(t_params *params);
 
 /**********************GET_NEXT_LINE ***************************************/
 
@@ -346,11 +364,12 @@ int					ft_exit(char **parsed, t_params *params);
 // r_ft_export_1.c
 int					print_export(t_params *params);
 int					check_error_var_temp(char *cmd);
+int					first_check_var_export(char *cmd);
+int					check_error_export(char *cmd);
 void				clean_export(char *exist_value, char *enter_value,
 						char *name);
 
 // r_ft_export_2.c
-int					check_error_export(char *cmd);
 char				*put_name_export(char *str);
 char				*put_value_export(char *str);
 t_export			*create_new_list_export(char *arg);
@@ -401,7 +420,7 @@ void				close_pipe(int fd[2]);
 
 // r_ft_utils_3.c
 int					is_pipe(char *token);
-int 				isoperator(char *s);
+int					isoperator(char *s);
 int					count_cmd(t_cmd *command);
 int					ft_strcmp(const char *s1, const char *s2);
 int					putchar_count(const char *src, char c);

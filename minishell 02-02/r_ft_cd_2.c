@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 15:11:07 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 21:36:39 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 13:57:13 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,11 @@ int	ft_cd(const char *arg, t_params *params)
 		i++;
 	temp = ft_getenv(params, "HOME");
 	if (i == 1 && !temp)
-		return (perror_msg(": cd: home not set\n", NULL), 1);
+		return (perror_msg(NULL, ": cd: home not set\n"), 1);
 	else if (temp)
 		free(temp);
-	if (i > 2)
-		return (perror_msg(": cd: too many arguments\n", NULL), 1);
+	if (i > 2 || find_char((char *)arg, ' '))
+		return (perror_msg(NULL, ": cd: too many arguments\n"), 1);
 	handle_cd(&i, (char *)arg, new_path, params);
 	return_oldpwd(params);
 	if (chdir(new_path) != 0)

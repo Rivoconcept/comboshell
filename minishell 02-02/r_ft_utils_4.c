@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 15:42:38 by rhanitra          #+#    #+#             */
-/*   Updated: 2024/01/02 21:57:19 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 14:06:03 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,9 @@ int	check_errors_path(char *path, char *parent_path, struct stat *statbuf,
 	if (path[0] != '/' && access(path, X_OK) != 0)
 	{
 		if (errno == EACCES)
-		{
-			perror_msg((char *)path, ": Permission denied\n");
-			return (126);
-		}
+			return (perror_msg((char *)path, ": Permission denied\n"), 126);
+		if (path[0] == '.' && path[1] == '/')
+			return (perror_msg((char *)path, ": No such file or directory\n"), 127);
 		perror_msg((char *)path, ": command not found\n");
 		return (127);
 	}
@@ -63,10 +62,7 @@ int	check_errors_path(char *path, char *parent_path, struct stat *statbuf,
 			return (127);
 		}
 		if (!S_ISDIR(statbuf->st_mode))
-		{
-			perror_msg((char *)path, ": Not a directory\n");
-			return (126);
-		}
+			return (perror_msg((char *)path, ": Not a directory\n"), 126);
 	}
 	return (0);
 }

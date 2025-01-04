@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 10:48:59 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/02 17:29:55 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 14:02:33 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,7 @@ int	ft_exit(char **parsed, t_params *params)
 	if (res > value)
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
-		write(STDERR_FILENO, "minishell: exit:", ft_strlen("minishell: exit:"));
-		write(STDERR_FILENO, parsed[1], ft_strlen(parsed[1]));
-		write(STDERR_FILENO, ": numeric argument required\n",
-			ft_strlen(": numeric argument required\n"));
+		perror_msg(parsed[1], ": numeric argument required\n");
 		cleanup_and_exit(params, 2);
 	}
 	exit_code = ft_atoi_lld(parsed[1]);

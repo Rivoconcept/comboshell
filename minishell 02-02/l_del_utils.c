@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   l_del_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
+/*   By: rrakoton <rrakoton@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 11:57:15 by rrakoton          #+#    #+#             */
-/*   Updated: 2025/01/01 22:42:25 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 12:41:05 by rrakoton         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,34 +49,25 @@ void	free_cmd_fields(t_cmd *cmd)
 	l_init_cmd(cmd);
 }
 
-void	handle_out_redirection(t_cmd *out, int *out_rank, int *i,
-		const char *type)
+int	handle_out_redirection(t_cmd *out, int *out_rank, int *i, const char *type)
 {
-	int	file;
+	char	*temp;
 
+	temp = format_quotes(out->cmd[*i + 1]);
+	if (ft_strcmp(temp, "") == 0)
+		ft_putstr_fd("No such file or directory\n", 2);
 	if (ft_strcmp(type, ">") == 0)
 	{
-		file = open(out->cmd[*i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (file >= 0)
-			close(file);
-		out->rank_great = (*out_rank)++;
-		if (out->great)
-			free(out->great);
-		out->great = ft_strdup(out->cmd[*i + 1]);
+		if (handle_great_red(out, temp, i, out_rank))
+			return (1);
 	}
 	else if (ft_strcmp(type, ">>") == 0)
 	{
-		file = open(out->cmd[*i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (file >= 0)
-			close(file);
-		out->rank_dgreat = (*out_rank)++;
-		if (out->dgreat)
-			free(out->dgreat);
-		out->dgreat = ft_strdup(out->cmd[*i + 1]);
+		if (handle_dgreat_red(out, temp, i, out_rank))
+			return (1);
 	}
-	free(out->cmd[*i]);
-	free(out->cmd[*i + 1]);
-	(*i)++;
+	clean_handle_out_red(out, temp, i);
+	return (0);
 }
 
 char	*prepare_temp_file(int num_cmd)
