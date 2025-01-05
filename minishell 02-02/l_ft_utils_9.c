@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:21:23 by rrakoton          #+#    #+#             */
-/*   Updated: 2025/01/04 18:21:39 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:11:58 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	set_false_out(t_cmd *out)
 	out->cmd[1] = NULL;
 }
 
-/*static void	cleanup_output_cmd(t_cmd *out, int j)
+static void	cleanup_output_cmd(t_cmd *out, int j)
 {
 	out->cmd[j] = NULL;
 	if (j == 0)
@@ -53,21 +53,7 @@ static void	set_false_out(t_cmd *out)
 		free(out->cmd);
 		out->cmd = NULL;
 	}
-}*/
-
-/*voi del_null_in_argv(t_cmd *out)
-{
-	int	i;
-
-	i = 0;
-	while (out->cmd[i])
-	{
-		if (out->cmd[i] == NULL && out->cmd[i + 1])
-		{
-			out->cmd[i] == out->cmd[i + 1]
-		}
-	}
-}*/
+}
 
 char	**delete_null_in_out(t_cmd **out, int size)
 {
@@ -103,31 +89,28 @@ char	**delete_null_in_out(t_cmd **out, int size)
 void	del_out(t_cmd *out)
 {
 	int	i;
+	int	j;
 	int	out_rank;
-	int	size;
-
-	if (!out || !out->cmd)
-		return;
-
-	size = 0;
-	while (out->cmd[size] != NULL) // Calculer la taille du tableau
-		size++;
 
 	i = 0;
+	j = 0;
 	out_rank = 0;
-	while (out->cmd[i])
+	while (out->cmd[i] != NULL)
 	{
-		if ((ft_strcmp(out->cmd[i], ">") == 0 || ft_strcmp(out->cmd[i], ">>") == 0) && out->cmd[i + 1])
+		if ((ft_strcmp(out->cmd[i], ">") == 0 || ft_strcmp(out->cmd[i],
+					">>") == 0) && out->cmd[i + 1])
 		{
 			if (handle_out_redirection(out, &out_rank, &i, out->cmd[i]))
 			{
 				set_false_out(out);
-				return;
+				return ;
 			}
 		}
+		else
+			out->cmd[j++] = out->cmd[i];
 		i++;
 	}
-	out->cmd = delete_null_in_out(&out, size);
+	cleanup_output_cmd(out, j);
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:45:01 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/04 18:01:26 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:41:24 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ typedef struct s_here_data
 	int				quote;
 }					t_here_data;
 
-char	**delete_null_in_out(t_cmd **out, int size);
+int	open_file_for_writing(char *file, t_params *params);
 // l_del_out_utils.c
 void				clean_handle_out_red(t_cmd *out, char *temp, int *i);
 int					handle_dgreat_red(t_cmd *out, char *temp, int *i,
@@ -113,7 +113,7 @@ void				clean_h_less(t_cmd *input, int *i, int *in_rank);
 int					h_less(t_cmd *input, int *i, int *in_rank);
 void				cleanup_input_cmd(t_cmd *input, int j);
 // l_monitor_err.c
-void				parse_and_check_redirections(t_cmd *current);
+void				parse_and_check_redirections(t_cmd *current, t_params *params);
 // l_ft_utils_9.c
 void				del_in(t_cmd *input, int here);
 void				del_out(t_cmd *out);

@@ -89,7 +89,7 @@ void	manage_red(t_params *params)
 	while (current != NULL)
 	{
 		next = current->next;
-		parse_and_check_redirections(current);
+		parse_and_check_redirections(current, params);
 		del_in(current, rank_cmd);
 		if (current->less_error)
 		{

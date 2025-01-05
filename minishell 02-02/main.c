@@ -6,7 +6,7 @@
 /*   By: rhanitra <rhanitra@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:21:04 by rhanitra          #+#    #+#             */
-/*   Updated: 2025/01/04 13:40:34 by rhanitra         ###   ########.fr       */
+/*   Updated: 2025/01/04 19:15:33 by rhanitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	handle_command_1(char *input, t_params *params)
 	free_array(params->parsed);
 	params->parsed = NULL;
 	if (manage_here(params))
-		return (1);
+		return (params->last_exit_code = 1);
 	manage_less(params);
 	manage_red(params);
 	if (!params->command)
